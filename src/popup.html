@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      @import url('https://fonts.googleapis.com/css?family=Montserrat:300,500,700');
+
+      body {
+        background: #2C2F33;
+        margin: 0px;
+        padding: 0px;
+        width: 400px;
+        height: 350px;
+        color: white;
+        font-family: 'montserrat', sans-serif;
+        font-weight: 300;
+        font-size: 16px;
+      }
+
+      button {
+        position: relative;
+        display: block;
+        border: 0px;
+        box-shadow: 0px;
+        background: #7289DA;
+        color: white;
+        border-radius: 5px;
+        height: 40px;
+        width: 80px;
+        font-size: 16px;
+        font-weight: 500;
+        cursor: pointer;
+      }
+
+      #login p {
+        margin-right: 10px;
+      }
+
+      #login.notloggedin {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      #login.notloggedin button {
+        width: 180px;
+        height: 50px;
+      }
+
+      #login.loggedin {
+        position: absolute;
+        top: 15px;
+        left: 5%;
+        display: flex;
+        width: 90%;
+        height: 50px;
+        justify-content: flex-end;
+        align-items: center;
+      }
+
+      #manual_login {
+        font-size: 16px;
+        width: 100%;
+        cursor: pointer;
+      }
+
+      #manual_login:hover {
+        text-decoration: underline;
+      }
+
+      form {
+        width: 90%;
+        margin: 80px 5% 0px 5%;
+        padding-bottom: 5%;
+        visibility: hidden;
+      }
+
+      form input {
+        background: transparent;
+        border: 1px solid #7289DA;
+        border-radius: 5px;
+        box-shadow: 0px;
+        height: 30px;
+        color: white;
+      }
+
+      #avatar {
+        margin-top: -20px;
+        width: 50px;
+        height: 50px;
+        border-radius: 100%;
+        float: left;
+      }
+
+      #webHookName {
+        margin: -5px 0 0 65px;
+      }
+
+      form label, form input{
+        width: 100%;
+        margin: 5px 0px;
+      }
+
+      form p {
+        margin-top: 15px;
+      }
+
+      #saveSettings {
+        position: absolute;
+        visibility: hidden;
+        bottom: 20px;
+      }
+
+      .centered {
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      .bold {
+        font-weight: 700;
+      }
+
+      .form_error {
+        font-size: 12px;
+        color: rgb(255, 67, 67);
+      }
+
+    </style>
+  </head>
+  <body>
+    <div id="login">
+      <p id="login_status">Status: Not logged in</p>
+      <button id="loginwithdiscord">Login with Discord</button>
+      <!-- <p class="centered" id="manual_login"><b>Alternative method:</b> Enter username manually</p> -->
+    </div>
+    <!-- <form id="settings">
+      <label for="username" id="username_label" class="bold">Username</label>
+      <input type="text" id="username" name="username">
+      <label for="webHookUrl" class="bold">Webhook URL</label>
+      <input type="text" id="webHookUrl" name="webHookUrl">
+      <div id="webHookInfo"></div>
+    </form>
+    <button id="saveSettings" class="centered">Save</button> -->
+    <div id="webHookInfo"></div>
+    <script src="popup.js"></script>
+  </body>
+</html>
