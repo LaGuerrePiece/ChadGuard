@@ -5,7 +5,7 @@ chrome.runtime.onInstalled.addListener(function() {
         contexts:["image", "video"],
     });
 });
-//Manually inputed :
+//Manually input :
 var webHookUrl = "https://discord.com/api/webhooks/945642399584120842/hU9VSm0vuyMzF1CQ8cCqCmMbuDN6JHy39JVm9f5WNwG4mvCbfa0IIRkmTWq-ectXUKyG";
 var username = "";
 
