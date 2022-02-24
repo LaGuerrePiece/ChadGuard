@@ -1,25 +1,25 @@
-  {
-    "name": "CHADGUARD Partie TS",
-    "version": "0.1",
-    "description": "Give the average pornscore of all the images in pages",
-    "manifest_version": 3,
-	"homepage_url": "https://github.com/whiterqbbit/Shamebot",
-    "permissions": ["activeTab", "storage", "identity"],
-    "background": {
-      "scripts": ["background.js"],
-      "persistent": false
-    },
-    "icons": { 
+{
+  "name": "CHADGUARD Partie TS",
+  "version": "0.1",
+  "description": "Give the average pornscore of all the images in pages",
+  "manifest_version": 3,
+"homepage_url": "https://github.com/whiterqbbit/Shamebot",
+  "permissions": ["activeTab", "storage", "identity"],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "icons": { 
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
+  "browser_action": {
+    "default_icon": {
       "16": "icon16.png",
       "48": "icon48.png",
-     "128": "icon128.png"
+      "128": "icon128.png"
     },
-    "browser_action": {
-      "default_icon": {
-        "16": "icon16.png",
-        "48": "icon48.png",
-       "128": "icon128.png"
-      },
-      "default_popup": "popup.html"
-    }
+    "default_popup": "popup.html"
   }
+}
