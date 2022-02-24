@@ -2,7 +2,7 @@
     "name": "CHADGUARD Partie TS",
     "version": "0.1",
     "description": "Give the average pornscore of all the images in pages",
-    "manifest_version": 2,
+    "manifest_version": 3,
 	"homepage_url": "https://github.com/whiterqbbit/Shamebot",
     "permissions": ["activeTab", "storage", "identity"],
     "background": {
