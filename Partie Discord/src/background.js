@@ -59,10 +59,6 @@ function refreshVars() {
         username = data.username;
         console.log("username: " + username);
     });
-    // chrome.storage.sync.get('webHookUrl', function(data) {
-    //     webHookUrl = data.webHookUrl;
-    //     console.log("url: " + webHookUrl);
-    // });
 }
 
 refreshVars();

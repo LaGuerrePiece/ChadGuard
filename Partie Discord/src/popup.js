@@ -1,7 +1,8 @@
 var loggedin = false;
 var username;
 
-chrome.storage.sync.get(['username', 'webHookInfo', 'webHookUrl'], function(data) {
+//If the username is in chrome storage, get it
+chrome.storage.sync.get(['username'], function(data) {
     username = data.username;
 });
 
@@ -53,7 +54,6 @@ function getUsername(token) {
 
 function getToken(code) {
     var xhr = new XMLHttpRequest();
-    
     xhr.open("POST", "https://discordapp.com/api/oauth2/token", true);
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     xhr.onload = function (e) {
