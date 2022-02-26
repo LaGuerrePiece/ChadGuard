@@ -3,9 +3,6 @@
 //<script src="https://unpkg.com/@tensorflow/tfjs@2.6.0" type="text/javascript"></script>
 //<script src="https://unpkg.com/nsfwjs@2.3.0" type="text/javascript"></script>
 
-import 'tfjs';
-import 'nsfwjs';
-
 chrome.runtime.onInstalled.addListener(function() {
     chrome.contextMenus.create({
         id: 'analyseImage',
