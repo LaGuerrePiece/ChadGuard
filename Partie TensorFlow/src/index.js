@@ -35,7 +35,6 @@ chrome.contextMenus.onClicked.addListener(function(info) {
 
 
 
-
 // OTHER SOURCE :
 
 // import * as nsfwjs from 'nsfwjs'
