@@ -20,5 +20,11 @@
       "128": "icon128.png"
     },
     "default_popup": "popup.html"
-  }
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ]
 }
