@@ -45,7 +45,7 @@ function analyse(imgSrcs, tabUrl) {
 }
 
 function decide(values, tabUrl) {
-    let pScore = 0
+    var pScore = 0
 
     function incrementPScore(value) {
         for (let i = 0; i < 5; i++) {
