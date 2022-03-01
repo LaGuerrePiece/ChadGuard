@@ -95,39 +95,56 @@ var webHookUrl = "https://discord.com/api/webhooks/945642399584120842/hU9VSm0vuy
 
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-    console.log('Requete : ' + request.greeting)
+    //console.log('Requete : ' + request.greeting)
     console.log('Sender tab url : ' + sender.tab.url);
-    console.log('Requete : ' + request.imgs[0])
     var imgSrcs = request.imgs
-    //var Scores = []
+    var predictionsArray = []
     var imgArray = []
     for (var i = 0; i < imgSrcs.length; i++) {
-        imgArray[i] = new Image();
+        imgArray[i] = new Image(100, 100);
         imgArray[i].src = imgSrcs[i]
+        imgArray[i].crossOrigin = "anonymous";
     }
-    console.log(imgArray[4])
 
-    
-    for (var i = 0; i < imgArray.length; i++) {
-        // nsfwjs.load()
-        //     .then(function (model) {
-        //         // Classify the image
-        //         return model.classify(imgArray[i])
-        //     })
-        //     .then(function (predictions) {
-        //         console.log('Predictions: ', predictions)
-        //         console.log(imgArray[i].src)
-        //     })
-
-        nsfwjs.load()
-            .then((model) => {
-            model.classify(imgArray[i])
-            .then((predictions) => {
-            console.log("Predictions", predictions);
+    var promiseArray = []
+    nsfwjs.load().then((model) => {
+        for (var i = 0; i < imgArray.length; i++) {
+            promiseArray[i] = new Promise((resolve, reject) => {
+                resolve(model.classify(imgArray[i]))
             });
-        })
+        }
+        Promise.all(promiseArray).then((values) => {
+            //console.log(values);
+            decision(values)
+        });
+    });
+
+    function decision(values) {
+        let pScore = 0
+        values.forEach(value => incrementPScore(value));
+
+        function incrementPScore(value) {
+            for (let i = 0; i < 5; i++) {
+                if (value[i].className == 'Porn') {
+                    pScore += value[i].probability
+                }
+            }
+        }
+        pScore = pScore/values.length
+        let treeshold = 0.00001
         
+        chrome.runtime.sendMessage({ score: pScore });
+        //var popup = chrome.extension.getViews({type: "popup"});
+        //popup.getElementById("pScore").innerHTML = "pScore : " + pScore;
+
+
+
+        console.log(`pornScore : ${pScore}`)
+        if (pScore > treeshold) {
+            //console.log('You are watching porn !')
+        }
     }
+
     //sendResponse({farewell: "ok ici le background script", autre: 'lalala'});
     //return true;
 });
@@ -142,10 +159,30 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 
 
 
+    // nsfwjs.load().then((model) => {
+    //     for (var i = 0; i < imgArray.length; i++) {
+    //         model.classify(imgArray[i])
+    //         .then((predictions) => {
+    //             console.log("Predictions", predictions);
+    //             predictionsArray.push(predictions)
+    //         });
+    //     }
+    //     setTimeout(()=> {console.log(predictionsArray)}, 5000)
+    // });
 
 
 
 
+
+        // nsfwjs.load()
+        //     .then(function (model) {
+        //         // Classify the image
+        //         return model.classify(imgArray[i])
+        //     })
+        //     .then(function (predictions) {
+        //         console.log('Predictions: ', predictions)
+        //         console.log(imgArray[i].src)
+        //     })
 
 
 

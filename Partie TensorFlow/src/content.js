@@ -74,15 +74,15 @@ function sendIt() {
 
 function img_find() {
     var imgs = document.getElementsByTagName("img");
-    //console.log(imgs[0].getAttribute('data-lazy'))
-    //console.log(imgs[0].getAttribute('data-srcset').split(" ")[0])
     var imgSrcs = [];
     if (imgs.length > 0) {
         //Push dans imgSrcs toutes les images de la page :
         for (var i = 0; i < imgs.length; i++) {
             if (imgs[i].getAttribute('src') !== null) {
-                imgSrcs.push(imgs[i].src);
-                console.log('src!')
+                if (imgs[i].getAttribute('src') !== "") {
+                    imgSrcs.push(imgs[i].src);
+                    console.log('src!')
+                }
             } else if (imgs[i].getAttribute('srcset') !== null) {
                 imgSrcs.push(imgs[i].currentSrc);
                 console.log('srcset!')
@@ -96,7 +96,7 @@ function img_find() {
                 imgSrcs.push(imgs[i].getAttribute('data-src'));
                 console.log('data-src!')
             } else {
-                console.log('une image na eu ni lun ni lautre : ')
+                console.log('une image na eu ni lun ni lautre')
             }
         }
         
@@ -109,9 +109,6 @@ function img_find() {
         }
 
         //Supprime les doublons :
-        //console.log('avant suppression : ')
-        //console.log('imgSrc length : ' + imgSrcs.length)
-        //imgSrcs.forEach(e => console.log(e))
         var imgSrcs = [...new Set(imgSrcs)];
         console.log('après suppression : ')
         console.log('imgSrc length : ' + imgSrcs.length)
@@ -122,12 +119,6 @@ function img_find() {
     }
     return imgSrcs;
 }
-
-
-
-
-
-
 
 
 

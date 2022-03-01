@@ -8,8 +8,8 @@
         background: #2C2F33;
         margin: 0px;
         padding: 0px;
-        width: 400px;
-        height: 350px;
+        width: 327px;
+        height: 230px;
         color: white;
         font-family: 'montserrat', sans-serif;
         font-weight: 300;
@@ -18,6 +18,7 @@
 
       button {
         position: relative;
+        top: 50px;
         display: block;
         border: 0px;
         box-shadow: 0px;
@@ -29,6 +30,10 @@
         font-size: 16px;
         font-weight: 500;
         cursor: pointer;
+      }
+      
+      #login {
+        flex: auto;
       }
 
       #login p {
@@ -58,14 +63,24 @@
         align-items: center;
       }
 
+      #chad_watch {
+        object-fit: fill;
+      }
+
+      #pScorediv {
+        text-align: center;
+        font-size: 30px;
+      }
+
     </style>
   </head>
   <body>
+    <img id="chad_watch" src="./images/chadlook2.png"/>
     <div id="login">
       <p id="login_status">Status: Not logged in</p>
       <button id="loginwithdiscord">Login with Discord</button>
     </div>
-    <div id="webHookInfo"></div>
+    <div id="pScorediv">p-Score : <span id="pScore"></span></div>
     <script src="popup.js"></script>
   </body>
 </html>

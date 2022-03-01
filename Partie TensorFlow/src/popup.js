@@ -91,3 +91,11 @@ function logout() {
         checkLoginStatus();
     });
 }
+
+
+chrome.runtime.onMessage.addListener(handleBackgroundMessages);
+function handleBackgroundMessages(message) {
+    if ('score' in message) {
+        document.getElementById("pScore").innerHTML = Math.round(message.score*100);
+    }
+}
