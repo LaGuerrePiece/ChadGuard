@@ -5,5 +5,5 @@
 </p>
 
 
-A chrome Extension that tells everyone on The War Room Discord server if you watch porn.
+A chrome Extension that tells everyone on [The War Room Discord server](https://discord.gg/d3GDTz6GUD) if you watch porn.
 
