@@ -1,7 +1,7 @@
 {
-  "name": "SHAMEBOT",
-  "version": "0.1",
-  "description": "Gives the average pornscore of all the images in page and sends it to Discord",
+  "name": "CHADWATCH",
+  "version": "1.0",
+  "description": "Reveal your inner chad. CHADWATCH keeps you away from porn.",
   "manifest_version": 2,
   "homepage_url": "https://github.com/whiterqbbit/Shamebot",
   "permissions": ["activeTab", "contextMenus", "storage", "identity", "https://discordapp.com/api/"],
@@ -10,15 +10,15 @@
   },
   "content_security_policy": "script-src 'self' filesystem: http://localhost:* https://unpkg.com/* 'unsafe-eval'; object-src 'self'",
   "icons": {
-    "16": "icon16.png",
-    "48": "icon48.png",
-    "128": "icon128.png"
+    "16": "./images/icon16.png",
+    "48": "./images/icon48.png",
+    "128": "./images/icon128.png"
   },
   "browser_action": {
     "default_icon": {
-      "16": "icon16.png",
-      "48": "icon48.png",
-      "128": "icon128.png"
+      "16": "./images/icon16.png",
+      "48": "./images/icon48.png",
+      "128": "./images/icon128.png"
     },
     "default_popup": "popup.html"
   },

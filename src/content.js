@@ -67,7 +67,7 @@ function sendIt() {
     console.log('src numéro 0 : ' + imgsArray[0])
     console.log('liste des srcs : ' + imgsArray)
     
-    chrome.runtime.sendMessage({greeting: "Salut, c'est le content script, voilà les srcs", imgs: imgsArray}, function(response) {
+    chrome.runtime.sendMessage({greeting: "Analyse donc ces srcs", imgs: imgsArray}, function(response) {
         //console.log(response.farewell);
     })
 }

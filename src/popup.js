@@ -92,10 +92,13 @@ function logout() {
     });
 }
 
+chrome.runtime.sendMessage({greeting: "requesting score"}, function(response) {
+    console.log('Réponse : ' + response)
+});
 
-chrome.runtime.onMessage.addListener(handleBackgroundMessages);
-function handleBackgroundMessages(message) {
-    if ('score' in message) {
-        document.getElementById("pScore").innerHTML = Math.round(message.score*100);
-    }
-}
+// chrome.runtime.onMessage.addListener(handleBackgroundMessages);
+// function handleBackgroundMessages(message) {
+//     if ('score' in message) {
+//         document.getElementById("pScore").innerHTML = Math.round(message.score*100);
+//     }
+// }
