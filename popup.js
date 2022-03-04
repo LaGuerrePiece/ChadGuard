@@ -1,6 +1,7 @@
 var loggedin = false;
 var username;
 
+
 //If the username is in chrome storage, get it
 chrome.storage.sync.get(['username'], function(data) {
     username = data.username;
@@ -92,13 +93,30 @@ function logout() {
     });
 }
 
-chrome.runtime.sendMessage({greeting: "requesting score"}, function(response) {
-    console.log('Réponse : ' + response)
+
+
+chrome.tabs.query({active: true, currentWindow: true},function(tabs){
+    var currentTabUrl = tabs[0].url;
+    console.log(currentTabUrl)
+    chrome.storage.sync.get(['url'], function(result) {
+        console.log('Value currently is ' + result);
+        console.log('Value currently is ' + result.url);
+    });
 });
 
-// chrome.runtime.onMessage.addListener(handleBackgroundMessages);
-// function handleBackgroundMessages(message) {
-//     if ('score' in message) {
-//         document.getElementById("pScore").innerHTML = Math.round(message.score*100);
+//{url: 'stackoverflow.com/questions/14531102/saving-and-retrieving-from-chrome-storage-sync', score: '0.55'}
+
+//var currentScore = localStorage.getItem(currentTab.url); 
+//document.getElementById("pScore").innerHTML = Math.round(currentScore*100);
+
+// chrome.runtime.onMessage.addListener(function(message) {
+//     if ('instruction' in message) {
+//         var score = localStorage.getItem('scores');
+//         var currentScore = score.currentTab.url
+//         document.getElementById("pScore").innerHTML = Math.round(currentScore*100);
 //     }
-// }
+// })
+
+// chrome.runtime.sendMessage({greeting: "requesting score"}, function(response) {
+//     console.log('Réponse : ' + response)
+// });

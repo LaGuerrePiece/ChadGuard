@@ -1,6 +1,8 @@
 var username = "";
 var webHookUrl = "https://discord.com/api/webhooks/945642399584120842/hU9VSm0vuyMzF1CQ8cCqCmMbuDN6JHy39JVm9f5WNwG4mvCbfa0IIRkmTWq-ectXUKyG";
 var treeshold = 0.5
+var urls = []
+var scores = []
 
 //MODULE DE CONNECTION :
 
@@ -57,10 +59,32 @@ function decide(values, tabUrl) {
 
     values.forEach(value => incrementPScore(value));
     pScore = pScore/values.length
+    //addToChromeStorage(tabUrl, pScore)
+
+    function addToChromeStorage(tabUrl, pScore) {
+        
+        //{urls : [], scores: []}
+        
+        // chrome.storage.sync.set({urls: tabUrl, score: pScore}, function() {
+        //     console.log(`${tabUrl} added with ${pScore} as score`)
+        // });
+        
+        chrome.storage.sync.get(['urls', 'scores'], function(result) {
+            urls = result.urls
+            scores = result.scores
+        });
+        urls.push(tabUrl)
+        scores.push(pScore)
+        chrome.storage.sync.set({urls: urls, scores: scores}, function() {
+            console.log(`${tabUrl} added with ${pScore} as score`)
+        });
+        console.log(urls)
+        console.log(scores)
+    }
     
-    chrome.runtime.sendMessage({ score: pScore });
-    //var popup = chrome.extension.getViews({type: "popup"});
-    //popup.getElementById("pScore").innerHTML = "pScore : " + pScore;
+    //localStorage.setItem(tabUrl, pScore);
+    chrome.runtime.sendMessage({ instruction: 'popup, reload' });
+    
 
 
 
@@ -83,7 +107,6 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         sendResponse({pScore : pScore})
         console.log(pScore)
     }
-
 
     //sendResponse({farewell: "ok ici le background script", autre: 'lalala'});
     //return true;
