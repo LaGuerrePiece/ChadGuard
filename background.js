@@ -1,8 +1,3 @@
-var username = "";
-var webHookUrl = "https://discord.com/api/webhooks/945642399584120842/hU9VSm0vuyMzF1CQ8cCqCmMbuDN6JHy39JVm9f5WNwG4mvCbfa0IIRkmTWq-ectXUKyG";
-var treeshold = 0.5
-var urls = []
-var scores = []
 
 //MODULE DE CONNECTION :
 
@@ -62,6 +57,8 @@ function decide(values, tabUrl) {
     //addToChromeStorage(tabUrl, pScore)
 
     function addToChromeStorage(tabUrl, pScore) {
+        var urls = []
+        var scores = []
         
         //{urls : [], scores: []}
         
@@ -89,6 +86,7 @@ function decide(values, tabUrl) {
 
 
     console.log(`pornScore : ${pScore}`)
+    let treeshold = 0.5
     if (pScore > treeshold) {
         console.log('Seems like porn !')
         sendToDiscord(username, tabUrl)
@@ -117,12 +115,14 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 //MODULE WEBHOOK :
 
 function sendToDiscord(username, url) {
+    
     url = url.replace('https://', '')
     url = url.replace('/', '')
     postToWebhook("**" + username + "** vient de trahir son chad intérieur sur : " + url + ".");
 }
 
 function postToWebhook(content) {
+    var webHookUrl = "https://discord.com/api/webhooks/945642399584120842/hU9VSm0vuyMzF1CQ8cCqCmMbuDN6JHy39JVm9f5WNwG4mvCbfa0IIRkmTWq-ectXUKyG";
     var xhr = new XMLHttpRequest();
     xhr.open('POST', webHookUrl, true);
     xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');

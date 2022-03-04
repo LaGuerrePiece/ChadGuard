@@ -2,7 +2,7 @@ var loggedin = false;
 var username;
 
 
-//If the username is in chrome storage, get it
+//Get username from chrome storage
 chrome.storage.sync.get(['username'], function(data) {
     username = data.username;
 });
