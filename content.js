@@ -1,3 +1,7 @@
+var ifrm = document.createElement("iframe");
+let iframe = chrome.runtime.getURL('sandbox.html');
+document.body.append(iframe)
+
 window.onload = sendIt()
 
 function sendIt() {

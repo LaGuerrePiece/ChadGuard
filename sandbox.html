@@ -4,24 +4,7 @@
         <h1>Hello, !</h1>
     </div>
 </script>
-<script>
-    console.log("sandbox")
-    window.addEventListener('message', function(event) {
-        var command = event.data.command;
-        var name = event.data.name || 'hello';
-        switch(command) {
-            case 'render':
-                event.source.postMessage({
-                    name: name,
-                    html: templates[name](event.data.context)
-                }, event.origin);
-                break;
-
-            // case 'somethingElse':
-            //   ...
-        }
-    });
-</script>
+<script src="./sandbox.js"></script>
 <script>
     var templates = [];
     var source = document.getElementById('hello-world-template').innerHTML;
