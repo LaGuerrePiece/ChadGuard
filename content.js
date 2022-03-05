@@ -1,60 +1,124 @@
-window.onload = sendIt()
+let tabUrl = location.href
+let treeshold = 0.2
+var webHookUrl = "https://discord.com/api/webhooks/945642399584120842/hU9VSm0vuyMzF1CQ8cCqCmMbuDN6JHy39JVm9f5WNwG4mvCbfa0IIRkmTWq-ectXUKyG";
 
-function sendIt() {
-    var imgsArray = img_find()
-    console.log('src numéro 0 : ' + imgsArray[0])
-    console.log('liste des srcs : ' + imgsArray)
-    
-    chrome.runtime.sendMessage({greeting: "Analyse donc ces srcs", imgs: imgsArray}, function(response) {
-        //console.log(response.farewell);
+
+window.onload = checkBlacklisted()
+
+function checkBlacklisted() {
+    chrome.storage.local.get(['bannedURLs'], function(result) {
+        let bannedURLs = result.bannedURLs
+        if (bannedURLs.includes(tabUrl)) {
+            block()
+        } else {
+            img_find()
+        }
     })
 }
 
+
 function img_find() {
+    //Chopper toutes les images
     var imgs = document.getElementsByTagName("img");
-    var imgSrcs = [];
-    if (imgs.length > 0) {
-        //Push dans imgSrcs toutes les images de la page :
-        for (var i = 0; i < imgs.length; i++) {
-            if (imgs[i].getAttribute('src') !== null) {
-                if (imgs[i].getAttribute('src') !== "") {
-                    imgSrcs.push(imgs[i].src);
-                    console.log('src!')
+    if (imgs.length) {
+        for (let i = 0; i < imgs.length; i++) {
+            if (imgs[i].getAttribute('width')) {imgs[i].setAttribute('width', 100)}
+            if (imgs[i].getAttribute('height')) imgs[i].setAttribute('height', 100);
+            imgs[i].setAttribute('crossorigin', 'anonymous');
+        }
+        let elements = [...imgs]
+        elements.forEach(e => console.log(e))
+        //Evaluer chaque image
+        let promiseArray = []
+        nsfwjs.load().then((model) => {
+            for (var i = 0; i < elements.length; i++) {
+                promiseArray[i] = new Promise((resolve, reject) => {
+                    resolve(model.classify(elements[i]))
+                });
+            }
+            Promise.all(promiseArray).then((values) => {
+                console.log(values);
+                var score = getScore(values)
+                addToChromeStorage(score)
+
+                console.log(`pornScore : ${score}`)
+                if (score > treeshold) {
+                    console.log('Seems like porn !')
+                    block()
+                    //sendToDiscord(username, tabUrl)
+                } else {
+                    console.log('All seems fine.')
                 }
-            } else if (imgs[i].getAttribute('srcset') !== null) {
-                imgSrcs.push(imgs[i].currentSrc);
-                console.log('srcset!')
-            } else if (imgs[i].getAttribute('data-lazy') !== null) {
-                imgSrcs.push(imgs[i].getAttribute('data-lazy'));
-                console.log('datalazy!')
-            } else if (imgs[i].getAttribute('data-srcset') !== null) {
-                imgSrcs.push(imgs[i].getAttribute('data-srcset').split(" ")[0]);
-                console.log('data-srcset!')
-            } else if (imgs[i].getAttribute('data-src') !== null) {
-                imgSrcs.push(imgs[i].getAttribute('data-src'));
-                console.log('data-src!')
-            } else {
-                console.log('une image na eu ni lun ni lautre')
-            }
-        }
-        
-        //Supprime lorsque l'url de l'image commence par un '/' :
-        for (var i = 0; i < imgSrcs.length; i++) {
-            if (imgSrcs[i][0] == '/') {
-                imgSrcs.splice(i, 1);
-                i--
-            }
-        }
-
-        //Supprime les doublons :
-        var imgSrcs = [...new Set(imgSrcs)];
-        console.log('après suppression : ')
-        console.log('imgSrc length : ' + imgSrcs.length)
-        imgSrcs.forEach(e => console.log(e))
-
-        //Problème : met plusieurs fois quand même img mais != url comme sur : https://github.com/tensorflow/tfjs/issues/322
-        //Ne fait pas encore les vidéos
-    }
-    return imgSrcs;
+            });
+        });
+    } else {addToChromeStorage(0)}
 }
+
+function getScore(values) {
+    let pScore = 0
+
+    function incrementPScore(value) {
+        for (let i = 0; i < 5; i++) {
+            if (value[i].className == 'Porn') {
+                pScore += value[i].probability
+            }
+        }
+    }
+    values.forEach(value => incrementPScore(value));
+    pScore = pScore/values.length
+    return pScore
+}
+
+function addToChromeStorage(score) {
+    // chrome.storage.local.get(['scores'], function(result) {
+    //     let scores = result.scores ?? {}
+    //     scores[tabUrl] = score
+    //     chrome.storage.local.set({scores: scores}, function() {
+    //         console.log('scores : ' + JSON.stringify(scores));
+    //     });
+    // });
+}
+
+function block() {
+    PUNISH(username)
+    location.replace('chrome-extension://' + chrome.runtime.id + '/blockpage.html')
+    
+}
+
+
+
+//MODULE WEBHOOK :
+
+function PUNISH(username) {                             //Mettre à jour username sur cette page
+    url = url.replace('https://', '')
+    url = url.replace('/', '')
+    postToWebhook("**" + username + "** vient de trahir son chad intérieur sur : " + tabUrl + ".");
+}
+
+function postToWebhook(content) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', webHookUrl, true);
+    xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+
+    data = {
+        content: content,
+    }
+
+    xhr.send(JSON.stringify(data));
+    xhr.onload = function(res) {
+        console.log('posted: ', res);
+    }
+    xhr.onerror = function(res) {
+        console.log('error posting: ', res);
+    }
+}
+
+
+
+
+
+
+
+
+
 

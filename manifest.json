@@ -1,7 +1,7 @@
 {
-  "name": "CHADWATCH",
+  "name": "CHADGUARD",
   "version": "1.0",
-  "description": "Reveal your inner chad. CHADWATCH keeps you away from porn.",
+  "description": "Reveal your inner chad. CHADGUARD keeps you away from porn.",
   "manifest_version": 2,
   "homepage_url": "https://github.com/whiterqbbit/Shamebot",
   "permissions": ["activeTab", "storage", "identity", "https://discordapp.com/api/"],
@@ -25,7 +25,11 @@
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["content.js"]
+      "js": ["nsfwjs.min.js", "content.js"]
     }
+  ],
+  "web_accessible_resources": [
+    "urls.json",
+    "blockpage.html"
   ]
 }

@@ -7,7 +7,7 @@ chrome.storage.sync.get(['username'], function(data) {
     username = data.username;
 });
 
-//Are the login info in chrome storage ? if yes, log him in. If not, ask him to log in 
+//Are the login info in chrome storage ? if yes, log him in. If not, ask him to log in
 function checkLoginStatus() {
     chrome.storage.sync.get(['discord_token', 'username'], function(data) {
         document.getElementById("login_status").value = data;
