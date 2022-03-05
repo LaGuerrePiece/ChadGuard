@@ -1,0 +1,29 @@
+<script src="handlebars-1.0.0.beta.6.js"></script>
+<script id="hello-world-template" type="text/x-handlebars-template">
+    <div class="entry">
+        <h1>Hello, !</h1>
+    </div>
+</script>
+<script>
+    console.log("sandbox")
+    window.addEventListener('message', function(event) {
+        var command = event.data.command;
+        var name = event.data.name || 'hello';
+        switch(command) {
+            case 'render':
+                event.source.postMessage({
+                    name: name,
+                    html: templates[name](event.data.context)
+                }, event.origin);
+                break;
+
+            // case 'somethingElse':
+            //   ...
+        }
+    });
+</script>
+<script>
+    var templates = [];
+    var source = document.getElementById('hello-world-template').innerHTML;
+    templates['hello'] = Handlebars.compile(source);
+</script>

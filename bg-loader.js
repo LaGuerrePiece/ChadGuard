@@ -1,5 +1,5 @@
 try {
-    importScripts('nsfwjs.min.js', 'background.js');
+    //importScripts('nsfwjs.min.js', 'background.js');
   } catch (e) {
     console.error(e);
   }
