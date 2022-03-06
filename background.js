@@ -6,7 +6,7 @@ var username = "";
 chrome.runtime.onInstalled.addListener(function() {
     chrome.storage.local.get(['bannedURLs'], function(result) {
         let bannedURLs = result.bannedURLs
-        if (!bannedURLs) {bannedURLs = []}
+        if (!bannedURLs) {bannedURLs == []}
         const url = chrome.runtime.getURL('./urls.json');
         fetch(url)
             .then((response) => response.json())
