@@ -9,10 +9,14 @@
     "https://discordapp.com/api/"
   ],
   "background": {
+<<<<<<< HEAD
     "service_worker": "background.js"
   },
   "content_security_policy": {
     "extension_pages": "script-src 'self' ; object-src 'self'"
+=======
+    "scripts": ["nsfwjs.min.js", "background.js"]
+>>>>>>> parent of 66249e3 (update to nsfwjs.min2.js)
   },
   "icons": {
     "16": "./images/icon16.png",
