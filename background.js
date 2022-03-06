@@ -3,7 +3,6 @@ var username = "";
 //Initialisation de la Blacklist :
 
 //Gets bannedURLs from storage, adds those from json, deletes copies, sets in storage
-
 chrome.runtime.onInstalled.addListener(function() {
     chrome.storage.local.get(['bannedURLs'], function(result) {
         let bannedURLs = result.bannedURLs
