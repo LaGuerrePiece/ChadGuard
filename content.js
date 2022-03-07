@@ -21,61 +21,41 @@ function img_find() {
     //Chopper toutes les images
     var imgs = document.getElementsByTagName("img");
     if (imgs.length) {
-        console.log('length avant suppression', imgs.length)
-        let imgArray = []
         for (let i = 0; i < imgs.length; i++) {
-            imgArray[i] = new Image()
-            //imgArray[i].crossOrigin = "anonymous"
-            if (imgs[i].hasAttribute('src')) {imgArray[i].src = imgs[i].getAttribute('src')}
-            if (imgs[i].hasAttribute('srcset')) {imgArray[i].srcset = imgs[i].getAttribute('srcset')}
-            if (imgs[i].hasAttribute('data-lazy')) {imgArray[i]['data-lazy'] = imgs[i].getAttribute('data-lazy')}
-            if (imgs[i].hasAttribute('data-srcset')) {imgArray[i]['data-srcset'] = imgs[i].getAttribute('data-srcset')}
-            if (imgs[i].hasAttribute('data-src')) {imgArray[i]['data-src'] = imgs[i].getAttribute('data-src')}
-
-            imgArray[i].width = imgs[i].clientWidth
-            imgArray[i].height = imgs[i].clientHeight
-            console.log(imgArray[i].src)
-            //if (imgArray[i].width == 0 || imgArray[i].height == 0) {imgArray.splice(i, 1); i--}
-
-            //if (!imgs[i].hasAttribute('width')) {imgs[i].setAttribute('width', imgs[i].clientWidth)}
-            //if (!imgs[i].hasAttribute('height')) {imgs[i].setAttribute('height', imgs[i].clientHeight)}
-            //imgs[i].setAttribute('crossOrigin', 'anonymous')
-            //if (imgs[i].getAttribute('width') == "0" || imgs[i].getAttribute('height') == "0") {imgs[i].remove(); i--}
+            if (!imgs[i].getAttribute('width')) {imgs[i].setAttribute('width', 100)}
+            if (!imgs[i].getAttribute('height')) imgs[i].setAttribute('height', 100);
+            imgs[i].setAttribute('crossorigin', 'anonymous');
         }
-        imgArray = imgArray.filter(function(item) {
-            if (item.src == "null" || item.src == null || item.width == 0 || item.height == 0) {
-                return false
-            } else {
-                return true
-            }
-        })
-        console.log('length après suppression', imgArray.length)
-        let elements = [...imgArray]
+        let elements = [...imgs]
         elements.forEach(e => console.log(e))
         //Evaluer chaque image
         let promiseArray = []
         nsfwjs.load().then((model) => {
-            for (var i = 0; i < elements.length; i++) {
-                promiseArray[i] = new Promise((resolve) => {
+            for (let i = 0; i < elements.length; i++) {
+                promiseArray[i] = new Promise((resolve, reject) => {
                     resolve(model.classify(elements[i]))
                 });
             }
             Promise.all(promiseArray).then((values) => {
                 console.log(values);
-                var score = getScore(values)
+                let score = getScore(values)
                 addToChromeStorage(score)
-
                 console.log(`pornScore : ${score}`)
-                if (score > treeshold) {
-                    console.log('Seems like porn !')
-                    block()
-                    //sendToDiscord(username, tabUrl)
-                } else {
-                    console.log('All seems fine.')
-                }
+
+                punition(score)
             });
         });
     } else {addToChromeStorage(0)}
+}
+
+function punition(score){
+    if (score > treeshold) {
+        console.log('Seems like porn !')
+        block()
+        //sendToDiscord(username, tabUrl)
+    } else {
+        console.log('All seems fine.')
+    }
 }
 
 function getScore(values) {
