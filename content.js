@@ -7,7 +7,7 @@ window.onload = checkBlacklisted()
 
 function checkBlacklisted() {
     chrome.storage.local.get(['bannedURLs'], function(result) {
-        let bannedURLs = result.bannedURLs
+        let bannedURLs = result.bannedURLs ?? []                        //Là il faut régler ce bug
         if (bannedURLs.includes(tabUrl)) {
             block()
         } else {
@@ -20,12 +20,19 @@ function checkBlacklisted() {
 function img_find() {
     //Chopper toutes les images
     var imgs = document.getElementsByTagName("img");
+    console.log('length avant purge :', imgs.length)
     if (imgs.length) {
         for (let i = 0; i < imgs.length; i++) {
-            if (!imgs[i].getAttribute('width')) {imgs[i].setAttribute('width', 100)}
-            if (!imgs[i].getAttribute('height')) imgs[i].setAttribute('height', 100);
+            if (!imgs[i].getAttribute('width')) {imgs[i].setAttribute('width', imgs[i].clientWidth)}
+            if (!imgs[i].getAttribute('height')) {imgs[i].setAttribute('height', imgs[i].clientHeight)}
             imgs[i].setAttribute('crossorigin', 'anonymous');
         }
+        for (let i = imgs.length - 1; i >= 0; --i) {
+            if (imgs[i].getAttribute('width') == 0 || imgs[i].getAttribute('height') == 0) {
+                imgs[i].remove();
+            }
+        }
+        console.log('length après purge :', imgs.length)
         let elements = [...imgs]
         elements.forEach(e => console.log(e))
         //Evaluer chaque image
