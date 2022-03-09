@@ -21,8 +21,6 @@ chrome.runtime.onInstalled.addListener(function() {
             });
         }
     });
-    // let idsToUrls = {}
-    // chrome.storage.local.set({idsToUrls});
 });
 
 function addToBannedURLs(urlToAdd) {
@@ -34,37 +32,15 @@ function addToBannedURLs(urlToAdd) {
     });
 }
 
-//When tab is updated, if it existed before, delete score associated with old url
-//Then, set the new url in the id to url tracker
-// chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-//     if (changeInfo.status == 'complete') {
-//         chrome.storage.local.get(['idsToUrls', 'scores'], function(a) {
-//             let idsToUrls = a.idsToUrls
-//             let scores = a.scores
-//             console.log(idsToUrls)
-//             if (idsToUrls[tabId]) {
-//                 delete scores[idsToUrls[tabId]]
-//             }
-//             idsToUrls[tabId] = changeInfo.url
-//             chrome.storage.local.set({scores, idsToUrls});
-//         });
-//     }
-// });
-
-//When tab is closed, removes score and id to url tracker
-// chrome.tabs.onRemoved.addListener(function(tabId, removeInfo) {
-//     chrome.storage.local.get(['idsToUrls', 'scores'], function(a) {
-//         let idsToUrls = a.idsToUrls
-//         let scores = a.scores
-//         delete scores[idsToUrls[tabId]]
-//         delete idsToUrls[tabId]
-//         chrome.storage.local.set({scores, idsToUrls});
-//     });
-// });
-
-
-
-
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+    console.log('score : ', request.score)
+    console.log('sender : ', sender.tab.id)
+    chrome.storage.local.get(['scores'], function(result) {
+        let scores = result.scores ?? {}
+        scores[sender.tab.id] = request.score
+        chrome.storage.local.set({scores});
+    });
+});
 
 //MIGRATION : https://developer.chrome.com/docs/extensions/mv3/intro/mv3-migration/
 

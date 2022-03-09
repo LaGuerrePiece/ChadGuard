@@ -2,6 +2,8 @@ var loggedin = false;
 var username;
 
 
+displayscore()
+
 //If the username is in chrome storage, get it
 chrome.storage.sync.get(['username'], function(data) {
     username = data.username;
@@ -93,30 +95,32 @@ function logout() {
     });
 }
 
+function displayscore() {
 
+    var query = { active: true, currentWindow: true };
+    function callback(tabs) {
+        var currentTab = tabs[0];
+        console.log(currentTab.id);
+        chrome.storage.local.get(['scores'], function(result) {
+            let currentScore = result.scores[currentTab.id]
+            document.getElementById("pScore").innerHTML = Math.round(currentScore*100);
+        })
+    }
+    chrome.tabs.query(query, callback);
+}
 
-chrome.tabs.query({active: true, currentWindow: true},function(tabs){
-    var currentTabUrl = tabs[0].url;
-    console.log(currentTabUrl)
-    chrome.storage.sync.get(['url'], function(result) {
-        console.log('Value currently is ' + result);
-        console.log('Value currently is ' + result.url);
+//choose BlockPage preference
+document.addEventListener('DOMContentLoaded', function() {
+    let BlockPageChoiceOne = document.getElementById('BlockPageChoiceOne');
+    BlockPageChoiceOne.addEventListener('click', function() {
+        chrome.storage.local.set({choice: 1});
     });
-});
-
-//{url: 'stackoverflow.com/questions/14531102/saving-and-retrieving-from-chrome-storage-sync', score: '0.55'}
-
-//var currentScore = localStorage.getItem(currentTab.url); 
-//document.getElementById("pScore").innerHTML = Math.round(currentScore*100);
-
-// chrome.runtime.onMessage.addListener(function(message) {
-//     if ('instruction' in message) {
-//         var score = localStorage.getItem('scores');
-//         var currentScore = score.currentTab.url
-//         document.getElementById("pScore").innerHTML = Math.round(currentScore*100);
-//     }
-// })
-
-// chrome.runtime.sendMessage({greeting: "requesting score"}, function(response) {
-//     console.log('Réponse : ' + response)
-// });
+    let BlockPageChoiceTwo = document.getElementById('BlockPageChoiceTwo');
+    BlockPageChoiceTwo.addEventListener('click', function() {
+        chrome.storage.local.set({choice: 2});
+    });
+    let BlockPageChoiceThree = document.getElementById('BlockPageChoiceThree');
+    BlockPageChoiceThree.addEventListener('click', function() {
+        chrome.storage.local.set({choice: 3});
+    });
+}); 

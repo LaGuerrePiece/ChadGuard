@@ -2,12 +2,11 @@ let tabUrl = location.href
 let treeshold = 0.2
 var webHookUrl = "https://discord.com/api/webhooks/945642399584120842/hU9VSm0vuyMzF1CQ8cCqCmMbuDN6JHy39JVm9f5WNwG4mvCbfa0IIRkmTWq-ectXUKyG";
 
-
 window.onload = checkBlacklisted()
 
 function checkBlacklisted() {
     chrome.storage.local.get(['bannedURLs'], function(result) {
-        let bannedURLs = result.bannedURLs ?? []                        //Là il faut régler ce bug
+        let bannedURLs = result.bannedURLs ?? []                        //Là il faut régler ce bug...URLS ?
         if (bannedURLs.includes(tabUrl)) {
             block()
         } else {
@@ -16,11 +15,13 @@ function checkBlacklisted() {
     })
 }
 
-
 function img_find() {
     //Chopper toutes les images
     var imgs = document.getElementsByTagName("img");
     console.log('length avant purge :', imgs.length)
+    // for (let i = 0; i < imgs.length; i++) {
+    //     console.log('img :', imgs[i])
+    // }
     if (imgs.length) {
         for (let i = 0; i < imgs.length; i++) {
             if (!imgs[i].getAttribute('width')) {imgs[i].setAttribute('width', imgs[i].clientWidth)}
@@ -34,7 +35,7 @@ function img_find() {
         }
         console.log('length après purge :', imgs.length)
         let elements = [...imgs]
-        elements.forEach(e => console.log(e))
+        //elements.forEach(e => console.log(e))
         //Evaluer chaque image
         let promiseArray = []
         nsfwjs.load().then((model) => {
@@ -43,23 +44,25 @@ function img_find() {
                     resolve(model.classify(elements[i]))
                 });
             }
-            Promise.all(promiseArray).then((values) => {
-                console.log(values);
+            Promise.allSettled(promiseArray).then((values) => {
+                for (let i = 0; i < values.length; i++) {
+                    //console.log(values[i], elements[i]);
+                }
+                
                 let score = getScore(values)
-                addToChromeStorage(score)
                 console.log(`pornScore : ${score}`)
-
+                addToSessionStorage(score)
                 punition(score)
             });
         });
-    } else {addToChromeStorage(0)}
+    } else {addToSessionStorage(0)}
 }
 
 function punition(score){
     if (score > treeshold) {
         console.log('Seems like porn !')
+        PUNISH(username)
         block()
-        //sendToDiscord(username, tabUrl)
     } else {
         console.log('All seems fine.')
     }
@@ -67,11 +70,12 @@ function punition(score){
 
 function getScore(values) {
     let pScore = 0
-
     function incrementPScore(value) {
-        for (let i = 0; i < 5; i++) {
-            if (value[i].className == 'Porn') {
-                pScore += value[i].probability
+        if (value.status == 'fulfilled') {
+            for (let i = 0; i < 5; i++) {
+                if (value.value[i].className == 'Porn') {
+                    pScore += value.value[i].probability
+                }
             }
         }
     }
@@ -80,20 +84,16 @@ function getScore(values) {
     return pScore
 }
 
-function addToChromeStorage(score) {
-    // chrome.storage.local.get(['scores'], function(result) {
-    //     let scores = result.scores ?? {}
-    //     scores[tabUrl] = score
-    //     chrome.storage.local.set({scores: scores}, function() {
-    //         console.log('scores : ' + JSON.stringify(scores));
-    //     });
-    // });
+
+
+function addToSessionStorage(score) {
+    chrome.runtime.sendMessage({score: score}, function(response) {
+        console.log(`score ${score} envoyé`);
+    });
 }
 
 function block() {
-    PUNISH(username)
     location.replace('chrome-extension://' + chrome.runtime.id + '/blockpage.html')
-    
 }
 
 
@@ -123,12 +123,6 @@ function postToWebhook(content) {
         console.log('error posting: ', res);
     }
 }
-
-
-
-
-
-
 
 
 
