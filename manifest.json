@@ -34,7 +34,10 @@
     }
   ],
   "web_accessible_resources": [{
-    "resources": ["urls.json", "blockpage.html"],
+    "resources": ["urls.json"],
     "extension_ids": [ "gehjkocgcpmoabfpdimjlkehchgkleom" ]
+  }, {
+    "resources": ["blockpage.html"],
+    "matches": ["<all_urls>"]
   }]
 }

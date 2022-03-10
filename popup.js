@@ -1,15 +1,12 @@
+//CONNECTION MODULE
+
 var loggedin = false;
 var username;
 
-
-displayscore()
-
-//If the username is in chrome storage, get it
 chrome.storage.sync.get(['username'], function(data) {
     username = data.username;
 });
 
-//Are the login info in chrome storage ? if yes, log him in. If not, ask him to log in
 function checkLoginStatus() {
     chrome.storage.sync.get(['discord_token', 'username'], function(data) {
         document.getElementById("login_status").value = data;
@@ -39,17 +36,13 @@ function getUsername(token) {
     xhr.setRequestHeader('Authorization', 'Bearer ' + token);
     xhr.onload = function (e) {
         if (xhr.readyState === 4) {
-            chrome.extension.getBackgroundPage().console.log(xhr.responseText);
-            var username = JSON.parse(xhr.responseText).username;
+            console.log(xhr.responseText);
+            username = JSON.parse(xhr.responseText).username;
             if(username === undefined) {
                 return;
             }
-            chrome.storage.sync.set({ username: username }, function() {
-                chrome.runtime.sendMessage({type: 'update',  update: 1}, function(response) {
-                });
-            });
-            document.getElementById("login_status").innerHTML = JSON.parse(xhr.responseText).username;
-            username = JSON.parse(xhr.responseText).username;
+            document.getElementById("login_status").innerHTML = username;
+            chrome.storage.sync.set({ username: username });
         }
     };
     xhr.send();
@@ -66,9 +59,10 @@ function getToken(code) {
             });
         }
     };
-    xhr.send("client_id=945674310461313087&client_secret=tWD4eQ7yT7f6wUk56NN7SDljcPgetWGv&code=" + code + "&scope=identify&grant_type=authorization_code");
+    xhr.send("client_id=945674310461313087&client_secret=tWD4eQ7yT7f6wUk56NN7SDljcPgetWGv&code=" + code + "&redirect_uri=" + chrome.identity.getRedirectURL() + "&scope=identify&grant_type=authorization_code");
 }
 
+console.log(chrome.identity.getRedirectURL())
 document.getElementById("loginwithdiscord").addEventListener("click", function(){
     if (loggedin) {
         logout();
@@ -79,10 +73,10 @@ document.getElementById("loginwithdiscord").addEventListener("click", function()
 
 
 function login() {
-    var url = "https://discordapp.com/api/oauth2/authorize?client_id=945674310461313087&response_type=code&scope=identify%20guilds";
+    var url = "https://discordapp.com/api/oauth2/authorize?client_id=945674310461313087&redirect_uri=" + chrome.identity.getRedirectURL() + "&response_type=code&scope=identify%20guilds";
     chrome.identity.launchWebAuthFlow({url: url, interactive: true}, function(res){
         var url = new URL(res);
-        chrome.extension.getBackgroundPage().console.log(res);
+        console.log(res)
         var code = url.searchParams.get("code");
         getToken(code);
     });
@@ -94,6 +88,12 @@ function logout() {
         checkLoginStatus();
     });
 }
+
+//AUTRES MODULES :
+
+displayscore()
+
+
 
 function displayscore() {
 
@@ -107,6 +107,27 @@ function displayscore() {
         })
     }
     chrome.tabs.query(query, callback);
+}
+
+//Add to banned URLs
+function addToBannedURLs(urlToAdd) {
+    chrome.storage.local.get(['bannedURLs'], function(result) {
+        let bannedURLs = result.bannedURLs
+        bannedURLs.push(urlToAdd)
+        bannedURLs = [...new Set(bannedURLs)];
+        chrome.storage.local.set({bannedURLs});
+    });
+}
+//Remove from banned URLs
+function removeFromBannedURLs(urlToRemove) {
+    chrome.storage.local.get(['bannedURLs'], function(result) {
+        let bannedURLs = result.bannedURLs
+        let index = bannedURLs.indexOf(urlToRemove)
+        if (index == - 1) {console.log("cette URL n'était pas là de base !")} else {
+            bannedURLs.splice(index, 1)
+        }
+        chrome.storage.local.set({bannedURLs});
+    });
 }
 
 //choose BlockPage preference

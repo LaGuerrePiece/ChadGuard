@@ -2,20 +2,21 @@ let tabUrl = location.href
 let treeshold = 0.2
 var webHookUrl = "https://discord.com/api/webhooks/945642399584120842/hU9VSm0vuyMzF1CQ8cCqCmMbuDN6JHy39JVm9f5WNwG4mvCbfa0IIRkmTWq-ectXUKyG";
 
+
 window.onload = checkBlacklisted()
 
 function checkBlacklisted() {
     chrome.storage.local.get(['bannedURLs'], function(result) {
-        let bannedURLs = result.bannedURLs ?? []                        //Là il faut régler ce bug...URLS ?
-        if (bannedURLs.includes(tabUrl)) {
+        let bannedURLs = result.bannedURLs ?? []
+        if (bannedURLs.some(e => tabUrl.includes(e))) {
             block()
         } else {
-            img_find()
+            analysePage()
         }
     })
 }
 
-function img_find() {
+function analysePage() {
     //Chopper toutes les images
     var imgs = document.getElementsByTagName("img");
     console.log('length avant purge :', imgs.length)
@@ -48,7 +49,6 @@ function img_find() {
                 for (let i = 0; i < values.length; i++) {
                     //console.log(values[i], elements[i]);
                 }
-                
                 let score = getScore(values)
                 console.log(`pornScore : ${score}`)
                 addToSessionStorage(score)
@@ -61,8 +61,7 @@ function img_find() {
 function punition(score){
     if (score > treeshold) {
         console.log('Seems like porn !')
-        PUNISH(username)
-        block()
+        PUNISH()
     } else {
         console.log('All seems fine.')
     }
@@ -84,8 +83,6 @@ function getScore(values) {
     return pScore
 }
 
-
-
 function addToSessionStorage(score) {
     chrome.runtime.sendMessage({score: score}, function(response) {
         console.log(`score ${score} envoyé`);
@@ -93,20 +90,33 @@ function addToSessionStorage(score) {
 }
 
 function block() {
-    location.replace('chrome-extension://' + chrome.runtime.id + '/blockpage.html')
+    chrome.storage.local.get(['choice'], function(result) {
+        if (result.choice == 1) {
+            chrome.runtime.sendMessage({message: 'closeIt'})
+        } else {
+            location.replace('chrome-extension://' + chrome.runtime.id + '/blockpage.html')
+        }
+    })
 }
 
 
 
 //MODULE WEBHOOK :
 
-function PUNISH(username) {                             //Mettre à jour username sur cette page
-    url = url.replace('https://', '')
-    url = url.replace('/', '')
-    postToWebhook("**" + username + "** vient de trahir son chad intérieur sur : " + tabUrl + ".");
+function PUNISH() {
+    url = tabUrl.replace('https://', '')
+    //url = url.replace('/', '')
+    chrome.storage.sync.get(['username'], function(data) {
+        if (data.username) {
+            postToWebhookThenBlock("**" + data.username + "** vient de trahir son chad intérieur sur : " + url + ".");
+        } else {
+            postToWebhookThenBlock("**un personnage non-identifié** vient de trahir son chad intérieur sur : " + url + ".");
+            console.log('Triché mais pas connecté !')
+        }
+    })
 }
 
-function postToWebhook(content) {
+function postToWebhookThenBlock(content) {
     var xhr = new XMLHttpRequest();
     xhr.open('POST', webHookUrl, true);
     xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
@@ -116,14 +126,19 @@ function postToWebhook(content) {
     }
 
     xhr.send(JSON.stringify(data));
-    xhr.onload = function(res) {
-        console.log('posted: ', res);
+    xhr.onload = function() {
+        block()
     }
     xhr.onerror = function(res) {
         console.log('error posting: ', res);
+        block()
     }
 }
 
+const getHostname = (url) => {
+    return new URL(url).hostname;
+}
 
-
-
+console.log(getHostname('https://discord.com/developers/applications/945674310461313087/information'))
+console.log(getHostname('https://www.youtube.com/watch?v=qM57JkOLL6s'))
+console.log(getHostname('https://fr.pornhub.com/'))
