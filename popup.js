@@ -1,3 +1,9 @@
+//EYE MODULE
+jQuery(document).ready(function() {
+    jQuery("#pupil1").jqEye({shape: "ellipse", width: 40, height: 10})
+    jQuery("#pupil2").jqEye({shape: "ellipse", width: 40, height: 10})
+})
+
 //CONNECTION MODULE
 
 var loggedin = false;

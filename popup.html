@@ -4,11 +4,10 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Jomhuria"/>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto"/>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Alfa+Slab+One"/>
-    <script src="popup.js"></script>
 
   </head>
   <body>
-    <div id="tete">CHADGUARD<img id="logo" src="./images/jaune2.png"></div>
+    <div id="tete">CHADGUARD<img id="logo" src="./images/sanspupillefilled.png"></div>
 
     <hr>
 
@@ -100,6 +99,15 @@
    </li>
   </ul>
 </nav>
+<div id="eye1">
+  <div id="pupil1"></div>
+</div>
+<div id="eye2">
+  <div id="pupil2"></div>
+</div>
+<script src="jquery.min.js"></script>
+<script src="jqeye.min.js"></script>
+<script src="popup.js"></script>
   
 
   </body>
@@ -192,6 +200,7 @@ body {
 #logo {
     margin-top: 10px;
     height: 75px;
+    z-index: 1;
     /* margin-right: 2%; */
     /* flex-grow: 1; */
 }
@@ -391,6 +400,46 @@ hr {
   width: 90%;
   margin-left: 5%;
   margin-bottom: -10px;
+}
+
+#eye1 {
+  width:50px;
+  height:50px;
+  position:absolute;
+  top: 90px;
+  left: 50px;
+  border-radius:25px;
+  border: solid;
+}
+
+#eye2 {
+  width:50px;
+  height:50px;
+  position:absolute;
+  top: 90px;
+  left: 210px;
+  border-radius:25px;
+  border: solid;
+}
+
+#pupil1 {
+  position: relative;
+  left: 20px;
+  top: 20px;
+  width: 30px;
+  height: 30px;
+  border-radius: 15px;
+  background-color: rgb(235, 226, 100);
+}
+
+#pupil2 {
+  position: relative;
+  left: 20px;
+  top: 20px;
+  width: 30px;
+  height: 30px;
+  border-radius: 15px;
+  background-color: rgb(235, 226, 100);
 }
 
     </style>
