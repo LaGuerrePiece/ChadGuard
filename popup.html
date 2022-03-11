@@ -7,10 +7,10 @@
 
   </head>
   <body>
-    <div id="tete">CHADGUARD<img id="logo" src="./images/sanspupillefilled.png"></div>
+    <div class="border"><div id="tete">CHADGUARD<img id="logo" src="./images/sanspupillefilled.png"></div>
 
     <hr>
-
+    
   <div class="all"><div id="all2">
       <div id="blocked">
           <ul id="liens">
@@ -73,7 +73,7 @@
   <ul class="navbar-nav">
      <li class="nav-item">
         <input class="nav-link label" type="checkbox" id="toggle">
-        <label class="nav-link nav-item label" for="toggle">Guide</label>
+        <label class="nav-link nav-item labello" for="toggle">FAQ</label>
         
         <dialog >
         <header>
@@ -92,13 +92,14 @@
 
      </li>
      <li class="nav-item">
-        <a class="nav-link" href="#">Discord</a>
+        <a class="nav-link" rel='https://discord.gg/d3GDTz6GUD' href="">Discord</a>
      </li>
      <li class="nav-item">
-      <a class="nav-link" href="#">GitHub</a>
+      <a class="nav-link" rel='' href="#">GitHub</a>
    </li>
   </ul>
 </nav>
+</div></div>
 <div id="eye1">
   <div id="pupil1"></div>
 </div>
@@ -126,6 +127,7 @@ body {
         /* letter-spacing: 2px; */
       }
 
+
 :root {
   text-align: center;
   font-size: 2vh;
@@ -138,12 +140,21 @@ body {
   --almostdarkblue : rgb(33, 33, 66);
 }
 
+.border {
+    border: solid 2px var(--white);
+}
 
 .link {
+    align-items: stretch;
+    min-width: 90%;
     background-color: transparent;
     color: transparent;
    text-shadow: 0 0 6px var(--white);
    padding-left: 20px;
+   min-width: 210px;
+    background-color: transparent;
+    border: solid 1px var(--lightblue);
+    border-radius: 2px;
    /* letter-spacing: 2px; */
 }
 
@@ -176,12 +187,13 @@ body {
     cursor: pointer;
 }
 .nav-item {
-    
+    margin-top: 4px;
     background-color: transparent;
     border: var(--darkblue);
     font-size: 14px;
     width: 50px;
     position: relative;
+    flex-grow: 1;
     /* top: 5px; */
 }
 
@@ -205,15 +217,13 @@ body {
     /* flex-grow: 1; */
 }
 
-li {
-    width: 200px;
+/* li {
+    min-width: 210px;
     background-color: transparent;
     border: solid 1px var(--lightblue);
     border-radius: 2px;
-    /* margin: 6px;
-    margin-right: 6vw; */
 
-}
+} */
 
 .navbar ul li a {text-decoration:none}
 
@@ -266,15 +276,12 @@ button:hover {
     background-color: var(--almostdarkblue);
 }
 
-/* button:active {
-    background-color: var(--yellow);
-} */
 
-button:focus {
+/* button:focus {
     border: solid 2px var(--yellow);
 
     box-shadow: 0px 0px 15px var(--yellow);
-}
+} */
 
 
 .blockingtype {
@@ -333,13 +340,39 @@ button:focus {
     font-size: 40px;
     /* letter-spacing: 2px; */
     align-items: center ;
-    color: var(--yellow);
+    color: var(--darkblue);
     background-color: transparent;
     margin: 0px;
     margin-top: 7px;
     justify-content: center;
     place-items: auto center;
     margin-bottom: 25px;
+    text-shadow:
+    -1px -1px 0 var(--yellow),  
+     1px -1px 0 var(--yellow),
+    -1px  1px 0 var(--yellow),
+     1px  1px 0 var(--yellow),
+     0   -1px 0 var(--yellow),
+     1px  0   0 var(--yellow),
+     0    1px 0 var(--yellow),
+    -1px  0   0 var(--yellow),
+    -2px -2px 0 var(--yellow),  
+     2px -2px 0 var(--yellow),
+    -2px  2px 0 var(--yellow),
+     2px  2px 0 var(--yellow),
+     1px -2px 0 var(--yellow),
+     2px  1px 0 var(--yellow),
+     1px  2px 0 var(--yellow),
+    -2px  1px 0 var(--yellow),
+    -3px -3px 0 var(--yellow),  
+     3px -3px 0 var(--yellow),
+    -3px  3px 0 var(--yellow),
+     3px  3px 0 var(--yellow),
+     2px -3px 0 var(--yellow),
+     3px  2px 0 var(--yellow),
+     2px  3px 0 var(--yellow),
+    -3px  2px 0 var(--yellow),
+    0px 0px 30px var(--yellow);
 }
 
 .all{
@@ -361,14 +394,27 @@ button:focus {
     font-size: 17px;
     height: 280px;
     list-style: none; 
+    overflow-x: hidden;
     overflow-y: scroll;
     /* scrollbar-color: rebeccapurple rgb(253, 233, 53); */
     scrollbar-width: thin;
 }
 
 #input {
-    border: none;
+    min-width: 90%;
+    /* border: solid yellow; */
     /* text-align: center; */
+}
+
+
+#input:active {
+    border:none;
+}
+
+#input:focus {
+    border: none;
+    color: var(--white);
+    text-shadow: none;
 }
 
 #toggle{
@@ -386,6 +432,14 @@ button:focus {
   overflow-y: scroll;
 }
 
+.labello {
+    /* border: solid 2px yellow; */
+    flex-grow: 1;
+    position: absolute;
+    bottom: 3px;
+    left: 25px;
+}
+
 .label2 {
     color: var(--darkblue);
     cursor: pointer;
@@ -393,6 +447,7 @@ button:focus {
     padding: 4px;
     border-radius: 5px;
 }
+
 
 hr {
   border: solid 1px var(--lightblue);
