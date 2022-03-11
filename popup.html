@@ -1,89 +1,397 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <style>
-      @import url('https://fonts.googleapis.com/css?family=Montserrat:300,500,700');
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Jomhuria"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Alfa+Slab+One"/>
+    <script src="popup.js"></script>
 
-      body {
-        background: #2C2F33;
-        margin: 0px;
-        padding: 0px;
-        width: 327px;
-        height: 230px;
-        color: white;
-        font-family: 'montserrat', sans-serif;
-        font-weight: 300;
-        font-size: 16px;
-      }
-
-      button {
-        position: relative;
-        top: 50px;
-        display: block;
-        border: 0px;
-        box-shadow: 0px;
-        background: #7289DA;
-        color: white;
-        border-radius: 5px;
-        height: 40px;
-        width: 80px;
-        font-size: 16px;
-        font-weight: 500;
-        cursor: pointer;
-      }
-      
-      #login {
-        flex: auto;
-      }
-
-      #login p {
-        margin-right: 10px;
-      }
-
-      #login.notloggedin {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-      }
-
-      #login.notloggedin button {
-        width: 180px;
-        height: 50px;
-      }
-
-      #login.loggedin {
-        position: absolute;
-        top: 15px;
-        left: 5%;
-        display: flex;
-        width: 90%;
-        height: 50px;
-        justify-content: flex-end;
-        align-items: center;
-      }
-
-      #chad_watch {
-        object-fit: fill;
-      }
-
-      #pScorediv {
-        text-align: center;
-        font-size: 30px;
-      }
-
-    </style>
   </head>
   <body>
-    <img id="chad_watch" src="./images/chadlook2.png"/>
-    <div id="login">
-      <p id="login_status">Status: Not logged in</p>
-      <button id="loginwithdiscord">Login with Discord</button>
-    </div>
-    <div id="pScorediv">p-Score : <span id="pScore"></span></div>
-    <button id="BlockPageChoiceOne">Choice 1</button>
-    <button id="BlockPageChoiceTwo">Choice 2</button>
-    <button id="BlockPageChoiceThree">Choice 3</button>
-    <script src="popup.js"></script>
+    <div id="tete">CHADGUARD<img id="logo" src="./images/jaune2.png"></div>
+
+    <hr>
+
+  <div class="all"><div id="all2">
+      <div id="blocked">
+          <ul id="liens">
+              <li class="link">link 1</li>
+              <li class="link">link2</li>
+              <li class="link">link3</li>
+              <li class="link">link 1</li>
+              <li class="link">link 1</li>
+              <li class="link">link 1</li>
+              <li class="link">link 1</li>
+              <li class="link">link 1</li>
+              <li class="link">link2</li>
+              <li class="link">link3</li>
+              <li class="link">link 1</li>
+              <li class="link">link 1</li>
+              <li class="link">link 1</li>
+              <li class="link">link 1</li>
+              <li class="link">link 1</li>
+              <li class="link">link2</li>
+              <li class="link">link3</li>
+              <li class="link">link 1</li>
+              <li class="link">link 1</li>
+              <li class="link">link 1</li>
+              <li class="link">link 1</li>
+              <li class="link">link 1</li>
+              <li class="link">link2</li>
+              <li class="link">zootube.com</li>
+              <li class="link">onlyfans.com</li>
+              <li class="link">xvideos.com</li>
+              <li class="link">pornhub.com</li>
+              <li class="link">link 1</li>
+            <li><input id="input" class="link" placeholder=""></input></li>
+          
+          </ul>
+          
+      </div>
+</div>
+<div id="log"><div class='button' id='discord' ><img id="discordlogo" src='./images/violetdiscord.png'/><div id="identity">Connected as <br> @machin</div></div>
+<div id="AI"><button class="iabutton">AI</button></div>
+<div id="block">
+<button id="1" class="button blockingtype" onclick="">1</button>
+<button id="2" class="button blockingtype" onclick="">2</button>
+<button id="3" class="button blockingtype" onclick="">3</button>
+</div>
+
+</div>
+
+
+
+
+
+
+
+
+</div>
+
+<hr>
+
+<nav class="navbar">
+  <ul class="navbar-nav">
+     <li class="nav-item">
+        <input class="nav-link label" type="checkbox" id="toggle">
+        <label class="nav-link nav-item label" for="toggle">Guide</label>
+        
+        <dialog >
+        <header>
+          FAQ
+        </header>
+          <p>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa nihil dolore similique quis qui ad blanditiis ex eum! Enim maiores ipsam fugiat officiis earum distinctio natus reprehenderit aliquam est iusto!
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa nihil dolore similique quis qui ad blanditiis ex eum! Enim maiores ipsam fugiat officiis earum distinctio natus reprehenderit aliquam est iusto!
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa nihil dolore similique quis qui ad blanditiis ex eum! Enim maiores ipsam fugiat officiis earum distinctio natus reprehenderit aliquam est iusto!
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa nihil dolore similique quis qui ad blanditiis ex eum! Enim maiores ipsam fugiat officiis earum distinctio natus reprehenderit aliquam est iusto!
+          </p>
+            
+          
+          <label class="label2" for="toggle">close overlay</label>
+        </dialog>
+
+     </li>
+     <li class="nav-item">
+        <a class="nav-link" href="#">Discord</a>
+     </li>
+     <li class="nav-item">
+      <a class="nav-link" href="#">GitHub</a>
+   </li>
+  </ul>
+</nav>
+  
+
   </body>
 </html>
+
+
+<style>
+      
+
+body {
+        margin: 0px;
+        padding: 0px;
+        width: 330px;
+        height: 520px;
+        font-family: 'Roboto';
+        /* letter-spacing: 2px; */
+      }
+
+:root {
+  text-align: center;
+  font-size: 2vh;
+  background-color: var(--darkblue);
+  font-family: 'Roboto';
+  --lightblue : rgb(101, 128, 204);
+  --darkblue : rgb(23, 23, 44);
+  --yellow : rgb(235, 226, 100);
+  --white : rgb(247, 232, 232);
+  --almostdarkblue : rgb(33, 33, 66);
+}
+
+
+.link {
+    background-color: transparent;
+    color: transparent;
+   text-shadow: 0 0 6px var(--white);
+   padding-left: 20px;
+   /* letter-spacing: 2px; */
+}
+
+.link:hover {
+    /* background-color: var(--almostdarkblue); */
+    color:var(--white);
+    text-shadow: none;
+}
+
+
+.navbar-nav {
+    padding: 2px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    height: 15px;
+    /* border: solid orange; */
+    list-style: none;
+}
+
+.nav-link:hover{
+    color:var(--yellow);
+    text-shadow: 0px 0px 25px var(--yellow);
+}
+
+
+.nav-link {
+    color: var(--lightblue);
+    cursor: pointer;
+}
+.nav-item {
+    
+    background-color: transparent;
+    border: var(--darkblue);
+    font-size: 14px;
+    width: 50px;
+    position: relative;
+    /* top: 5px; */
+}
+
+#all2 {
+    min-height: 300px;
+    display: flex;
+    flex-wrap: wrap;
+    min-width: 100%;
+    background-color: transparent;
+    /* border: solid 2px var(--lightblue); */
+    border-radius: 10px;
+    margin-top: 0;
+    margin-bottom: 5px;
+}
+
+#logo {
+    margin-top: 10px;
+    height: 75px;
+    /* margin-right: 2%; */
+    /* flex-grow: 1; */
+}
+
+li {
+    width: 200px;
+    background-color: transparent;
+    border: solid 1px var(--lightblue);
+    border-radius: 2px;
+    /* margin: 6px;
+    margin-right: 6vw; */
+
+}
+
+.navbar ul li a {text-decoration:none}
+
+#discordlogo {
+    height: 25px;
+    margin: 8px;
+    margin-left: 2px;
+}
+#log {
+    
+    height: 50px;
+    /* border: solid red; */
+    width: 100%;
+    display: flex;
+    margin: auto;
+    flex-direction: row;
+    flex-wrap: wrap;
+    color: var(--lightblue);
+    flex-grow: 1;
+    margin-top: 20px;
+} 
+
+#discord {
+    display: flex;
+    flex-direction: row;
+    /* align-items: center; */
+    background-color: transparent;
+    color: var(--yellow);
+    /* border: solid 2px #AC6AFF; */
+    border-radius: 10%;
+    /* margin-right: 3px; */
+    font-size: 8px;
+    width: fit-content;
+    height: 70%;
+    /* line-height: 100%; */
+}
+
+#identity {
+    margin-top: 3px;
+    /* height: fit-content; */
+    border: solid 2px var(--lightblue);
+    border-radius: 5px;
+    padding: 6px;
+    text-shadow: 0px 0px 5px var(--yellow);
+
+}
+
+
+button:hover {
+    background-color: var(--almostdarkblue);
+}
+
+/* button:active {
+    background-color: var(--yellow);
+} */
+
+button:focus {
+    border: solid 2px var(--yellow);
+
+    box-shadow: 0px 0px 15px var(--yellow);
+}
+
+
+.blockingtype {
+    background-color: transparent;
+    height: 100%;
+    color:var(--white);
+    flex-grow: 1;
+    border: solid 2px var(--lightblue);
+    border-radius: 5px;
+    margin: 2px;
+
+}
+
+#block {
+    width: 125px;
+    border-radius: 10%;
+    /* border: solid blue; */
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-around;
+    height: 70%;
+    width: 38%;
+}
+
+.iabutton {
+    width: 35px;
+    margin-right: 18px;
+    margin-left: 18px;
+
+    background-color: transparent;
+    height: 100%;
+    color:var(--white);
+    flex-grow: 1;
+    border: solid 2px var(--lightblue);
+    border-radius: 5px;
+    margin: 2px;
+}
+
+
+#AI {
+    color: var(--white);
+    /* flex-grow: 1; */
+    height: 70%;
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
+
+
+#tete {
+    font-family: 'Alfa Slab One';
+    text-shadow: 0px 0px 30px var(--yellow);
+    display: flex;
+    flex-direction: column;
+    font-size: 40px;
+    /* letter-spacing: 2px; */
+    align-items: center ;
+    color: var(--yellow);
+    background-color: transparent;
+    margin: 0px;
+    margin-top: 7px;
+    justify-content: center;
+    place-items: auto center;
+    margin-bottom: 25px;
+}
+
+.all{
+    margin-top: 0;
+    flex-wrap: wrap;
+    /* border: solid 2px rgb(22, 163, 116); */
+    text-align: center;
+    background-color: transparent;
+    padding: 3%;
+    display: flex;
+    flex-direction: column;
+}
+
+#liens {
+    text-align: left;
+    /* border: solid rgb(173, 22, 153); */
+    /* min-width: 100%; */
+    margin-top: 0px;
+    font-size: 17px;
+    height: 280px;
+    list-style: none; 
+    overflow-y: scroll;
+    /* scrollbar-color: rebeccapurple rgb(253, 233, 53); */
+    scrollbar-width: thin;
+}
+
+#input {
+    border: none;
+    /* text-align: center; */
+}
+
+#toggle{
+  visibility: hidden;
+}
+
+#toggle:checked ~ dialog {
+    z-index: 100;
+  display: block;
+  background-color: var(--darkblue);
+  color: var(--lightblue);
+  position:fixed;
+  bottom: 0px;
+  height: 68%;
+  overflow-y: scroll;
+}
+
+.label2 {
+    color: var(--darkblue);
+    cursor: pointer;
+    background-color: var(--lightblue);
+    padding: 4px;
+    border-radius: 5px;
+}
+
+hr {
+  border: solid 1px var(--lightblue);
+  margin: 0;
+  width: 90%;
+  margin-left: 5%;
+  margin-bottom: -10px;
+}
+
+    </style>
+
