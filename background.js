@@ -17,8 +17,7 @@ chrome.runtime.onInstalled.addListener(function() {
             });
         }
     });
-    chrome.storage.local.set({scores: {}})
-    chrome.storage.local.set({choice: 1})
+    chrome.storage.local.set({"scores": {}, "choice": 1, 'ai': 1})
 });
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {

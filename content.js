@@ -6,12 +6,14 @@ var webHookUrl = "https://discord.com/api/webhooks/945642399584120842/hU9VSm0vuy
 window.onload = checkBlacklisted()
 
 function checkBlacklisted() {
-    chrome.storage.local.get(['bannedURLs'], function(result) {
+    chrome.storage.local.get(['bannedURLs', 'ai'], function(result) {
         let bannedURLs = result.bannedURLs ?? []
         if (bannedURLs.some(e => tabUrl.includes(e))) {
             block()
-        } else {
+        } else if (result.ai == 1) {
             analysePage()
+        } else {
+            console.log('page not analysed because ai = 0')
         }
     })
 }
