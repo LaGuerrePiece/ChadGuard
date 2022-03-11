@@ -400,6 +400,34 @@ button:hover {
     scrollbar-width: thin;
 }
 
+
+
+
+
+#liens::-webkit-scrollbar {
+    -webkit-appearance: none;
+}
+
+#liens::-webkit-scrollbar:vertical {
+    width: 11px;
+}
+
+#liens::-webkit-scrollbar:horizontal {
+    height: 11px;
+}
+
+#liens::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    border: 3px solid var(--darkblue); /* should match background, can't be transparent */
+    background-color: var(--lightblue);
+    
+}
+
+
+
+
+
+
 #input {
     min-width: 90%;
     /* border: solid yellow; */
