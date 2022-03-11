@@ -91,7 +91,7 @@ function addToSessionStorage(score) {
 
 function block() {
     chrome.storage.local.get(['choice'], function(result) {
-        if (result.choice == 1) {
+        if (result.choice == 3) {
             chrome.runtime.sendMessage({message: 'closeIt'})
         } else {
             location.replace('chrome-extension://' + chrome.runtime.id + '/blockpage.html')
