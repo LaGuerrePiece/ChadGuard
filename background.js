@@ -11,9 +11,9 @@ chrome.runtime.onInstalled.addListener(function() {
         function MiseAJour(urls, bannedURLs) {
             console.log(urls)
             urls.forEach((e) => {bannedURLs.push(e)})
-            bannedURLs = [...new Set(bannedURLs)];
+            bannedURLs = [...new Set(bannedURLs)]
             chrome.storage.local.set({bannedURLs: bannedURLs}, function() {
-                console.log('Value is set to ' + bannedURLs);
+                console.log('Value is set to ' + bannedURLs[89]);
             });
         }
     });
