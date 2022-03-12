@@ -4,7 +4,7 @@
   "description": "Reveal your inner chad. CHADGUARD keeps you away from porn.",
   "manifest_version": 3,
   "homepage_url": "https://github.com/whiterqbbit/Shamebot",
-  "permissions": ["activeTab", "storage", "identity", "scripting", "tabs"],
+  "permissions": ["activeTab", "storage", "identity", "scripting", "tabs", "webRequest", "webRequestBlocking", "declarativeNetRequest", "declarativeNetRequestWithHostAccess", "declarativeNetRequestFeedback"],
   "host_permissions": [
     "https://discordapp.com/api/"
   ],
