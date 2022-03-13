@@ -9,13 +9,15 @@
     <div class="flex flex-col gap-2">
       <p class="text-xl">
         Access the preferences by typing <br />
-        “{{ pact }}”
+        “<span class="select-none">{{ pact }}</span
+        >”
       </p>
       <input
         type="text"
         class="h-full mx-8 px-3 py-1 mb-2 border-2 bg-[#A1B5F6] text-lg rounded-md outline-none default-border"
         placeholder="I believe in you"
         v-model="phrase"
+        @paste.prevent
       />
     </div>
   </div>
