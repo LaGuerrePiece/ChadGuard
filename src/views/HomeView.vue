@@ -13,7 +13,7 @@
       style="padding-left: 25px"
     >
       <div class="text-6xl logo">ChadGuard</div>
-      <div class="text-2xl">I love you, brother</div>
+      <div class="text-2xl">{{ randomCatch }}</div>
     </div>
     <div
       class="h-12 w-full flex border-t-2 border-b-2 default-border bg-[#f0a6e4] bg-opacity-25"
@@ -123,7 +123,6 @@ import { BanIcon } from "@heroicons/vue/solid";
 import { XIcon } from "@heroicons/vue/outline";
 
 export default defineComponent({
-  name: "HomeView",
   components: {
     LoadingSpinner,
     TheFooter,
@@ -182,6 +181,9 @@ export default defineComponent({
       loading.value = false;
     });
 
+    const phrases = ["I love you, brother", "Chad is watching you"];
+    const randomCatch = phrases[Math.floor(Math.random() * phrases.length)];
+
     return {
       loading,
       page,
@@ -194,6 +196,7 @@ export default defineComponent({
       setAddingLink,
       addingLinkValue,
       addInput,
+      randomCatch,
     };
   },
 });

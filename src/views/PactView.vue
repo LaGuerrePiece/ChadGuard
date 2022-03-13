@@ -30,7 +30,6 @@ import TheFooter from "@/components/TheFooter.vue";
 import { useRouter } from "vue-router";
 
 export default defineComponent({
-  name: "HomeView",
   components: {
     TheFooter,
   },
