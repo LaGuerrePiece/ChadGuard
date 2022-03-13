@@ -41,7 +41,10 @@
       </div>
     </div>
   </div>
-  <div class="overflow-y-auto p-3 flex-grow" v-if="!page">
+  <div v-if="loading" class="flex justify-center items-center flex-grow">
+    <LoadingSpinner />
+  </div>
+  <div class="overflow-y-auto p-3 flex-grow" v-else-if="!page">
     <div class="flex flex-col gap-2">
       <div v-if="addingLink" class="flex">
         <div class="input border-2 rounded flex-grow font-sans">
@@ -107,8 +110,12 @@
 </template>
 
 <script lang="ts">
+// Avoid this, temporary fix for Vue not finding chrome types when compiling
+/* eslint-disable */
+
 import { defineComponent, ref, watch } from "vue";
 import TheFooter from "@/components/TheFooter.vue";
+import LoadingSpinner from "@/components/LoadingSpinner.vue";
 import { PlusIcon } from "@heroicons/vue/outline";
 import { TrashIcon } from "@heroicons/vue/outline";
 import { CogIcon } from "@heroicons/vue/outline";
@@ -118,6 +125,7 @@ import { XIcon } from "@heroicons/vue/outline";
 export default defineComponent({
   name: "HomeView",
   components: {
+    LoadingSpinner,
     TheFooter,
     PlusIcon,
     TrashIcon,
@@ -130,7 +138,8 @@ export default defineComponent({
     const addInput = ref();
     const addingLink = ref(false);
     const addingLinkValue = ref("");
-    const links = ref(["www.turboshemale.com", "www.youtube.com"]);
+    const links = ref<string[]>([]);
+    const loading = ref(true);
 
     const setPage = (b: boolean) => {
       page.value = b;
@@ -141,7 +150,10 @@ export default defineComponent({
     };
 
     const addLink = (url: string) => {
+      console.log("aaaa");
       links.value.unshift(url);
+      console.log(links.value);
+      chrome.storage.local.set({ blocklist: links.value });
       addingLinkValue.value = "";
       setAddingLink(false);
     };
@@ -150,6 +162,7 @@ export default defineComponent({
       var index = links.value.indexOf(url);
       if (index !== -1) {
         links.value.splice(index, 1);
+        chrome.storage.local.set({ blocklist: links.value });
       }
     };
 
@@ -162,7 +175,15 @@ export default defineComponent({
       if (addInput.value) (addInput.value as HTMLInputElement).select();
     });
 
+    chrome.storage.local.get(["blocklist"], (result) => {
+      for (const key in result.blocklist) {
+        links.value.push(result.blocklist[key]);
+      }
+      loading.value = false;
+    });
+
     return {
+      loading,
       page,
       setPage,
       toggleFaq,
