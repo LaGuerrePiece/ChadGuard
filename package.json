@@ -1,0 +1,18 @@
+{
+  "name": "chardguard",
+  "scripts": {
+    "lint": "eslint .",
+    "build": "webpack --config webpack.config.js",
+    "dev:chrome": "npm-run-all --parallel dev start:chrome",
+    "start:chrome": "web-ext run --source-dir ./dist/ --target=chromium"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "eslint": "^8.11.0",
+    "ts-loader": "^9.2.8",
+    "typescript": "^4.6.2",
+    "web-ext": "^6.7.0",
+    "webpack": "^5.70.0",
+    "webpack-cli": "^4.9.2"
+  }
+}

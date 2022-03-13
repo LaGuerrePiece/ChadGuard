@@ -1,43 +1,6 @@
 {
-  "name": "CHADGUARD",
+  "name": "Getting Started Example",
+  "description": "Build an Extension!",
   "version": "1.0",
-  "description": "Reveal your inner chad. CHADGUARD keeps you away from porn.",
-  "manifest_version": 3,
-  "homepage_url": "https://github.com/whiterqbbit/Shamebot",
-  "permissions": ["activeTab", "storage", "identity", "scripting", "tabs", "webRequest", "webRequestBlocking", "declarativeNetRequest", "declarativeNetRequestWithHostAccess", "declarativeNetRequestFeedback"],
-  "host_permissions": [
-    "https://discordapp.com/api/"
-  ],
-  "background": {
-    "service_worker": "background.js"
-  },
-  "content_security_policy": {
-    "extension_pages": "script-src 'self' ; object-src 'self'"
-  },
-  "icons": {
-    "16": "./images/icon16.png",
-    "48": "./images/icon48.png",
-    "128": "./images/icon128.png"
-  },
-  "action": {
-    "default_icon": {
-      "16": "./images/icon16.png",
-      "48": "./images/icon48.png",
-      "128": "./images/icon128.png"
-    },
-    "default_popup": "popup.html"
-  },
-  "content_scripts": [
-    {
-      "matches": ["<all_urls>"],
-      "js": ["nsfwjs.min2.js", "content.js"]
-    }
-  ],
-  "web_accessible_resources": [{
-    "resources": ["urls.json"],
-    "extension_ids": [ "gehjkocgcpmoabfpdimjlkehchgkleom" ]
-  }, {
-    "resources": ["blockpage.html"],
-    "matches": ["<all_urls>"]
-  }]
+  "manifest_version": 3
 }
