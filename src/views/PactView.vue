@@ -2,9 +2,9 @@
   <div class="flex flex-col flex-grow gap-3 mt-6">
     <div class="text-6xl logo">THE CHAD PACT</div>
     <img
-      style="width: 290px"
+      style="width: 260px"
       src="https://i.imgur.com/WjsCGCG.png"
-      class="mx-auto mr-10"
+      class="mx-auto pl-3"
     />
     <div class="flex flex-col gap-2">
       <p class="text-xl">
@@ -13,7 +13,7 @@
       </p>
       <input
         type="text"
-        class="h-full mx-8 px-3 py-1 mb-2 border-2 bg-[#A1B5F6] text-lg rounded-md outline-none"
+        class="h-full mx-8 px-3 py-1 mb-2 border-2 bg-[#A1B5F6] text-lg rounded-md outline-none default-border"
         placeholder="I believe in you"
         v-model="phrase"
       />
@@ -39,7 +39,7 @@ export default defineComponent({
 
     watch(phrase, () => {
       if (phrase.value.toLowerCase() === pact.toLowerCase()) {
-        router.push("/");
+        router.push("/home");
       }
     });
 

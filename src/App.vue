@@ -1,11 +1,9 @@
 <template>
-  <div class="flex justify-center items-center w-full h-full">
-    <div
-      class="relative flex flex-col w-[400px] h-[640px] border rounded default-bg default-text default-border"
-    >
-      <TheFAQ v-if="showFaq" :closeCallback="toggleFaq" />
-      <router-view @toggleFaq="toggleFaq" />
-    </div>
+  <div
+    class="relative flex flex-col w-full h-full border rounded default-bg default-text default-border"
+  >
+    <TheFAQ v-if="showFaq" :closeCallback="toggleFaq" />
+    <router-view @toggleFaq="toggleFaq" />
   </div>
 </template>
 
@@ -46,9 +44,9 @@ body,
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   background: #111;
-  width: 100%;
+  width: 400px;
+  height: 600px;
   margin: 0;
-  height: 100%;
 }
 
 nav {
