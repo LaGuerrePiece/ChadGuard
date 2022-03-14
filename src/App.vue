@@ -44,6 +44,7 @@ body,
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   background: #111;
+  overflow: hidden;
   width: 400px;
   height: 600px;
   margin: 0;

@@ -35,7 +35,8 @@ export default defineComponent({
   },
   setup(props, { emit }) {
     const router = useRouter();
-    const pact = "I am not betraying our sacred pact, Chad bro";
+    const pact = "123";
+    const pactOriginal = "I am not betraying our sacred pact, Chad bro";
     const phrase = ref("");
 
     watch(phrase, () => {

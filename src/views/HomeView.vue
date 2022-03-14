@@ -1,11 +1,13 @@
 <template>
   <div
+    id="grandiv"
     class="h-[210px] relative w-full flex flex-col items-center shadow font-bold"
     style="
       background: url(https://media.discordapp.net/attachments/952181816364789772/952283565306032168/ChadPecs.png);
       background-size: 330px;
       background-repeat: no-repeat;
       background-position: 160px 0px;
+      z-index: 30;
     "
   >
     <div
@@ -17,7 +19,7 @@
     </div>
     <div
       class="h-12 w-full flex border-t-2 border-b-2 default-border bg-[#f0a6e4] bg-opacity-25"
-      style="backdrop-filter: blur(4px)"
+      style="backdrop-filter: blur(2px)"
     >
       <div
         class="flex items-center justify-center flex-grow cursor-pointer text-xl"
@@ -41,10 +43,29 @@
       </div>
     </div>
   </div>
+  <div
+    class="rotate"
+    style="
+      position: fixed;
+      height: 1600px;
+      width: 1600px;
+      top: -590px;
+      left: -250px;
+      z-index: 1;
+    "
+  >
+    <img
+      src="https://i.imgur.com/C2GBPBQ.png"
+      style="height: 100%; opacity: 0.3"
+    />
+  </div>
   <div v-if="loading" class="flex justify-center items-center flex-grow">
     <LoadingSpinner />
   </div>
-  <div class="overflow-y-auto p-3 flex-grow" v-else-if="!page">
+  <div
+    class="overflow-y-auto p-3 flex-grow bg-[#f5c7ee] z-10"
+    v-else-if="!page"
+  >
     <div class="flex flex-col gap-2">
       <div v-if="addingLink" class="flex">
         <div class="input border-2 rounded flex-grow font-sans">
@@ -84,7 +105,10 @@
       </div>
     </div>
   </div>
-  <div class="oveflow-scoll p-5 flex flex-col grow items-start gap-5" v-else>
+  <div
+    class="oveflow-scoll p-5 flex flex-col grow items-start gap-5 bg-[#f5c7ee] z-10"
+    v-else
+  >
     <div class="flex flex-col gap-1 w-full items-start">
       <h1 class="text-lg font-bold">Blocking type :</h1>
       <select class="default-border px-3 py-1 rounded w-full">
@@ -152,7 +176,7 @@ export default defineComponent({
       console.log("aaaa");
       links.value.unshift(url);
       console.log(links.value);
-      chrome.storage.local.set({ blocklist: links.value });
+      // chrome.storage.local.set({ blocklist: links.value });
       addingLinkValue.value = "";
       setAddingLink(false);
     };
@@ -161,7 +185,7 @@ export default defineComponent({
       var index = links.value.indexOf(url);
       if (index !== -1) {
         links.value.splice(index, 1);
-        chrome.storage.local.set({ blocklist: links.value });
+        // chrome.storage.local.set({ blocklist: links.value });
       }
     };
 
@@ -174,14 +198,20 @@ export default defineComponent({
       if (addInput.value) (addInput.value as HTMLInputElement).select();
     });
 
-    chrome.storage.local.get(["blocklist"], (result) => {
-      for (const key in result.blocklist) {
-        links.value.push(result.blocklist[key]);
-      }
-      loading.value = false;
-    });
+    // chrome.storage.local.get(["blocklist"], (result) => {
+    //   for (const key in result.blocklist) {
+    //     links.value.push(result.blocklist[key]);
+    //   }
+    //   loading.value = false;
+    // });
 
-    const phrases = ["I love you, brother", "Chad is watching you"];
+    loading.value = false;
+    const phrases = [
+      "I love you, brother",
+      "It's a bright day brother",
+      "I'm proud of us",
+      "Let's build",
+    ];
     const randomCatch = phrases[Math.floor(Math.random() * phrases.length)];
 
     return {
@@ -201,3 +231,17 @@ export default defineComponent({
   },
 });
 </script>
+<style>
+.rotate {
+  animation: rotation 90s infinite linear;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+</style>

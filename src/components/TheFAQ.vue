@@ -1,6 +1,6 @@
 <template>
   <div
-    class="absolute w-full h-full flex justify-center items-center px-5 py-16"
+    class="absolute w-full h-full flex justify-center items-center px-5 py-16 z-50"
   >
     <div
       class="absolute w-full h-full bg-black bg-opacity-50 flex justify-center items-center z-10"
