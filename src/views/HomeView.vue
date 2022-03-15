@@ -95,7 +95,6 @@
             type="text"
             :value="link"
             class="w-full h-full bg-transparent blur-sm hover:blur-none transition-all duration-500 px-3 py-1 outline-none text-center"
-            onclick="this.select()"
           />
         </div>
         <TrashIcon
