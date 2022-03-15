@@ -163,7 +163,7 @@ export default defineComponent({
     XIcon,
   },
   setup(props, { emit }) {
-    const page = ref(false);
+    const page = ref(true);
     const addInput = ref();
     const addingLink = ref(false);
     const addingLinkValue = ref("");
@@ -179,10 +179,9 @@ export default defineComponent({
     };
 
     const addLink = (url: string) => {
-      console.log("aaaa");
       links.value.unshift(url);
       console.log(links.value);
-      chrome.storage.local.set({ blocklist: links.value });
+      chrome.storage.sync.set({ userBlocklist: links.value });
       addingLinkValue.value = "";
       setAddingLink(false);
     };
@@ -191,7 +190,7 @@ export default defineComponent({
       var index = links.value.indexOf(url);
       if (index !== -1) {
         links.value.splice(index, 1);
-        chrome.storage.local.set({ blocklist: links.value });
+        chrome.storage.sync.set({ userBlocklist: links.value });
       }
     };
 
@@ -201,12 +200,13 @@ export default defineComponent({
     };
 
     watch(addInput, () => {
+      console.log("holy peperoni", addInput);
       if (addInput.value) (addInput.value as HTMLInputElement).select();
     });
 
-    chrome.storage.local.get(["blocklist"], (result) => {
-      for (const key in result.blocklist) {
-        links.value.push(result.blocklist[key]);
+    chrome.storage.sync.get(["userBlocklist"], (result) => {
+      for (const key in result.userBlocklist) {
+        links.value.push(result.userBlocklist[key]);
       }
       loading.value = false;
     });

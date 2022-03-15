@@ -1,22 +1,22 @@
 console.log("service worker running");
 
-//Initialisation de la blocklist :
+//Initialisation de la defaultBlocklist :
 chrome.runtime.onInstalled.addListener(function () {
-  chrome.storage.local.get(["blocklist"], function (result) {
-    let blocklist = result.blocklist ?? [];
+  chrome.storage.local.get(["defaultBlocklist"], function (result) {
+    let defaultBlocklist = result.defaultBlocklist ?? [];
     const url = chrome.runtime.getURL("./defaultBlocklist.json");
     fetch(url)
       .then((response) => response.json())
-      .then((json) => MiseAJour(json, blocklist));
+      .then((json) => MiseAJour(json, defaultBlocklist));
 
-    function MiseAJour(urls: string[], blocklist: string[]) {
+    function MiseAJour(urls: string[], defaultBlocklist: string[]) {
       console.log(urls);
       urls.forEach((e) => {
-        blocklist.push(e);
+        defaultBlocklist.push(e);
       });
-      blocklist = [...new Set(blocklist)];
-      chrome.storage.local.set({ blocklist: blocklist }, function () {
-        console.log("Value 89 for instance is set to " + blocklist[89]);
+      defaultBlocklist = [...new Set(defaultBlocklist)];
+      chrome.storage.local.set({ defaultBlocklist: defaultBlocklist }, function () {
+        console.log("Value 89 for instance is set to " + defaultBlocklist[89]);
       });
     }
   });

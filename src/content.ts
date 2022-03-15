@@ -92,7 +92,6 @@ interface values {
     probability: number
   }[]
 }
-
 function getScore(values: values[]) {
   let pScore = 0;
   function incrementPScore(value: values) {
