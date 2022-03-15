@@ -200,7 +200,6 @@ export default defineComponent({
     };
 
     watch(addInput, () => {
-      console.log("holy peperoni", addInput);
       if (addInput.value) (addInput.value as HTMLInputElement).select();
     });
 

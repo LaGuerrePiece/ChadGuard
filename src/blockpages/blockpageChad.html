@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Playfair+Display">
+    <title>Stop right here !</title>
+    <style>
+        body,
+        html {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .image {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5));
+            height: 100%;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            position: relative;
+        }
+
+        .text {
+            text-align: center;
+            font-family: 'Playfair Display', serif;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: rgb(255, 255, 255);
+            /* -webkit-text-stroke: 1px rgb(0, 0, 0); */
+            text-shadow:
+                0px 0px 5px rgb(0, 0, 0);
+            /* -1px -1px 5px rgb(0, 0, 0),  
+            1px -1px 5px rgb(0, 0, 0),
+            -1px  1px 5px rgb(0, 0, 0),
+            1px  1px 5px rgb(0, 0, 0); */
+        }
+
+        .char {
+            font-size: 40px;
+            height: 40px;
+            animation: an 1s ease-out 1 both;
+            display: inline-block;
+        }
+
+        @keyframes an {
+            from {
+                opacity: 0;
+                transform: perspective(500px) translate3d(-35px, -40px, -150px) rotate3d(1, -1, 0, 35deg);
+            }
+
+            50% {
+                opacity: 0.9;
+                text-shadow:
+                    0px 0px 2px rgb(0, 0, 0);
+            }
+
+            to {
+                opacity: 1;
+                transform: perspective(500px) translate3d(0, 0, 0);
+                text-shadow:
+                    0px 0px 5px rgb(0, 0, 0);
+            }
+        }
+
+        .mylink {
+            position: absolute;
+            z-index: 150;
+            bottom: 0;
+            right: 0;
+            width: 100%;
+            text-align: right;
+            padding: .6rem;
+        }
+
+        .mylink a {
+            font-family: Calibri;
+            color: #fff;
+            border-bottom: 1px solid #fff;
+            opacity: .5;
+            transition: opacity .3s;
+            text-decoration: none
+        }
+
+        .mylink a:hover {
+            opacity: 1
+        }
+    </style>
+</head>
+
+<body>
+    <div class="image" id="imageid">
+        <div class="text">
+            <h1 style="font-size:50px" id="quote"></h1>
+            <h2 style="font-size:28px" id="author"></h2>
+        </div>
+    </div>
+    <script src="blockpageChad.js"></script>
+</body>
+
+</html>
