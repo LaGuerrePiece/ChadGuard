@@ -115,11 +115,18 @@
         <option>Chad</option>
         <option>Video</option>
         <option>Auto-Close</option>
-        <option>Chad (pink version)</option>
+        <option>Chad (pink mode)</option>
       </select>
     </div>
     <div class="flex flex-col gap-1 w-full items-start">
       <h1 class="text-lg font-bold">AI Filtering :</h1>
+      <select class="default-border px-3 py-1 rounded w-full">
+        <option>Enabled</option>
+        <option>Disabled</option>
+      </select>
+    </div>
+    <div class="flex flex-col gap-1 w-full items-start">
+      <h1 class="text-lg font-bold">Day Counter :</h1>
       <select class="default-border px-3 py-1 rounded w-full">
         <option>Enabled</option>
         <option>Disabled</option>
@@ -208,9 +215,11 @@ export default defineComponent({
     loading.value = false;
     const phrases = [
       "I love you, brother",
-      "It's a bright day brother",
+      "What a bright day brother",
       "I'm proud of us",
-      "Let's build",
+      "To the moon, friend",
+      "Time to fuck some bitches",
+      "We're gonna make it",
     ];
     const randomCatch = phrases[Math.floor(Math.random() * phrases.length)];
 

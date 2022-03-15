@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col flex-grow gap-3 mt-6">
-    <div class="text-6xl logo">THE CHAD PACT</div>
+    <div class="text-6xl logo">CHADGUARD</div>
     <img
       style="width: 260px"
       src="https://i.imgur.com/WjsCGCG.png"
