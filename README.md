@@ -1,9 +1,24 @@
-<p align="center">
-    <img align="center" src="https://github.com/whiterqbbit/ChadWatch/blob/main/images/chadlook2.png" alt="The Chad Look" width="400" />
-    <h1 align="center">ChadGuard</h1>
-    <h2 align="center">Reveal your inner chad</h2>
-</p>
+# test
 
+## Project setup
+```
+npm install
+```
 
-A chrome Extension that tells everyone on [The War Room Discord server](https://discord.gg/d3GDTz6GUD) if you watch porn.
+### Compiles and hot-reloads for development
+```
+npm run serve
+```
 
+### Compiles and minifies for production
+```
+npm run build
+```
+
+### Lints and fixes files
+```
+npm run lint
+```
+
+### Customize configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).

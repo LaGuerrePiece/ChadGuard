@@ -1,0 +1,34 @@
+{
+  "name": "CHADGUARD",
+  "version": "1.0",
+  "description": "Reveal your inner chad. CHADGUARD keeps you away from porn.",
+  "manifest_version": 3,
+  "homepage_url": "https://github.com/LaGuerrePiece/ChadGuard",
+  "permissions": [
+    "activeTab",
+    "storage",
+    "identity",
+    "scripting",
+    "tabs",
+    "webRequest",
+    "declarativeNetRequest",
+    "declarativeNetRequestWithHostAccess",
+    "declarativeNetRequestFeedback"
+  ],
+  "host_permissions": ["https://discordapp.com/api/"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' ; object-src 'self'"
+  },
+  "action": {
+    "default_popup": "index.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["nsfwjsmin2.js", "content.js"]
+    }
+  ]
+}
