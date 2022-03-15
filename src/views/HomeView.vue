@@ -182,7 +182,7 @@ export default defineComponent({
       console.log("aaaa");
       links.value.unshift(url);
       console.log(links.value);
-      // chrome.storage.local.set({ blocklist: links.value });
+      chrome.storage.local.set({ blocklist: links.value });
       addingLinkValue.value = "";
       setAddingLink(false);
     };
@@ -191,7 +191,7 @@ export default defineComponent({
       var index = links.value.indexOf(url);
       if (index !== -1) {
         links.value.splice(index, 1);
-        // chrome.storage.local.set({ blocklist: links.value });
+        chrome.storage.local.set({ blocklist: links.value });
       }
     };
 
@@ -204,12 +204,12 @@ export default defineComponent({
       if (addInput.value) (addInput.value as HTMLInputElement).select();
     });
 
-    // chrome.storage.local.get(["blocklist"], (result) => {
-    //   for (const key in result.blocklist) {
-    //     links.value.push(result.blocklist[key]);
-    //   }
-    //   loading.value = false;
-    // });
+    chrome.storage.local.get(["blocklist"], (result) => {
+      for (const key in result.blocklist) {
+        links.value.push(result.blocklist[key]);
+      }
+      loading.value = false;
+    });
 
     loading.value = false;
     const phrases = [
