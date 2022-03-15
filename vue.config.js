@@ -6,20 +6,29 @@ module.exports = defineConfig({
   transpileDependencies: true,
   productionSourceMap: false,
   configureWebpack: {
-    entry: {
-      content: `./src/content.ts`,
-      background: `./src/background.ts`,
-    },
     output: {
       path: this.outputDir,
       filename: "[name].js",
     },
     resolve: {
       extensions: [".js", ".ts"],
+      fallback: {
+        stream: require.resolve("stream-browserify"),
+        path: require.resolve("path-browserify"),
+        zlib: require.resolve("browserify-zlib"),
+      },
+    },
+    experiments: {
+      topLevelAwait: true,
     },
     plugins: [
       new CopyWebpackPlugin({
-        patterns: [{ from: `./src/manifest.json`, to: this.outputDir }],
+        patterns: [
+          { from: `./src/manifest.json`, to: this.outputDir },
+          { from: `./src/nsfwjsmin2.js`, to: this.outputDir },
+          // { from: `./src/background.js`, to: this.outputDir },
+          // { from: `./src/content.js`, to: this.outputDir },
+        ],
       }),
     ],
   },

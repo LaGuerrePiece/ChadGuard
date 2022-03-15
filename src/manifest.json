@@ -11,7 +11,6 @@
     "scripting",
     "tabs",
     "webRequest",
-    "webRequestBlocking",
     "declarativeNetRequest",
     "declarativeNetRequestWithHostAccess",
     "declarativeNetRequestFeedback"
@@ -29,7 +28,7 @@
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["content.js"]
+      "js": ["nsfwjsmin2.js", "content.js"]
     }
   ]
 }

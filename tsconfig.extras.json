@@ -1,0 +1,40 @@
+{
+    "compilerOptions": {
+      "target": "esnext",
+      "module": "esnext",
+      "strict": true,
+      "jsx": "preserve",
+      "resolveJsonModule": true,
+      "moduleResolution": "node",
+      "skipLibCheck": true,
+      "esModuleInterop": true,
+      "allowSyntheticDefaultImports": true,
+      "forceConsistentCasingInFileNames": true,
+      "useDefineForClassFields": true,
+      "sourceMap": false,
+      "outDir": "dist",
+      "baseUrl": ".",
+      "types": [
+        "webpack-env",
+        "chrome",
+      ],
+      "paths": {
+        "@/*": [
+          "src/*"
+        ]
+      },
+      "lib": [
+        "esnext",
+        "dom",
+        "dom.iterable",
+        "scripthost"
+      ]
+    },
+    "include": [
+      "src/background.ts",
+      "src/content.ts",
+    ],
+    "exclude": [
+      "node_modules"
+    ]
+  }
