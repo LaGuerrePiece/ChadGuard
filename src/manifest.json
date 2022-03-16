@@ -32,7 +32,7 @@
     }
   ],
   "web_accessible_resources": [{
-    "resources": ["blockpage.html"],
+    "resources": ["blockpages/blockpageChad.html", "blockpages/blockpageVideo.html"],
     "matches": ["<all_urls>"]
   }]
 }

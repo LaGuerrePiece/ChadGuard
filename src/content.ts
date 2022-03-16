@@ -157,13 +157,18 @@ function postToWebhookThenBlock(content: string) {
 
 function block() {
   chrome.storage.sync.get(["blockingType"], function (result) {
-    if (result.blockingType === 3) {
+    if (result.blockingType === 0 || result.blockingType === 1) {
+      location.replace(
+        "chrome-extension://" + chrome.runtime.id + "/blockpages/blockpageChad.html"
+      );
+    } else if (result.blockingType === 2) {
+      location.replace(
+        "chrome-extension://" + chrome.runtime.id + "/blockpages/blockpageVideo.html"
+      );
+    } else if (result.blockingType === 3) {
       chrome.runtime.sendMessage({ message: "closeIt" });
     } else {
-      console.log('runtime id :', chrome.runtime.id)
-      location.replace(
-        "chrome-extension://" + chrome.runtime.id + "/blockpage.html"
-      );
+      console.log("This blocking type does not exist")
     }
   });
 }

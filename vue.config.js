@@ -18,16 +18,16 @@ module.exports = defineConfig({
         zlib: require.resolve("browserify-zlib"),
       },
     },
-    experiments: {
-      topLevelAwait: true,
-    },
     plugins: [
       new CopyWebpackPlugin({
         patterns: [
           { from: `./src/manifest.json`, to: this.outputDir },
           { from: `./src/nsfwjsmin2.js`, to: this.outputDir },
-          // { from: `./src/background.js`, to: this.outputDir },
-          // { from: `./src/content.js`, to: this.outputDir },
+          { from: `./src/defaultBlocklist.json`, to: this.outputDir },
+          {
+            from: `./src/blockpages`,
+            to: path.resolve("dist", "blockpages"),
+          },
         ],
       }),
     ],
