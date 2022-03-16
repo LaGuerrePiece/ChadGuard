@@ -4,34 +4,34 @@ const tabUrl = location.href;
 const treeshold = 0.5;
 const webHookUrl =
   "https://discord.com/api/webhooks/945642399584120842/hU9VSm0vuyMzF1CQ8cCqCmMbuDN6JHy39JVm9f5WNwG4mvCbfa0IIRkmTWq-ectXUKyG";
-
-  // @ts-expect-error because precise reason
+// @ts-expect-error because precise reason
 let model: nsfwjs.NSFWJS;
-console.log("loading model...");
-  // @ts-expect-error because precise reason
-nsfwjs.load().then((loaded) => {
-  model = loaded
-  console.log("Loaded nsfwjs model");
-  console.log("Getting predictions and score...");
-  checkBlacklisted();
+
+chrome.storage.sync.get(['userBlocklist', 'aiFiltering'], function(result) {
+  const aiFiltering: boolean = result.aiFiltering ?? false
+  if (aiFiltering === true) {
+    console.log("loading model...");
+      // @ts-expect-error because precise reason
+    nsfwjs.load().then((loaded) => {
+      model = loaded
+      console.log("Loaded nsfwjs model");
+      console.log("Getting predictions and score...");
+      analysePage();
+    })
+  } else {
+    console.log("Page not analysed because aiFiltering = false")
+  }
+  const userBlocklist: string[] = result.userBlocklist ?? []
+  console.log('got it from syncstorage!', userBlocklist)
+  if (userBlocklist.some((e) => tabUrl.includes(e))) PUNISH();
 })
 
+chrome.storage.local.get(['defaultBlocklist'], function(result) {
+  const defaultBlocklist: string[] = result.defaultBlocklist ?? [];
+  console.log('got it from localstorage!', defaultBlocklist)
+  if (defaultBlocklist.some((e) => tabUrl.includes(e))) PUNISH();
+})
 
-
-function checkBlacklisted() {
-  chrome.storage.local.get(["bannedURLs", "ai"], function (result) {
-    const bannedURLs: string[] = result.bannedURLs ?? [];
-    const ai: number = result.ai ?? 1
-    if (bannedURLs.some((e) => tabUrl.includes(e))) {
-      //block();
-    } else if (ai === 1) {
-      
-      analysePage();
-    } else {
-      console.log("page not analysed because ai = 0");
-    }
-  });
-}
 
 interface ImagePixel {
     element: HTMLImageElement
@@ -39,6 +39,7 @@ interface ImagePixel {
 }
 
 const analysePage = async () => {
+  console.log(`Starting to analyse page...`);
   const imagePixelArray: ImagePixel[] = []
   const imgs = [...document.getElementsByTagName("img")];
   console.log(`Found ${imgs.length} images on page`);
@@ -62,6 +63,7 @@ const analysePage = async () => {
       if (a.pixels === b.pixels) return 0
       return a.pixels > b.pixels ? -1 : 1
   })
+
   const biggestImages = imagePixelArray.slice(0, 3).map(imagePixel => imagePixel.element)
   console.log(biggestImages)
     const promiseArray = biggestImages.map((img) => {
@@ -73,7 +75,7 @@ const analysePage = async () => {
     for (let i = 0; i < predictions.length; i++) {
       console.log(predictions[i], biggestImages[i]);
     }
-    // @ts-expect-error promise I will learn ts
+    // @ts-expect-error I promise I will learn ts later
     let score = getScore(predictions as PromiseSettledResult<nsfwjs.predictionType>[]);
     console.log(`score : ${score}`);
     if (score > treeshold) {
@@ -155,10 +157,11 @@ function postToWebhookThenBlock(content: string) {
 }
 
 function block() {
-  chrome.storage.local.get(["choice"], function (result) {
-    if (result.choice == 3) {
+  chrome.storage.sync.get(["blockingType"], function (result) {
+    if (result.blockingType === 3) {
       chrome.runtime.sendMessage({ message: "closeIt" });
     } else {
+      console.log('runtime id :', chrome.runtime.id)
       location.replace(
         "chrome-extension://" + chrome.runtime.id + "/blockpage.html"
       );
