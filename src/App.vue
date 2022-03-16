@@ -46,7 +46,7 @@ body,
   background: #111;
   overflow: hidden;
   width: 400px;
-  height: 613px;
+  height: 600px;
   margin: 0;
 }
 

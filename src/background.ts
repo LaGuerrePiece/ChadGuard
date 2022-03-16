@@ -18,7 +18,7 @@ chrome.runtime.onInstalled.addListener(function () {
         });
     }
   });
-  chrome.storage.sync.set({"blockingType": 0, 'aiFiltering': true})
+  chrome.storage.sync.set({blockingType: 0, aiFiltering: true})
 });
 
 

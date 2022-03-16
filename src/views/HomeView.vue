@@ -95,7 +95,6 @@
             type="text"
             :value="link"
             class="w-full h-full bg-transparent blur-sm hover:blur-none transition-all duration-500 px-3 py-1 outline-none text-center"
-            onclick="this.select()"
           />
         </div>
         <TrashIcon
@@ -110,26 +109,32 @@
     v-else
   >
     <div class="flex flex-col gap-1 w-full items-start">
-      <h1 class="text-lg font-bold">Blocking type :</h1>
-      <select class="default-border px-3 py-1 rounded w-full">
-        <option>Chad</option>
-        <option>Video</option>
-        <option>Auto-Close</option>
-        <option>Chad (pink mode)</option>
+      <h1 class="text-lg font-bold">Blocking type :{{ isBlockingType }}</h1>
+      <select
+        class="default-border px-3 py-1 rounded w-full"
+        v-model="blockingTypeSelected"
+      >
+        <option value="0">Chad</option>
+        <option value="1">Chad (pink mode)</option>
+        <option value="2">Video</option>
+        <option value="3">Auto-Close</option>
       </select>
     </div>
     <div class="flex flex-col gap-1 w-full items-start">
-      <h1 class="text-lg font-bold">AI Filtering :</h1>
-      <select class="default-border px-3 py-1 rounded w-full">
-        <option>Enabled</option>
-        <option>Disabled</option>
+      <h1 class="text-lg font-bold">AI Filtering :{{ isAiFiltering }}</h1>
+      <select class="default-border px-3 py-1 rounded w-full" v-model="aiState">
+        <option value="en">Enabled</option>
+        <option value="dis">Disabled</option>
       </select>
     </div>
     <div class="flex flex-col gap-1 w-full items-start">
-      <h1 class="text-lg font-bold">Day Counter :</h1>
-      <select class="default-border px-3 py-1 rounded w-full">
-        <option>Enabled</option>
-        <option>Disabled</option>
+      <h1 class="text-lg font-bold">Day Counter :{{ isDayCounter }}</h1>
+      <select
+        class="default-border px-3 py-1 rounded w-full"
+        v-model="dayCounterState"
+      >
+        <option value="true">Enabled</option>
+        <option value="false">Disabled</option>
       </select>
     </div>
     <div class="flex flex-col gap-1 w-full items-start">
@@ -164,12 +169,44 @@ export default defineComponent({
     XIcon,
   },
   setup(props, { emit }) {
-    const page = ref(false);
+    const page = ref(true);
     const addInput = ref();
     const addingLink = ref(false);
     const addingLinkValue = ref("");
     const links = ref<string[]>([]);
     const loading = ref(true);
+
+    //determine if ai is filtering
+    let aiFiltering = ref(true);
+    var aiState = ref("en");
+    watch(aiState, () => {
+      if (aiState.value === "en") {
+        aiFiltering.value = true;
+        chrome.storage.sync.set({ aiFiltering: aiFiltering.value });
+        console.log("oueoue" + aiFiltering.value);
+      } else if (aiState.value === "dis") {
+        aiFiltering.value = false;
+        chrome.storage.sync.set({ aiFiltering: aiFiltering.value });
+        console.log("nonon", aiFiltering.value);
+      }
+    });
+
+    //determine the blockingType
+    var blockingType = ref();
+    var blockingTypeSelected = ref(0);
+    watch(blockingTypeSelected, () => {
+      blockingType.value = blockingTypeSelected.value;
+      chrome.storage.sync.set({ blockingType: blockingType.value });
+    });
+
+    //determine if daycounter is activated
+    var dayCounterState = ref(true);
+    var dayCounter = ref(true);
+
+    watch(dayCounterState, () => {
+      dayCounter.value = dayCounterState.value;
+      chrome.storage.sync.set({ dayCounter: dayCounter.value });
+    });
 
     const setPage = (b: boolean) => {
       page.value = b;
@@ -180,10 +217,9 @@ export default defineComponent({
     };
 
     const addLink = (url: string) => {
-      console.log("aaaa");
       links.value.unshift(url);
       console.log(links.value);
-      // chrome.storage.local.set({ blocklist: links.value });
+      chrome.storage.sync.set({ userBlocklist: links.value });
       addingLinkValue.value = "";
       setAddingLink(false);
     };
@@ -192,7 +228,7 @@ export default defineComponent({
       var index = links.value.indexOf(url);
       if (index !== -1) {
         links.value.splice(index, 1);
-        // chrome.storage.local.set({ blocklist: links.value });
+        chrome.storage.sync.set({ userBlocklist: links.value });
       }
     };
 
@@ -205,12 +241,12 @@ export default defineComponent({
       if (addInput.value) (addInput.value as HTMLInputElement).select();
     });
 
-    // chrome.storage.local.get(["blocklist"], (result) => {
-    //   for (const key in result.blocklist) {
-    //     links.value.push(result.blocklist[key]);
-    //   }
-    //   loading.value = false;
-    // });
+    chrome.storage.sync.get(["userBlocklist"], (result) => {
+      for (const key in result.userBlocklist) {
+        links.value.push(result.userBlocklist[key]);
+      }
+      loading.value = false;
+    });
 
     loading.value = false;
     const phrases = [
@@ -236,6 +272,12 @@ export default defineComponent({
       addingLinkValue,
       addInput,
       randomCatch,
+      aiFiltering,
+      aiState,
+      blockingType,
+      blockingTypeSelected,
+      dayCounterState,
+      dayCounter,
     };
   },
 });
