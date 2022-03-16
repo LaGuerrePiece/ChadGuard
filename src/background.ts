@@ -2,7 +2,7 @@ console.log("service worker running");
 
 //Initialisation de la defaultBlocklist :
 chrome.runtime.onInstalled.addListener(function () {
-  chrome.storage.local.get(["defaultBlocklist"], function (result) {
+  chrome.storage.sync.get(["defaultBlocklist"], function (result) {
     let defaultBlocklist = result.defaultBlocklist ?? [];
     const url = chrome.runtime.getURL("./defaultBlocklist.json");
     fetch(url)
@@ -15,12 +15,24 @@ chrome.runtime.onInstalled.addListener(function () {
         defaultBlocklist.push(e);
       });
       defaultBlocklist = [...new Set(defaultBlocklist)];
-      chrome.storage.local.set({ defaultBlocklist: defaultBlocklist }, function () {
-        console.log("Value 89 for instance is set to " + defaultBlocklist[89]);
-      });
+      chrome.storage.sync.set(
+        { defaultBlocklist: defaultBlocklist },
+        function () {
+          console.log(
+            "Value 89 for instance is set to " + defaultBlocklist[89]
+          );
+        }
+      );
     }
   });
-  chrome.storage.local.set({ blockingType: 1, aiFiltering: true });
+  chrome.storage.sync.set({
+    blockingType: 1,
+    aiFiltering: true,
+    visitCount: 0,
+    dayCounter: false,
+    dayCounterValue: 0,
+    noseEggUnlock: false
+  });
 });
 
 // interface sender {
