@@ -30,5 +30,9 @@
       "matches": ["<all_urls>"],
       "js": ["nsfwjsmin2.js", "content.js"]
     }
-  ]
+  ],
+  "web_accessible_resources": [{
+    "resources": ["blockpages/blockpageChad.html", "blockpages/blockpageVideo.html"],
+    "matches": ["<all_urls>"]
+  }]
 }
