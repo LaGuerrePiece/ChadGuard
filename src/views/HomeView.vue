@@ -104,42 +104,59 @@
       </div>
     </div>
   </div>
-  <div
-    class="oveflow-scoll p-5 flex flex-col grow items-start gap-5 bg-[#f5c7ee] z-10"
-    v-else
-  >
-    <div class="flex flex-col gap-1 w-full items-start">
-      <h1 class="text-lg font-bold">Blocking type :</h1>
-      <select
-        class="default-border px-3 py-1 rounded w-full"
-        v-model="blockingTypeSelected"
-      >
-        <option value="0">Chad</option>
-        <option value="1">Chad (pink mode)</option>
-        <option value="2">Video</option>
-        <option value="3">Auto-Close</option>
-      </select>
+  <div class="p-5 pb-20 grow gap-3 bg-[#f5c7ee] z-10 flex flex-col" v-else>
+    <div id="notrepromier" class="flex flex-row grow w-full gap-1 space-x-4">
+      <div class="flex flex-col gap-1 grow basis-0">
+        <h1 class="text-left text-lg font-bold">Blocking type :</h1>
+        <select
+          class="align-middle default-border px-3 py-1 rounded w-full"
+          v-model="blockingTypeSelected"
+        >
+          <option value="0">Chad</option>
+          <option value="1">Chad (pink mode)</option>
+          <option value="2">Video</option>
+          <option value="3">Auto-Close</option>
+        </select>
+      </div>
+      <div class="flex flex-col gap-1 grow basis-0">
+        <h1 class="text-left text-lg font-bold">AI Filtering :</h1>
+        <select
+          class="align-middle default-border px-3 py-1 rounded w-full"
+          v-model="aiState"
+        >
+          <option value="true">Enabled</option>
+          <option value="false">Disabled</option>
+        </select>
+      </div>
     </div>
-    <div class="flex flex-col gap-1 w-full items-start">
-      <h1 class="text-lg font-bold">AI Filtering :</h1>
-      <select class="default-border px-3 py-1 rounded w-full" v-model="aiState">
-        <option value="true">Enabled</option>
-        <option value="false">Disabled</option>
-      </select>
+    <div id="notredosieme" class="flex flex-row grow w-full gap-1">
+      <div class="flex flex-col gap-1">
+        <h1 class="text-left text-lg font-bold">Day Counter :</h1>
+        <select
+          class="align-middle default-border px-3 py-1 rounded w-full"
+          v-model="dayCounterState"
+        >
+          <option value="true">Enabled</option>
+          <option value="false">Disabled</option>
+        </select>
+      </div>
+      <div class="flex flex-col gap-1">
+        <button class="default-button grow basis-0">Reset</button>
+      </div>
     </div>
-    <div class="flex flex-col gap-1 w-full items-start">
-      <h1 class="text-lg font-bold">Day Counter :</h1>
-      <select
-        class="default-border px-3 py-1 rounded w-full"
-        v-model="dayCounterState"
-      >
-        <option value="true">Enabled</option>
-        <option value="false">Disabled</option>
-      </select>
-    </div>
-    <div class="flex flex-col gap-1 w-full items-start">
-      <h1 class="text-lg font-bold">Discord :</h1>
-      <button class="default-button">Connect with Discord</button>
+    <div id="notretrosieme">
+      <div class="flex flex-col grow gap-1">
+        <h1 class="text-left text-lg font-bold">Discord :</h1>
+        <div class="flex flex-row grow gap-1 space-x-4">
+          <button class="default-button grow basis-0">
+            Connect with Discord
+          </button>
+          <button class="default-button grow basis-0">
+            
+          </button>
+          <!-- <div class="grow basis-0"></div> -->
+        </div>
+      </div>
     </div>
   </div>
   <TheFooter @toggleFaq="toggleFaq" />
@@ -249,7 +266,7 @@ export default defineComponent({
       loading.value = false;
     });
 
-    // A METTRE DANS LE BOUTON RESET 
+    // A METTRE DANS LE BOUTON RESET
     //         chrome.storage.sync.set({ startDay: Date.now() });
     //         reste de la fonction pour update
 
