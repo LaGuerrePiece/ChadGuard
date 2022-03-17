@@ -177,8 +177,8 @@ export default defineComponent({
     const loading = ref(true);
 
     //determine if ai is filtering
+    
     var aiState = ref();
-
     chrome.storage.sync.get(["aiFiltering"], (result) => {
       aiState.value = result.aiFiltering;
     });
@@ -190,15 +190,12 @@ export default defineComponent({
 
     //determine the blockingType
 
-    // var blockingType = ref();
     var blockingTypeSelected = ref();
     chrome.storage.sync.get(["blockingType"], (result) => {
-      // blockingType.value = result.blockingType;
       blockingTypeSelected.value = result.blockingType;
     });
 
     watch(blockingTypeSelected, () => {
-      // blockingType.value = blockingTypeSelected.value;
       chrome.storage.sync.set({ blockingType: blockingTypeSelected.value });
     });
 
@@ -252,7 +249,6 @@ export default defineComponent({
       loading.value = false;
     });
 
-    loading.value = false;
     const phrases = [
       "I love you, brother",
       "What a bright day brother",

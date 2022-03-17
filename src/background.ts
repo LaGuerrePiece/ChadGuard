@@ -24,7 +24,8 @@ chrome.runtime.onInstalled.addListener(function () {
     visitCount: 0,
     dayCounter: false,
     dayCounterValue: 0,
-    noseEggUnlock: false
+    noseEggUnlock: false,
+    lastPactDate: 1647527774447
   });
 });
 

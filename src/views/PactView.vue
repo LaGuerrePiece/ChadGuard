@@ -1,4 +1,7 @@
 <template>
+  <div v-if="loading" class="flex justify-center items-center flex-grow">
+    <LoadingSpinner />
+  </div>
   <div class="flex flex-col flex-grow gap-3 mt-6">
     <div class="text-6xl logo">CHADGUARD</div>
     <img
@@ -28,9 +31,11 @@
 import { defineComponent, ref, watch } from "vue";
 import TheFooter from "@/components/TheFooter.vue";
 import { useRouter } from "vue-router";
+import LoadingSpinner from "@/components/LoadingSpinner.vue";
 
 export default defineComponent({
   components: {
+    LoadingSpinner,
     TheFooter,
   },
   setup(props, { emit }) {
@@ -38,9 +43,32 @@ export default defineComponent({
     const pact = "123";
     const pactOriginal = "I am not betraying our sacred pact, Chad bro";
     const phrase = ref("");
+    const dateNow = new Date();
+    const loading = ref(true);
+
+    // VERIFIE SI C'EST LA PREMIERE VISITE OU SI L'UTILISATEUR A ENTRE LE MDP IL Y A - DE 2 MIN POUR SKIP
+    chrome.storage.sync.get(["visitCount"], (result) => {
+      console.log("result.visitCount", result.visitCount);
+      if (result.visitCount == 0) {
+        chrome.storage.sync.set({ lastPactDate: Date.now() });
+        router.push("/home");
+      }
+    });
+
+    chrome.storage.sync.get(["lastPactDate"], (result) => {
+      let lastPactDate = result.lastPactDate;
+      let dateNow = Date.now();
+      if (dateNow - lastPactDate < 120000) {
+        chrome.storage.sync.set({ lastPactDate: dateNow });
+        router.push("/home");
+      }
+    });
+
+    loading.value = false;
 
     watch(phrase, () => {
       if (phrase.value.toLowerCase() === pact.toLowerCase()) {
+        chrome.storage.sync.set({ lastPactDate: Date.now() });
         router.push("/home");
       }
     });
@@ -49,7 +77,7 @@ export default defineComponent({
       emit("toggleFaq");
     };
 
-    return { phrase, pact, toggleFaq };
+    return { phrase, pact, toggleFaq, loading };
   },
 });
 </script>
