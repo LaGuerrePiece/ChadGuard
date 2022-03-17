@@ -109,7 +109,7 @@
     v-else
   >
     <div class="flex flex-col gap-1 w-full items-start">
-      <h1 class="text-lg font-bold">Blocking type :{{ isBlockingType }}</h1>
+      <h1 class="text-lg font-bold">Blocking type :</h1>
       <select
         class="default-border px-3 py-1 rounded w-full"
         v-model="blockingTypeSelected"
@@ -121,14 +121,14 @@
       </select>
     </div>
     <div class="flex flex-col gap-1 w-full items-start">
-      <h1 class="text-lg font-bold">AI Filtering :{{ isAiFiltering }}</h1>
+      <h1 class="text-lg font-bold">AI Filtering :</h1>
       <select class="default-border px-3 py-1 rounded w-full" v-model="aiState">
         <option value="en">Enabled</option>
         <option value="dis">Disabled</option>
       </select>
     </div>
     <div class="flex flex-col gap-1 w-full items-start">
-      <h1 class="text-lg font-bold">Day Counter :{{ isDayCounter }}</h1>
+      <h1 class="text-lg font-bold">Day Counter :</h1>
       <select
         class="default-border px-3 py-1 rounded w-full"
         v-model="dayCounterState"
@@ -177,11 +177,25 @@ export default defineComponent({
     const loading = ref(true);
 
     //determine if ai is filtering
-    let aiFiltering = ref(true);
-    var aiState = ref("en");
+    var aiFiltering = ref();
+
+    chrome.storage.sync.get(["aiFiltering"], (result) => {
+      aiFiltering.value = result.aiFiltering;
+    });
+    var aiState = ref("");
+
+    watch(aiFiltering, () => {
+      if (aiFiltering.value === true) {
+        aiState.value = "en";
+      } else if (aiFiltering.value === false) {
+        aiState.value = "dis";
+      }
+    });
+
     watch(aiState, () => {
       if (aiState.value === "en") {
         aiFiltering.value = true;
+
         chrome.storage.sync.set({ aiFiltering: aiFiltering.value });
         console.log("oueoue" + aiFiltering.value);
       } else if (aiState.value === "dis") {
@@ -192,16 +206,26 @@ export default defineComponent({
     });
 
     //determine the blockingType
+
     var blockingType = ref();
-    var blockingTypeSelected = ref(0);
+    var blockingTypeSelected = ref();
+    chrome.storage.sync.get(["blockingType"], (result) => {
+      blockingType.value = result.blockingType;
+      blockingTypeSelected.value = result.blockingType;
+    });
+
     watch(blockingTypeSelected, () => {
       blockingType.value = blockingTypeSelected.value;
       chrome.storage.sync.set({ blockingType: blockingType.value });
     });
 
     //determine if daycounter is activated
-    var dayCounterState = ref(true);
-    var dayCounter = ref(true);
+    var dayCounterState = ref();
+    var dayCounter = ref();
+    chrome.storage.sync.get(["dayCounter"], (result) => {
+      dayCounter.value = result.dayCounter;
+      dayCounterState.value = result.dayCounter;
+    });
 
     watch(dayCounterState, () => {
       dayCounter.value = dayCounterState.value;
