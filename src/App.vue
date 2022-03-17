@@ -74,6 +74,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+
 @import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Yanone+Kaffeesatz:wght@300&display=swap");
 
@@ -104,9 +105,7 @@ nav {
     }
   }
 }
-</style>
 
-<style lang="scss">
 .logo {
   color: #a1b5f6;
   text-shadow: rgb(31, 35, 45) 5px 0px 0px,
