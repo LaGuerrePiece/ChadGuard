@@ -27,7 +27,7 @@
           'default-active-border': !page,
           'default-hover cursor-pointer': page,
         }"
-        @click="setPage(false)"
+        @click="setPageBlocklistOrSettings(false)"
       >
         <BanIcon class="w-6 h-6 mr-1" /> BLOCK LIST
       </div>
@@ -37,7 +37,7 @@
           'default-active-border': page,
           'default-hover cursor-pointer ': !page,
         }"
-        @click="setPage(true)"
+        @click="setPageBlocklistOrSettings(true)"
       >
         <CogIcon class="w-6 h-6 mr-1" /> SETTINGS
       </div>
@@ -123,8 +123,8 @@
     <div class="flex flex-col gap-1 w-full items-start">
       <h1 class="text-lg font-bold">AI Filtering :</h1>
       <select class="default-border px-3 py-1 rounded w-full" v-model="aiState">
-        <option value="en">Enabled</option>
-        <option value="dis">Disabled</option>
+        <option value="true">Enabled</option>
+        <option value="false">Disabled</option>
       </select>
     </div>
     <div class="flex flex-col gap-1 w-full items-start">
@@ -177,62 +177,42 @@ export default defineComponent({
     const loading = ref(true);
 
     //determine if ai is filtering
-    var aiFiltering = ref();
+    var aiState = ref();
 
     chrome.storage.sync.get(["aiFiltering"], (result) => {
-      aiFiltering.value = result.aiFiltering;
-    });
-    var aiState = ref("");
-
-    watch(aiFiltering, () => {
-      if (aiFiltering.value === true) {
-        aiState.value = "en";
-      } else if (aiFiltering.value === false) {
-        aiState.value = "dis";
-      }
+      aiState.value = result.aiFiltering;
     });
 
     watch(aiState, () => {
-      if (aiState.value === "en") {
-        aiFiltering.value = true;
-
-        chrome.storage.sync.set({ aiFiltering: aiFiltering.value });
-        console.log("oueoue" + aiFiltering.value);
-      } else if (aiState.value === "dis") {
-        aiFiltering.value = false;
-        chrome.storage.sync.set({ aiFiltering: aiFiltering.value });
-        console.log("nonon", aiFiltering.value);
-      }
+      chrome.storage.sync.set({ aiFiltering: aiState.value });
+      console.log("oueoue" + aiState.value);
     });
 
     //determine the blockingType
 
-    var blockingType = ref();
+    // var blockingType = ref();
     var blockingTypeSelected = ref();
     chrome.storage.sync.get(["blockingType"], (result) => {
-      blockingType.value = result.blockingType;
+      // blockingType.value = result.blockingType;
       blockingTypeSelected.value = result.blockingType;
     });
 
     watch(blockingTypeSelected, () => {
-      blockingType.value = blockingTypeSelected.value;
-      chrome.storage.sync.set({ blockingType: blockingType.value });
+      // blockingType.value = blockingTypeSelected.value;
+      chrome.storage.sync.set({ blockingType: blockingTypeSelected.value });
     });
 
     //determine if daycounter is activated
     var dayCounterState = ref();
-    var dayCounter = ref();
     chrome.storage.sync.get(["dayCounter"], (result) => {
-      dayCounter.value = result.dayCounter;
       dayCounterState.value = result.dayCounter;
     });
 
     watch(dayCounterState, () => {
-      dayCounter.value = dayCounterState.value;
-      chrome.storage.sync.set({ dayCounter: dayCounter.value });
+      chrome.storage.sync.set({ dayCounter: dayCounterState.value });
     });
 
-    const setPage = (b: boolean) => {
+    const setPageBlocklistOrSettings = (b: boolean) => {
       page.value = b;
     };
 
@@ -286,7 +266,7 @@ export default defineComponent({
     return {
       loading,
       page,
-      setPage,
+      setPageBlocklistOrSettings,
       toggleFaq,
       links,
       addLink,
@@ -296,12 +276,9 @@ export default defineComponent({
       addingLinkValue,
       addInput,
       randomCatch,
-      aiFiltering,
       aiState,
-      blockingType,
       blockingTypeSelected,
       dayCounterState,
-      dayCounter,
     };
   },
 });
