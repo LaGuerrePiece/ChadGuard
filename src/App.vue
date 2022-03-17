@@ -24,57 +24,15 @@ export default defineComponent({
       showFaq.value = !showFaq.value;
     };
 
-    chrome.storage.sync.get(["visitCount"], (res) => {
-      if (res.visitCount === 0) {
-        console.log("Première visite");
-        startDate = setDay();
-      } else {
-        console.log("Visite numero", res.visitCount);
-      }
-      let visitCountInc = res.visitCount + 1;
-      chrome.storage.sync.set({ visitCount: visitCountInc });
-      console.log("getNumberOfDays", getNumberOfDays('01/01/1990', setDay()));
-    });
-
-    function getNumberOfDays(start: string, end: string) {
-      const date1 = new Date(start);
-      const date2 = new Date(end);
-
-      // One day in milliseconds
-      const oneDay = 1000 * 60 * 60 * 24;
-
-      // Calculating the time difference between two dates
-      const diffInTime = date2.getTime() - date1.getTime();
-
-      // Calculating the no. of days between two dates
-      const diffInDays = Math.round(diffInTime / oneDay);
-
-      return diffInDays;
-    }
-
-    function setDay() {
-      let today = new Date();
-      var date =
-        today.getMonth() +
-        1 +
-        "/" +
-        today.getDate() +
-        "/" +
-        today.getFullYear();
-      return date;
-    }
-
     return {
       showFaq,
       toggleFaq,
-      getNumberOfDays,
     };
   },
 });
 </script>
 
 <style lang="scss">
-
 @import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Yanone+Kaffeesatz:wght@300&display=swap");
 

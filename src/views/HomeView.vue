@@ -177,7 +177,7 @@ export default defineComponent({
     const loading = ref(true);
 
     //determine if ai is filtering
-    
+
     var aiState = ref();
     chrome.storage.sync.get(["aiFiltering"], (result) => {
       aiState.value = result.aiFiltering;
@@ -248,6 +248,10 @@ export default defineComponent({
       }
       loading.value = false;
     });
+
+    // A METTRE DANS LE BOUTON RESET 
+    //         chrome.storage.sync.set({ startDay: Date.now() });
+    //         reste de la fonction pour update
 
     const phrases = [
       "I love you, brother",

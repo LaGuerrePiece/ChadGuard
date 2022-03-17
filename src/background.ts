@@ -24,6 +24,7 @@ chrome.runtime.onInstalled.addListener(function () {
     visitCount: 0,
     dayCounter: false,
     dayCounterValue: 0,
+    startDayCounter: 164752777444,
     noseEggUnlock: false,
     lastPactDate: 1647527774447
   });

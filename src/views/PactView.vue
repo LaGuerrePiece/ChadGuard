@@ -47,12 +47,19 @@ export default defineComponent({
     const loading = ref(true);
 
     // VERIFIE SI C'EST LA PREMIERE VISITE OU SI L'UTILISATEUR A ENTRE LE MDP IL Y A - DE 2 MIN POUR SKIP
-    chrome.storage.sync.get(["visitCount"], (result) => {
-      console.log("result.visitCount", result.visitCount);
-      if (result.visitCount == 0) {
+
+    chrome.storage.sync.get(["visitCount"], (res) => {
+      if (res.visitCount === 0) {
+        console.log("Première visite");
+        chrome.storage.sync.set({ startDayCounter: Date.now() });
+        console.log("startDayCounter changed to :", Date.now());
         chrome.storage.sync.set({ lastPactDate: Date.now() });
         router.push("/home");
+      } else {
+        console.log("Visite numero", (res.visitCount + 1 ));
       }
+      let visitCountInc = res.visitCount + 1;
+      chrome.storage.sync.set({ visitCount: visitCountInc });
     });
 
     chrome.storage.sync.get(["lastPactDate"], (result) => {
@@ -62,6 +69,22 @@ export default defineComponent({
         chrome.storage.sync.set({ lastPactDate: dateNow });
         router.push("/home");
       }
+    });
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+
+    chrome.storage.sync.get(["startDayCounter"], (result) => {
+      let startDayCounter = result.startDayCounter;
+      const oneDay = 1000 * 60 * 60 * 24;
+      const oneMin = 1000 * 60;
+      const dayElapsed = Math.round((Date.now() - startDayCounter) / oneMin);
+      console.log(
+        "startDayCounter",
+        new Date(startDayCounter).toLocaleString()
+      );
+      console.log("COUNTER DAY DIFF", dayElapsed);
+      chrome.action.setBadgeBackgroundColor({ color: [51, 51, 153, 255] });
+      chrome.action.setBadgeText({ text: String(dayElapsed) });
     });
 
     loading.value = false;
