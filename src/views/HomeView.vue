@@ -113,7 +113,7 @@
       <div
         class="flex flex-col grow basis-0 border-solid border-green-600 border-2"
       >
-        <h1 class="text-left text-lg font-bold">Blocking type :</h1>
+        <h1 class="text-left text-lg font-bold ml-2">Blocking type :</h1>
         <select
           class="align-middle default-border px-3 py-1 rounded w-full"
           v-model="blockingTypeSelected"
@@ -127,7 +127,7 @@
       <div
         class="flex flex-col grow basis-0 border-solid border-green-600 border-2"
       >
-        <h1 class="text-left text-lg font-bold">AI Filtering :</h1>
+        <h1 class="text-left text-lg font-bold ml-2">AI Filtering :</h1>
         <select
           class="align-middle default-border px-3 py-1 rounded w-full"
           v-model="aiState"
@@ -142,7 +142,7 @@
       class="flex flex-row grow w-full gap-1 space-x-4 border-red-600 border-2"
     >
       <div class="flex flex-col w-6/12 border-green-600 border-2">
-        <h1 class="text-left text-lg font-bold">Day Counter :</h1>
+        <h1 class="text-left text-lg font-bold ml-2">Day Counter :</h1>
         <select
           class="align-middle default-border px-3 py-1 rounded w-full"
           v-model="dayCounterState"
@@ -152,7 +152,7 @@
         </select>
       </div>
       <div class="flex flex-col w-6/12 border-green-600 border-2">
-        <h1 class="text-left text-lg font-bold">
+        <h1 class="text-left text-lg font-bold ml-2">
           Nb de jours : {{ dayElapsed }}
         </h1>
         <button
