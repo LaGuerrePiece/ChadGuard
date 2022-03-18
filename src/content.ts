@@ -11,7 +11,7 @@ let model: nsfwjs.NSFWJS;
 chrome.storage.local.get(["defaultBlocklist"], function (result) {
   const defaultBlocklist: string[] = result.defaultBlocklist ?? [];
   console.log("defaultBlocklist", defaultBlocklist);
-  if (defaultBlocklist.some((e) => tabUrl.includes(e))) PUNISH();
+  //if (defaultBlocklist.some((e) => tabUrl.includes(e))) PUNISH();
 });
 
 chrome.storage.sync.get(["userBlocklist", "aiFiltering"], function (result) {
@@ -51,7 +51,7 @@ const analysePage = async () => {
     const img = imgs[i];
     img.width = img.clientWidth;
     img.height = img.clientHeight;
-    if (img.src && img.width > 41 && img.height > 41) {
+    if (img.src && img.width > 41 && img.height > 41 && img.naturalHeight > 10) {
       //console.log('i', i, 'width', imgs[i].width, 'clientWidth', img.width)
       const pixels = img.width * img.height;
       imagePixelArray.push({ element: img, pixels });
@@ -82,7 +82,7 @@ const analysePage = async () => {
   console.log("3 biggest fetchables images:", fetchableImages);
   const promiseArray = fetchableImages.map((img) => {
     return new Promise((resolve, reject) => {
-      console.log('Etape 1 : conversion en New Image()')
+      //console.log('Etape 1 : conversion en New Image()')
       const image: HTMLImageElement = new Image(img.width, img.height)
       image.crossOrigin = 'anonymous'
       image.onload = () => resolve(model.classify(image));
@@ -91,7 +91,15 @@ const analysePage = async () => {
   });
   Promise.allSettled(promiseArray).then((predictions) => {
     for (let i = 0; i < predictions.length; i++) {
-      console.log(predictions[i], fetchableImages[i]);
+      console.log('Image ' + i + ' ' + predictions[i].status);
+      if (predictions[i].status === 'fulfilled') {
+        // @ts-expect-error promise I will learn ts
+        for (const key in predictions[i].value) {
+          // @ts-expect-error promise I will learn ts
+          console.log(predictions[i].value[key]);
+        }
+      }
+      console.log(fetchableImages[i]);
     }
     // @ts-expect-error promise I will learn ts
     let score = getScore(predictions as PromiseSettledResult<nsfwjs.predictionType>[]);
