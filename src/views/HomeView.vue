@@ -133,7 +133,11 @@
         </select>
       </div>
     </div>
-    <div id="notredosieme" class="flex flex-row grow w-full gap-1 space-x-4">
+    <div
+      v-if="dayCounterState === 'true'"
+      id="displayDayCounter"
+      class="flex flex-row grow w-full gap-1 space-x-4"
+    >
       <div class="flex flex-col w-6/12">
         <h1 class="text-left text-lg font-semibold ml-2">Day Counter :</h1>
         <select
@@ -156,14 +160,51 @@
         </button>
       </div>
     </div>
-    <div id="notretrosieme">
-      <div class="flex flex-col grow gap-1 border-red-600 border-2">
+    <div
+      v-else
+      id="hideDayCounter"
+      class="flex flex-row grow w-full gap-1 space-x-4"
+    >
+      <div class="flex flex-col w-6/12">
+        <h1 class="text-left text-lg font-semibold ml-2">Day Counter :</h1>
+        <select
+          class="align-middle default-border px-3 py-1 rounded w-full"
+          v-model="dayCounterState"
+        >
+          <option value="true">Enabled</option>
+          <option value="false">Disabled</option>
+        </select>
+      </div>
+      <div class="flex flex-col w-6/12 opacity-0">
+        <h1 class="text-left text-lg font-semibold ml-2">
+          {{ dayElapsed }} jours
+        </h1>
+        <button
+          v-on:click="resetDayCounter()"
+          class="default-button align-middle default-border px-3 py-1 rounded w-6/12 h-[35px]"
+        >
+          Reset
+        </button>
+      </div>
+    </div>
+    <div v-if="dayCounterState === 'true'" id="connectDiscord" class="mb-3">
+      <div class="flex flex-col grow gap-1">
+        <h1 class="text-left text-lg font-semibold">
+          Discord : connected as michel{{}}
+        </h1>
+        <div class="flex flex-row grow gap-1 space-x-4">
+          <button class="default-button grow basis-0">Disconnect</button>
+          <button class="default-button grow basis-0 opacity-0"></button>
+          <!-- <div class="grow basis-0"></div> -->
+        </div>
+      </div>
+    </div>
+    <div v-else id="disconnectDiscord" class="mb-3">
+      <div class="flex flex-col grow gap-1">
         <h1 class="text-left text-lg font-semibold">Discord :</h1>
         <div class="flex flex-row grow gap-1 space-x-4">
-          <button class="default-button grow basis-0">
-            Connect with Discord
-          </button>
-          <button class="default-button grow basis-0"></button>
+          <button class="default-button grow basis-0">Connect</button>
+          <button class="default-button grow basis-0 opacity-0"></button>
           <!-- <div class="grow basis-0"></div> -->
         </div>
       </div>
