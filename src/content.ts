@@ -87,20 +87,10 @@ interface values {
   }[];
 }
 
-chrome.storage.sync.get(["startDayCounter"], (result) => {
-  let startDayCounter = result.startDayCounter;
-  const oneDay = 1000 * 60 * 60 * 24;
-  const oneMin = 1000 * 60;
-  const dayElapsed = Math.round((Date.now() - startDayCounter) / oneMin);
-  // console.log("startDayCounter", new Date(startDayCounter).toLocaleString());
-  // console.log("COUNTER DAY DIFF", dayElapsed);
-  chrome.storage.sync.set({ dayElapsed: dayElapsed });
-  chrome.storage.sync.get(["dayCounter"], (result: any) => {
-    // console.log("result.dayCounter", result.dayCounter);
-    if (result.dayCounter) {
-      chrome.runtime.sendMessage({ greeting: "hello" });
-    }
-  });
+chrome.storage.sync.get(["dayCounter"], (result: any) => {
+  if (result.dayCounter) {
+    chrome.runtime.sendMessage({ greeting: "refreshDayCounter" });
+  }
 });
 
 function getScore(values: values[]) {

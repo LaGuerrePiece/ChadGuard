@@ -272,8 +272,9 @@ export default defineComponent({
     // BOUTON RESET
 
     let resetDayCounter = () => {
-      chrome.storage.sync.set({ startDay: Date.now() });
+      chrome.storage.sync.set({ startDayCounter: Date.now() });
       console.log("erfhu", Date.now());
+      chrome.runtime.sendMessage({ greeting: "refreshDayCounter" });
     };
 
     const phrases = [
