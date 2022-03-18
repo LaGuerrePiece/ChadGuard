@@ -141,7 +141,12 @@
         </select>
       </div>
       <div class="flex flex-col gap-1">
-        <button class="default-button grow basis-0">Reset</button>
+        <button
+          v-on:click="resetDayCounter()"
+          class="default-button grow basis-0"
+        >
+          Reset
+        </button>
       </div>
     </div>
     <div id="notretrosieme">
@@ -151,9 +156,7 @@
           <button class="default-button grow basis-0">
             Connect with Discord
           </button>
-          <button class="default-button grow basis-0">
-            
-          </button>
+          <button class="default-button grow basis-0"></button>
           <!-- <div class="grow basis-0"></div> -->
         </div>
       </div>
@@ -266,9 +269,12 @@ export default defineComponent({
       loading.value = false;
     });
 
-    // A METTRE DANS LE BOUTON RESET
-    //         chrome.storage.sync.set({ startDay: Date.now() });
-    //         reste de la fonction pour update
+    // BOUTON RESET
+
+    let resetDayCounter = () => {
+      chrome.storage.sync.set({ startDay: Date.now() });
+      console.log("erfhu", Date.now());
+    };
 
     const phrases = [
       "I love you, brother",
@@ -296,6 +302,7 @@ export default defineComponent({
       aiState,
       blockingTypeSelected,
       dayCounterState,
+      resetDayCounter,
     };
   },
 });
