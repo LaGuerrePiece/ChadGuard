@@ -19,7 +19,7 @@ chrome.runtime.onInstalled.addListener(function (details) {
         { defaultBlocklist: defaultBlocklist },
         function () {
           console.log(
-            "Value 89 for instance is set to " + defaultBlocklist[89]
+            "Value 85 for instance is set to " + defaultBlocklist[85]
           );
         }
       );

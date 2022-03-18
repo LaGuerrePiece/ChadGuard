@@ -10,7 +10,7 @@ let model: nsfwjs.NSFWJS;
 
 chrome.storage.local.get(["defaultBlocklist"], function (result) {
   const defaultBlocklist: string[] = result.defaultBlocklist ?? [];
-  console.log("got it from localstorage!", defaultBlocklist);
+  console.log("defaultBlocklist", defaultBlocklist);
   if (defaultBlocklist.some((e) => tabUrl.includes(e))) PUNISH();
 });
 
@@ -29,8 +29,10 @@ chrome.storage.sync.get(["userBlocklist", "aiFiltering"], function (result) {
     console.log("Page not analysed because aiFiltering = false");
   }
   const userBlocklist: string[] = result.userBlocklist ?? [];
-  console.log("got it from syncstorage!", userBlocklist);
-  if (userBlocklist.some((e) => tabUrl.includes(e))) PUNISH();
+  console.log("userBlocklist", userBlocklist);
+  for (const key in result.userBlocklist) {
+    if (tabUrl.includes(result.userBlocklist[key])) PUNISH();
+  }
 });
 
 interface ImagePixel {
@@ -143,7 +145,6 @@ function postToWebhookThenBlock(content: string) {
   const data = {
     content: content,
   };
-
   xhr.send(JSON.stringify(data));
   xhr.onload = function () {
     block();
