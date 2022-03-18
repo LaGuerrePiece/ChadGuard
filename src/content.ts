@@ -91,21 +91,34 @@ const analysePage = async () => {
   });
   Promise.allSettled(promiseArray).then((predictions) => {
     for (let i = 0; i < predictions.length; i++) {
-      console.log('Image ' + i + ' ' + predictions[i].status);
-      if (predictions[i].status === 'fulfilled') {
+      const prediction = predictions[i]
+      console.log('Image ' + i + ' ' + prediction.status);
+      if (prediction.status === 'fulfilled') {
         // @ts-expect-error promise I will learn ts
-        for (const key in predictions[i].value) {
+        for (const key in prediction.value) {
           // @ts-expect-error promise I will learn ts
-          console.log(predictions[i].value[key]);
+          console.log(prediction.value[key]);
         }
       }
+      // @ts-expect-error promise I will learn ts
+      console.log('pScore : ' + getPScore(prediction))
+      // @ts-expect-error promise I will learn ts
+      console.log('hScore : ' + getHScore(prediction))
       console.log(fetchableImages[i]);
     }
     // @ts-expect-error promise I will learn ts
-    let score = getScore(predictions as PromiseSettledResult<nsfwjs.predictionType>[]);
-    console.log(`score : ${score}`);
-    if (score > treeshold) {
+    let pScores = predictions.map(e => getPScore(e))
+    // @ts-expect-error promise I will learn ts
+    let hScores = predictions.map(e => getHScore(e))
+    let pScore = pScores.reduce((a, b) => a + b, 0)/pScores.length
+    let hScore = hScores.reduce((a, b) => a + b, 0)/hScores.length
+    console.log(`pScore Total : ${pScore}`);
+    console.log(`hScore Total : ${hScore}`);
+    if (pScore > treeshold) {
       console.log("Seems like porn !");
+      //PUNISH();
+    } else if (hScore > treeshold){
+      console.log("Seems like Hentai !");
       //PUNISH();
     } else {
       console.log("All seems fine.");
@@ -121,27 +134,32 @@ interface values {
   }[];
 }
 
+function getPScore(value: values) {
+  let pScore = 0;
+  if (value.status == "fulfilled") {
+    for (let i = 0; i < 5; i++) {
+      if (value.value[i].className == "Porn") pScore += value.value[i].probability
+      if (value.value[i].className == "Sexy") pScore += value.value[i].probability*0.7
+    }
+  }  
+  return pScore
+}
+
+function getHScore(value: values) {
+  let hScore = 0;
+  if (value.status == "fulfilled") {
+    for (let i = 0; i < 5; i++) {
+      if (value.value[i].className == "Hentai") hScore += value.value[i].probability
+    }
+  }  
+  return hScore
+}
+
 chrome.storage.sync.get(["dayCounter"], (result: any) => {
   if (result.dayCounter) {
     chrome.runtime.sendMessage({ greeting: "refreshDayCounter" });
   }
 });
-
-function getScore(values: values[]) {
-  let pScore = 0;
-  function incrementPScore(value: values) {
-    if (value.status == "fulfilled") {
-      for (let i = 0; i < 5; i++) {
-        if (value.value[i].className == "Porn") {
-          pScore += value.value[i].probability;
-        }
-      }
-    }
-  }
-  values.forEach((e) => incrementPScore(e));
-  pScore = pScore / values.length;
-  return pScore;
-}
 
 //MODULE WEBHOOK :
 
