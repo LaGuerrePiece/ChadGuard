@@ -19,12 +19,14 @@ chrome.runtime.onInstalled.addListener(function () {
     }
   });
   chrome.storage.sync.set({
-    blockingType: 1,
+    blockingType: 0,
     aiFiltering: true,
     visitCount: 0,
     dayCounter: false,
     dayCounterValue: 0,
-    noseEggUnlock: false
+    startDayCounter: 164752777444,
+    noseEggUnlock: false,
+    lastPactDate: 1647527774447
   });
 });
 

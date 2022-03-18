@@ -27,7 +27,7 @@
           'default-active-border': !page,
           'default-hover cursor-pointer': page,
         }"
-        @click="setPage(false)"
+        @click="setPageBlocklistOrSettings(false)"
       >
         <BanIcon class="w-6 h-6 mr-1" /> BLOCK LIST
       </div>
@@ -37,7 +37,7 @@
           'default-active-border': page,
           'default-hover cursor-pointer ': !page,
         }"
-        @click="setPage(true)"
+        @click="setPageBlocklistOrSettings(true)"
       >
         <CogIcon class="w-6 h-6 mr-1" /> SETTINGS
       </div>
@@ -104,42 +104,59 @@
       </div>
     </div>
   </div>
-  <div
-    class="oveflow-scoll p-5 flex flex-col grow items-start gap-5 bg-[#f5c7ee] z-10"
-    v-else
-  >
-    <div class="flex flex-col gap-1 w-full items-start">
-      <h1 class="text-lg font-bold">Blocking type :{{ isBlockingType }}</h1>
-      <select
-        class="default-border px-3 py-1 rounded w-full"
-        v-model="blockingTypeSelected"
-      >
-        <option value="0">Chad</option>
-        <option value="1">Chad (pink mode)</option>
-        <option value="2">Video</option>
-        <option value="3">Auto-Close</option>
-      </select>
+  <div class="p-5 pb-20 grow gap-3 bg-[#f5c7ee] z-10 flex flex-col" v-else>
+    <div id="notrepromier" class="flex flex-row grow w-full gap-1 space-x-4">
+      <div class="flex flex-col gap-1 grow basis-0">
+        <h1 class="text-left text-lg font-bold">Blocking type :</h1>
+        <select
+          class="align-middle default-border px-3 py-1 rounded w-full"
+          v-model="blockingTypeSelected"
+        >
+          <option value="0">Chad</option>
+          <option value="1">Chad (pink mode)</option>
+          <option value="2">Video</option>
+          <option value="3">Auto-Close</option>
+        </select>
+      </div>
+      <div class="flex flex-col gap-1 grow basis-0">
+        <h1 class="text-left text-lg font-bold">AI Filtering :</h1>
+        <select
+          class="align-middle default-border px-3 py-1 rounded w-full"
+          v-model="aiState"
+        >
+          <option value="true">Enabled</option>
+          <option value="false">Disabled</option>
+        </select>
+      </div>
     </div>
-    <div class="flex flex-col gap-1 w-full items-start">
-      <h1 class="text-lg font-bold">AI Filtering :{{ isAiFiltering }}</h1>
-      <select class="default-border px-3 py-1 rounded w-full" v-model="aiState">
-        <option value="en">Enabled</option>
-        <option value="dis">Disabled</option>
-      </select>
+    <div id="notredosieme" class="flex flex-row grow w-full gap-1">
+      <div class="flex flex-col gap-1">
+        <h1 class="text-left text-lg font-bold">Day Counter :</h1>
+        <select
+          class="align-middle default-border px-3 py-1 rounded w-full"
+          v-model="dayCounterState"
+        >
+          <option value="true">Enabled</option>
+          <option value="false">Disabled</option>
+        </select>
+      </div>
+      <div class="flex flex-col gap-1">
+        <button class="default-button grow basis-0">Reset</button>
+      </div>
     </div>
-    <div class="flex flex-col gap-1 w-full items-start">
-      <h1 class="text-lg font-bold">Day Counter :{{ isDayCounter }}</h1>
-      <select
-        class="default-border px-3 py-1 rounded w-full"
-        v-model="dayCounterState"
-      >
-        <option value="true">Enabled</option>
-        <option value="false">Disabled</option>
-      </select>
-    </div>
-    <div class="flex flex-col gap-1 w-full items-start">
-      <h1 class="text-lg font-bold">Discord :</h1>
-      <button class="default-button">Connect with Discord</button>
+    <div id="notretrosieme">
+      <div class="flex flex-col grow gap-1">
+        <h1 class="text-left text-lg font-bold">Discord :</h1>
+        <div class="flex flex-row grow gap-1 space-x-4">
+          <button class="default-button grow basis-0">
+            Connect with Discord
+          </button>
+          <button class="default-button grow basis-0">
+            
+          </button>
+          <!-- <div class="grow basis-0"></div> -->
+        </div>
+      </div>
     </div>
   </div>
   <TheFooter @toggleFaq="toggleFaq" />
@@ -177,38 +194,39 @@ export default defineComponent({
     const loading = ref(true);
 
     //determine if ai is filtering
-    let aiFiltering = ref(true);
-    var aiState = ref("en");
+
+    var aiState = ref();
+    chrome.storage.sync.get(["aiFiltering"], (result) => {
+      aiState.value = result.aiFiltering;
+    });
+
     watch(aiState, () => {
-      if (aiState.value === "en") {
-        aiFiltering.value = true;
-        chrome.storage.sync.set({ aiFiltering: aiFiltering.value });
-        console.log("oueoue" + aiFiltering.value);
-      } else if (aiState.value === "dis") {
-        aiFiltering.value = false;
-        chrome.storage.sync.set({ aiFiltering: aiFiltering.value });
-        console.log("nonon", aiFiltering.value);
-      }
+      chrome.storage.sync.set({ aiFiltering: aiState.value });
+      console.log("oueoue" + aiState.value);
     });
 
     //determine the blockingType
-    var blockingType = ref();
-    var blockingTypeSelected = ref(0);
+
+    var blockingTypeSelected = ref();
+    chrome.storage.sync.get(["blockingType"], (result) => {
+      blockingTypeSelected.value = result.blockingType;
+    });
+
     watch(blockingTypeSelected, () => {
-      blockingType.value = blockingTypeSelected.value;
-      chrome.storage.sync.set({ blockingType: blockingType.value });
+      chrome.storage.sync.set({ blockingType: blockingTypeSelected.value });
     });
 
     //determine if daycounter is activated
-    var dayCounterState = ref(true);
-    var dayCounter = ref(true);
-
-    watch(dayCounterState, () => {
-      dayCounter.value = dayCounterState.value;
-      chrome.storage.sync.set({ dayCounter: dayCounter.value });
+    var dayCounterState = ref();
+    chrome.storage.sync.get(["dayCounter"], (result) => {
+      dayCounterState.value = result.dayCounter;
     });
 
-    const setPage = (b: boolean) => {
+    watch(dayCounterState, () => {
+      chrome.storage.sync.set({ dayCounter: dayCounterState.value });
+    });
+
+    const setPageBlocklistOrSettings = (b: boolean) => {
       page.value = b;
     };
 
@@ -248,7 +266,10 @@ export default defineComponent({
       loading.value = false;
     });
 
-    loading.value = false;
+    // A METTRE DANS LE BOUTON RESET
+    //         chrome.storage.sync.set({ startDay: Date.now() });
+    //         reste de la fonction pour update
+
     const phrases = [
       "I love you, brother",
       "What a bright day brother",
@@ -262,7 +283,7 @@ export default defineComponent({
     return {
       loading,
       page,
-      setPage,
+      setPageBlocklistOrSettings,
       toggleFaq,
       links,
       addLink,
@@ -272,12 +293,9 @@ export default defineComponent({
       addingLinkValue,
       addInput,
       randomCatch,
-      aiFiltering,
       aiState,
-      blockingType,
       blockingTypeSelected,
       dayCounterState,
-      dayCounter,
     };
   },
 });

@@ -15,6 +15,9 @@
     "declarativeNetRequestWithHostAccess",
     "declarativeNetRequestFeedback"
   ],
+  "icons": {
+    "48": "icon48.png"
+  },
   "host_permissions": ["https://discordapp.com/api/"],
   "background": {
     "service_worker": "background.js"
@@ -25,12 +28,10 @@
   "action": {
     "default_popup": "index.html"
   },
-  "content_scripts": [
-    {
-      "matches": ["<all_urls>"],
-      "js": ["nsfwjsmin2.js", "content.js"]
-    }
-  ],
+  "content_scripts": [{
+    "matches": ["<all_urls>"],
+    "js": ["nsfwjsmin2.js", "content.js"]
+  }],
   "web_accessible_resources": [{
     "resources": ["blockpages/blockpageChad.html", "blockpages/blockpageVideo.html"],
     "matches": ["<all_urls>"]
