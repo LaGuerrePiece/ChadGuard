@@ -189,11 +189,16 @@
     </div>
     <div v-if="discordState === 'true'" id="connectDiscord" class="mb-3">
       <div class="flex flex-col grow gap-1">
-        <h1 class="text-left text-lg font-semibold">
+        <h1 class="text-left text-lg font-semibold ml-2">
           Discord : Connected as {{ username }}
         </h1>
         <div class="flex flex-row grow gap-1 space-x-4">
-          <button class="default-button grow basis-0">Disconnect</button>
+          <button
+            class="default-button grow basis-0 h-[35px]"
+            v-on:click="logout()"
+          >
+            Disconnect
+          </button>
           <button class="default-button grow basis-0 opacity-0"></button>
           <!-- <div class="grow basis-0"></div> -->
         </div>
@@ -201,9 +206,14 @@
     </div>
     <div v-else id="disconnectDiscord" class="mb-3">
       <div class="flex flex-col grow gap-1">
-        <h1 class="text-left text-lg font-semibold">Discord :</h1>
+        <h1 class="text-left text-lg font-semibold ml-2">Discord :</h1>
         <div class="flex flex-row grow gap-1 space-x-4">
-          <button class="default-button grow basis-0" v-on:click="login()">Connect</button>
+          <button
+            class="default-button grow basis-0 h-[35px]"
+            v-on:click="login()"
+          >
+            Connect
+          </button>
           <button class="default-button grow basis-0 opacity-0"></button>
           <!-- <div class="grow basis-0"></div> -->
         </div>
@@ -245,7 +255,7 @@ export default defineComponent({
     const loading = ref(true);
     const dayElapsed = ref();
     const discordState = ref();
-    let username = ref()
+    let username = ref();
 
     //determine if ai is filtering
 
@@ -287,13 +297,8 @@ export default defineComponent({
       chrome.runtime.sendMessage({ greeting: "refreshDayCounter" });
     });
 
-    watch(discordState, () => {
-      if (discordState.value == "true") {
-        chrome.storage.sync.set({ dayCounter: true });
-      }
-      if (discordState.value == "false") {
-        chrome.storage.sync.set({ dayCounter: false });
-      }
+    watch(username, () => {
+      if (username.value) chrome.storage.sync.set({ username: username.value });
     });
 
     const setPageBlocklistOrSettings = (b: boolean) => {
@@ -353,16 +358,16 @@ export default defineComponent({
     checkLoginStatus();
 
     function checkLoginStatus() {
-      chrome.storage.sync.get(["username", "discordToken"], function (data) {
-        if ("discordToken" in data) {
+      chrome.storage.sync.get(["username", "discordToken"], (data) => {
+        if (data.discordToken) {
           if (!data.username) {
             getUsername(data.discordToken.access_token);
-            chrome.storage.sync.get(["username"], function (data) {
-              username = data.username;
+            chrome.storage.sync.get(["username"], (data) => {
+              username.value = data.username;
             });
           }
-          username = data.username;
-          discordState.value = "true"
+          username.value = data.username;
+          discordState.value = "true";
           //L'UTILISATEUR EST CONNECTE, AFFICHER SON USERNAME ET "DECONNEXION"
         } else {
           //L'UTILISATEUR EST DECONNECTE, AFFICHER "CONNEXION"
@@ -372,17 +377,14 @@ export default defineComponent({
 
     function getUsername(token: string) {
       var xhr = new XMLHttpRequest();
-
       xhr.open("GET", "https://discordapp.com/api/users/@me", true);
       xhr.setRequestHeader("Authorization", "Bearer " + token);
       xhr.onload = function (e) {
         if (xhr.readyState === 4) {
-          console.log(xhr.responseText);
-          const username = JSON.parse(xhr.responseText).username;
-          if (username === undefined) {
-            return;
-          }
-          chrome.storage.sync.set({ username: username });
+          let usernameResponse = JSON.parse(xhr.responseText).username;
+          if (usernameResponse === undefined) return;
+          // chrome.storage.sync.set({ username: usernameResponse });
+          username.value = usernameResponse;
         }
       };
       xhr.send();
@@ -411,9 +413,12 @@ export default defineComponent({
         function (res: string | undefined) {
           if (res) {
             var url = new URL(res);
-            console.log(res);
             var code = url.searchParams.get("code");
-            getToken(code as string);
+            if (code) getToken(code as string);
+            else {
+              console.log('Erreur :', url.searchParams.get("error"));
+              logout();
+            }
           }
         }
       );
@@ -445,6 +450,7 @@ export default defineComponent({
     function logout() {
       chrome.storage.sync.remove(["discordToken", "username"], function () {
         console.log("Déconnexion");
+        discordState.value = "false";
         checkLoginStatus();
       });
     }
@@ -489,7 +495,7 @@ export default defineComponent({
       discordState,
       username,
       login,
-
+      logout,
     };
   },
 });
