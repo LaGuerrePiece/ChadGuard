@@ -63,7 +63,7 @@
     <LoadingSpinner />
   </div>
   <div
-    class="overflow-y-auto p-3 flex-grow bg-[#f5c7ee] z-10"
+    class="overflow-y-auto p-3 flex-grow bg-[#f5c7ee] z-10 tracking-widest"
     v-else-if="!page"
   >
     <div class="flex flex-col gap-2">
@@ -105,15 +105,13 @@
       </div>
     </div>
   </div>
-  <div class="p-5 grow gap-3 bg-[#f5c7ee] z-10 flex flex-col" v-else>
-    <div
-      id="notrepromier"
-      class="flex flex-row grow w-full gap-1 space-x-4 border-red-600 border-2"
-    >
-      <div
-        class="flex flex-col grow basis-0 border-solid border-green-600 border-2"
-      >
-        <h1 class="text-left text-lg font-bold ml-2">Blocking type :</h1>
+  <div
+    class="p-5 grow gap-3 bg-[#f5c7ee] z-10 flex flex-col tracking-[.075em]"
+    v-else
+  >
+    <div id="notrepromier" class="flex flex-row grow w-full gap-1 space-x-4">
+      <div class="flex flex-col grow basis-0 border-solid">
+        <h1 class="text-left text-lg font-semibold ml-2">Blocking type :</h1>
         <select
           class="align-middle default-border px-3 py-1 rounded w-full"
           v-model="blockingTypeSelected"
@@ -124,10 +122,8 @@
           <option value="3">Auto-Close</option>
         </select>
       </div>
-      <div
-        class="flex flex-col grow basis-0 border-solid border-green-600 border-2"
-      >
-        <h1 class="text-left text-lg font-bold ml-2">AI Filtering :</h1>
+      <div class="flex flex-col grow basis-0 border-solid">
+        <h1 class="text-left text-lg font-semibold ml-2">AI Filtering :</h1>
         <select
           class="align-middle default-border px-3 py-1 rounded w-full"
           v-model="aiState"
@@ -137,12 +133,9 @@
         </select>
       </div>
     </div>
-    <div
-      id="notredosieme"
-      class="flex flex-row grow w-full gap-1 space-x-4 border-red-600 border-2"
-    >
-      <div class="flex flex-col w-6/12 border-green-600 border-2">
-        <h1 class="text-left text-lg font-bold ml-2">Day Counter :</h1>
+    <div id="notredosieme" class="flex flex-row grow w-full gap-1 space-x-4">
+      <div class="flex flex-col w-6/12">
+        <h1 class="text-left text-lg font-semibold ml-2">Day Counter :</h1>
         <select
           class="align-middle default-border px-3 py-1 rounded w-full"
           v-model="dayCounterState"
@@ -151,13 +144,13 @@
           <option value="false">Disabled</option>
         </select>
       </div>
-      <div class="flex flex-col w-6/12 border-green-600 border-2">
-        <h1 class="text-left text-lg font-bold ml-2">
-          Nb de jours : {{ dayElapsed }}
+      <div class="flex flex-col w-6/12">
+        <h1 class="text-left text-lg font-semibold ml-2">
+          {{ dayElapsed }} jours
         </h1>
         <button
           v-on:click="resetDayCounter()"
-          class="default-button text-left align-middle default-border px-3 py-1 rounded w-full h-[35px]"
+          class="default-button align-middle default-border px-3 py-1 rounded w-6/12 h-[35px]"
         >
           Reset
         </button>
@@ -165,7 +158,7 @@
     </div>
     <div id="notretrosieme">
       <div class="flex flex-col grow gap-1 border-red-600 border-2">
-        <h1 class="text-left text-lg font-bold">Discord :</h1>
+        <h1 class="text-left text-lg font-semibold">Discord :</h1>
         <div class="flex flex-row grow gap-1 space-x-4">
           <button class="default-button grow basis-0">
             Connect with Discord
