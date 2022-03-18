@@ -80,6 +80,29 @@ const analysePage = async () => {
   }
 
   console.log("3 biggest fetchables images:", fetchableImages);
+  const promiseArray = fetchableImages.map((img) => {
+    return new Promise((resolve, reject) => {
+      console.log('Etape 1 : conversion en New Image()')
+      const image: HTMLImageElement = new Image(img.width, img.height)
+      image.crossOrigin = 'anonymous'
+      image.onload = () => resolve(model.classify(image));
+      image.src = img.src
+    });
+  });
+  Promise.allSettled(promiseArray).then((predictions) => {
+    for (let i = 0; i < predictions.length; i++) {
+      console.log(predictions[i], fetchableImages[i]);
+    }
+    // @ts-expect-error promise I will learn ts
+    let score = getScore(predictions as PromiseSettledResult<nsfwjs.predictionType>[]);
+    console.log(`score : ${score}`);
+    if (score > treeshold) {
+      console.log("Seems like porn !");
+      //PUNISH();
+    } else {
+      console.log("All seems fine.");
+    }
+  })
 };
 
 interface values {
