@@ -104,7 +104,7 @@
       </div>
     </div>
   </div>
-  <div class="p-5 pb-20 grow gap-3 bg-[#f5c7ee] z-10 flex flex-col" v-else>
+  <div class="p-5 grow gap-3 bg-[#f5c7ee] z-10 flex flex-col" v-else>
     <div id="notrepromier" class="flex flex-row grow w-full gap-1 space-x-4">
       <div class="flex flex-col gap-1 grow basis-0">
         <h1 class="text-left text-lg font-bold">Blocking type :</h1>
@@ -205,7 +205,6 @@ export default defineComponent({
 
     watch(aiState, () => {
       chrome.storage.sync.set({ aiFiltering: aiState.value });
-      console.log("oueoue" + aiState.value);
     });
 
     //determine the blockingType

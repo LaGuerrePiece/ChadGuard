@@ -2,6 +2,7 @@ console.log("service worker running");
 
 //Initialisation de la defaultBlocklist :
 chrome.runtime.onInstalled.addListener(function () {
+  chrome.storage.sync.set({ visitCount: 0 })
   chrome.storage.local.get(["defaultBlocklist"], function (result) {
     let defaultBlocklist = result.defaultBlocklist ?? [];
     const url = chrome.runtime.getURL("./defaultBlocklist.json");
@@ -30,11 +31,10 @@ chrome.runtime.onInstalled.addListener(function () {
       chrome.storage.sync.set({
         blockingType: 0,
         aiFiltering: true,
-        visitCount: 0,
         dayCounter: false,
         dayCounterValue: 0,
         dayElapsed: 0,
-        startDayCounter: 164752777444,
+        startDayCounter: Date.now(),
         noseEggUnlock: false,
         lastPactDate: 1647527774447,
       });

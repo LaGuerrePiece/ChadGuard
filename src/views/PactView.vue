@@ -51,8 +51,6 @@ export default defineComponent({
     chrome.storage.sync.get(["visitCount"], (res) => {
       if (res.visitCount === 0) {
         console.log("Première visite");
-        chrome.storage.sync.set({ startDayCounter: Date.now() });
-        console.log("startDayCounter changed to :", Date.now());
         chrome.storage.sync.set({ lastPactDate: Date.now() });
         router.push("/home");
       } else {
