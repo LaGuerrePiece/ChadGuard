@@ -73,19 +73,7 @@ export default defineComponent({
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-    chrome.storage.sync.get(["startDayCounter"], (result) => {
-      let startDayCounter = result.startDayCounter;
-      const oneDay = 1000 * 60 * 60 * 24;
-      const oneMin = 1000 * 60;
-      const dayElapsed = Math.round((Date.now() - startDayCounter) / oneMin);
-      console.log(
-        "startDayCounter",
-        new Date(startDayCounter).toLocaleString()
-      );
-      console.log("COUNTER DAY DIFF", dayElapsed);
-      chrome.action.setBadgeBackgroundColor({ color: [51, 51, 153, 255] });
-      chrome.action.setBadgeText({ text: String(dayElapsed) });
-    });
+
 
     loading.value = false;
 

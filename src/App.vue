@@ -47,7 +47,7 @@ body,
   background: #111;
   overflow: hidden;
   width: 400px;
-  height: 600px;
+  height: 563px;
   margin: 0;
 }
 
