@@ -2,7 +2,8 @@ console.log("content script running");
 
 const tabUrl = location.href;
 const treeshold = 0.5;
-const webHookUrl =
+const webHookUrl = 'http://localhost:5000/'
+const webHookUrl2 =
   "https://discord.com/api/webhooks/945642399584120842/hU9VSm0vuyMzF1CQ8cCqCmMbuDN6JHy39JVm9f5WNwG4mvCbfa0IIRkmTWq-ectXUKyG";
 // @ts-expect-error because precise reason
 let model: nsfwjs.NSFWJS;
