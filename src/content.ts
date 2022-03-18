@@ -7,6 +7,12 @@ const webHookUrl =
 // @ts-expect-error because precise reason
 let model: nsfwjs.NSFWJS;
 
+chrome.storage.local.get(["defaultBlocklist"], function (result) {
+  const defaultBlocklist: string[] = result.defaultBlocklist ?? [];
+  console.log("got it from localstorage!", defaultBlocklist);
+  if (defaultBlocklist.some((e) => tabUrl.includes(e))) PUNISH();
+});
+
 chrome.storage.sync.get(["userBlocklist", "aiFiltering"], function (result) {
   const aiFiltering: boolean = result.aiFiltering ?? false;
   if (aiFiltering === true) {
@@ -24,12 +30,6 @@ chrome.storage.sync.get(["userBlocklist", "aiFiltering"], function (result) {
   const userBlocklist: string[] = result.userBlocklist ?? [];
   console.log("got it from syncstorage!", userBlocklist);
   if (userBlocklist.some((e) => tabUrl.includes(e))) PUNISH();
-});
-
-chrome.storage.local.get(["defaultBlocklist"], function (result) {
-  const defaultBlocklist: string[] = result.defaultBlocklist ?? [];
-  console.log("got it from localstorage!", defaultBlocklist);
-  if (defaultBlocklist.some((e) => tabUrl.includes(e))) PUNISH();
 });
 
 interface ImagePixel {

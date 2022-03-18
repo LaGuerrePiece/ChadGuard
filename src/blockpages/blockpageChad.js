@@ -1,5 +1,5 @@
 let quotes = [
-  ["Jordan Peterson", "The masculine spirit is under assault. It’s obvious."],
+  ["Jordan Peterson", "The masculine spirit is under assault. It's obvious."],
   [
     "Jordan Peterson",
     "Once someone has spent enough time cultivating bad habits and biding their time, they are much diminished. Much of what they could have been has dissipated.",
@@ -43,7 +43,7 @@ let quotes = [
   ["Spiderman", "With great power comes great responsibility."],
   [
     "Lord of the Rings",
-    "Precious, precious, precious!’ Gollum cried. ‘My Precious! O my Precious!",
+    "Precious, precious, precious!' Gollum cried. 'My Precious! O my Precious!",
   ],
   ["Gollum", "My precious."],
   ["Samwise Gamgee", "Wake up, Mr. Frodo!"],
@@ -76,7 +76,7 @@ let quotes = [
 
 let rand = Math.floor(Math.random() * quotes.length);
 let randImage = Math.floor(Math.random() * 6);
-let blockingType = 3;
+
 
 console.log("rand", rand);
 console.log("length", quotes.length);
@@ -85,70 +85,73 @@ console.log(quotes[rand]);
 document.getElementById("quote").innerHTML = quotes[rand][1];
 document.getElementById("author").innerHTML = quotes[rand][0];
 
-if (blockingType == 3) {
-  switch (randImage) {
-    case 0:
-      document.getElementById("imageid").style.backgroundImage =
-        "url(./blockChads/wall0.jpg)";
-      break;
-    case 1:
-      document.getElementById("imageid").style.backgroundImage =
-        "url(./blockChads/wall1.jpg)";
-      break;
-    case 2:
-      document.getElementById("imageid").style.backgroundImage =
-        "url(./blockChads/wall2.jpg)";
-      break;
-    case 3:
-      document.getElementById("imageid").style.backgroundImage =
-        "url(./blockChads/wall3.jpg)";
-      break;
-    case 4:
-      document.getElementById("imageid").style.backgroundImage =
-        "url(./blockChads/wall4.jpg)";
-      break;
-    case 5:
-      document.getElementById("imageid").style.backgroundImage =
-        "url(./blockChads/wall5.jpg)";
-      break;
-    case 6:
-      document.getElementById("imageid").style.backgroundImage =
-        "url(./blockChads/wall6.jpg)";
-      break;
+chrome.storage.sync.get(["blockingType"], (res) => {
+  console.log('CIBLE', res.blockingType)
+  let blockingType = res.blockingType
+  if (blockingType == 1) {
+    switch (randImage) {
+      case 0:
+        document.getElementById("imageid").style.backgroundImage =
+          "url(./blockChads/wall0r.jpg)";
+        break;
+      case 1:
+        document.getElementById("imageid").style.backgroundImage =
+          "url(./blockChads/wall1r.jpg)";
+        break;
+      case 2:
+        document.getElementById("imageid").style.backgroundImage =
+          "url(./blockChads/wall2r.jpg)";
+        break;
+      case 3:
+        document.getElementById("imageid").style.backgroundImage =
+          "url(./blockChads/wall3r.jpg)";
+        break;
+      case 4:
+        document.getElementById("imageid").style.backgroundImage =
+          "url(./blockChads/wall4r.jpg)";
+        break;
+      case 5:
+        document.getElementById("imageid").style.backgroundImage =
+          "url(./blockChads/wall5r.jpg)";
+        break;
+      case 6:
+        document.getElementById("imageid").style.backgroundImage =
+          "url(./blockChads/wall6r.jpg)";
+        break;
+    }
+  } else {
+    switch (randImage) {
+      case 0:
+        document.getElementById("imageid").style.backgroundImage =
+          "url(./blockChads/wall0.jpg)";
+        break;
+      case 1:
+        document.getElementById("imageid").style.backgroundImage =
+          "url(./blockChads/wall1.jpg)";
+        break;
+      case 2:
+        document.getElementById("imageid").style.backgroundImage =
+          "url(./blockChads/wall2.jpg)";
+        break;
+      case 3:
+        document.getElementById("imageid").style.backgroundImage =
+          "url(./blockChads/wall3.jpg)";
+        break;
+      case 4:
+        document.getElementById("imageid").style.backgroundImage =
+          "url(./blockChads/wall4.jpg)";
+        break;
+      case 5:
+        document.getElementById("imageid").style.backgroundImage =
+          "url(./blockChads/wall5.jpg)";
+        break;
+      case 6:
+        document.getElementById("imageid").style.backgroundImage =
+          "url(./blockChads/wall6.jpg)";
+        break;
+    }
   }
-} else if (blockingType == 4) {
-  switch (randImage) {
-    case 0:
-      document.getElementById("imageid").style.backgroundImage =
-        "url(./blockChads/wall0r.jpg)";
-      break;
-    case 1:
-      document.getElementById("imageid").style.backgroundImage =
-        "url(./blockChads/wall1r.jpg)";
-      break;
-    case 2:
-      document.getElementById("imageid").style.backgroundImage =
-        "url(./blockChads/wall2r.jpg)";
-      break;
-    case 3:
-      document.getElementById("imageid").style.backgroundImage =
-        "url(./blockChads/wall3r.jpg)";
-      break;
-    case 4:
-      document.getElementById("imageid").style.backgroundImage =
-        "url(./blockChads/wall4r.jpg)";
-      break;
-    case 5:
-      document.getElementById("imageid").style.backgroundImage =
-        "url(./blockChads/wall5r.jpg)";
-      break;
-    case 6:
-      document.getElementById("imageid").style.backgroundImage =
-        "url(./blockChads/wall6r.jpg)";
-      break;
-  }
-}
-
+})
 // var text = document.getElementById('quote');
 // var newDom = '';
 // var animationDelay = 6;

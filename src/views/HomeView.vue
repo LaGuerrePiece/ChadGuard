@@ -215,7 +215,7 @@ export default defineComponent({
     });
 
     watch(blockingTypeSelected, () => {
-      chrome.storage.sync.set({ blockingType: blockingTypeSelected.value });
+      chrome.storage.sync.set({ blockingType: parseInt(blockingTypeSelected.value, 10) });
     });
 
     //determine if daycounter is activated
