@@ -105,8 +105,13 @@
     </div>
   </div>
   <div class="p-5 grow gap-3 bg-[#f5c7ee] z-10 flex flex-col" v-else>
-    <div id="notrepromier" class="flex flex-row grow w-full gap-1 space-x-4">
-      <div class="flex flex-col gap-1 grow basis-0">
+    <div
+      id="notrepromier"
+      class="flex flex-row grow w-full gap-1 space-x-4 border-red-600 border-2"
+    >
+      <div
+        class="flex flex-col grow basis-0 border-solid border-green-600 border-2"
+      >
         <h1 class="text-left text-lg font-bold">Blocking type :</h1>
         <select
           class="align-middle default-border px-3 py-1 rounded w-full"
@@ -118,7 +123,9 @@
           <option value="3">Auto-Close</option>
         </select>
       </div>
-      <div class="flex flex-col gap-1 grow basis-0">
+      <div
+        class="flex flex-col grow basis-0 border-solid border-green-600 border-2"
+      >
         <h1 class="text-left text-lg font-bold">AI Filtering :</h1>
         <select
           class="align-middle default-border px-3 py-1 rounded w-full"
@@ -129,8 +136,11 @@
         </select>
       </div>
     </div>
-    <div id="notredosieme" class="flex flex-row grow w-full gap-1">
-      <div class="flex flex-col gap-1">
+    <div
+      id="notredosieme"
+      class="flex flex-row grow w-full gap-1 space-x-4 border-red-600 border-2"
+    >
+      <div class="flex flex-col w-6/12 border-green-600 border-2">
         <h1 class="text-left text-lg font-bold">Day Counter :</h1>
         <select
           class="align-middle default-border px-3 py-1 rounded w-full"
@@ -140,17 +150,18 @@
           <option value="false">Disabled</option>
         </select>
       </div>
-      <div class="flex flex-col gap-1">
+      <div class="flex flex-col w-6/12 border-green-600 border-2">
+        <h1 class="text-left text-lg font-bold">Nb de jours :</h1>
         <button
           v-on:click="resetDayCounter()"
-          class="default-button grow basis-0"
+          class="default-button align-middle default-border px-3 py-1 rounded w-full h-[35px]"
         >
           Reset
         </button>
       </div>
     </div>
     <div id="notretrosieme">
-      <div class="flex flex-col grow gap-1">
+      <div class="flex flex-col grow gap-1 border-red-600 border-2">
         <h1 class="text-left text-lg font-bold">Discord :</h1>
         <div class="flex flex-row grow gap-1 space-x-4">
           <button class="default-button grow basis-0">
@@ -215,7 +226,9 @@ export default defineComponent({
     });
 
     watch(blockingTypeSelected, () => {
-      chrome.storage.sync.set({ blockingType: parseInt(blockingTypeSelected.value, 10) });
+      chrome.storage.sync.set({
+        blockingType: parseInt(blockingTypeSelected.value, 10),
+      });
     });
 
     //determine if daycounter is activated
