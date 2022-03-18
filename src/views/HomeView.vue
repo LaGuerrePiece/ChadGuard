@@ -187,10 +187,10 @@
         </button>
       </div>
     </div>
-    <div v-if="dayCounterState === 'true'" id="connectDiscord" class="mb-3">
+    <div v-if="discordState === 'true'" id="connectDiscord" class="mb-3">
       <div class="flex flex-col grow gap-1">
         <h1 class="text-left text-lg font-semibold">
-          Discord : connected as michel{{}}
+          Discord : Connected as {{ username }}
         </h1>
         <div class="flex flex-row grow gap-1 space-x-4">
           <button class="default-button grow basis-0">Disconnect</button>
@@ -203,7 +203,7 @@
       <div class="flex flex-col grow gap-1">
         <h1 class="text-left text-lg font-semibold">Discord :</h1>
         <div class="flex flex-row grow gap-1 space-x-4">
-          <button class="default-button grow basis-0">Connect</button>
+          <button class="default-button grow basis-0" v-on:click="login()">Connect</button>
           <button class="default-button grow basis-0 opacity-0"></button>
           <!-- <div class="grow basis-0"></div> -->
         </div>
@@ -244,6 +244,8 @@ export default defineComponent({
     const links = ref<string[]>([]);
     const loading = ref(true);
     const dayElapsed = ref();
+    const discordState = ref();
+    let username = ref()
 
     //determine if ai is filtering
 
@@ -283,6 +285,15 @@ export default defineComponent({
         chrome.storage.sync.set({ dayCounter: false });
       }
       chrome.runtime.sendMessage({ greeting: "refreshDayCounter" });
+    });
+
+    watch(discordState, () => {
+      if (discordState.value == "true") {
+        chrome.storage.sync.set({ dayCounter: true });
+      }
+      if (discordState.value == "false") {
+        chrome.storage.sync.set({ dayCounter: false });
+      }
     });
 
     const setPageBlocklistOrSettings = (b: boolean) => {
@@ -343,7 +354,6 @@ export default defineComponent({
 
     function checkLoginStatus() {
       chrome.storage.sync.get(["username", "discordToken"], function (data) {
-        let username: string;
         if ("discordToken" in data) {
           if (!data.username) {
             getUsername(data.discordToken.access_token);
@@ -352,6 +362,7 @@ export default defineComponent({
             });
           }
           username = data.username;
+          discordState.value = "true"
           //L'UTILISATEUR EST CONNECTE, AFFICHER SON USERNAME ET "DECONNEXION"
         } else {
           //L'UTILISATEUR EST DECONNECTE, AFFICHER "CONNEXION"
@@ -475,6 +486,10 @@ export default defineComponent({
       resetDayCounter,
       dayElapsed,
       editLink,
+      discordState,
+      username,
+      login,
+
     };
   },
 });
