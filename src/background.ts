@@ -38,6 +38,7 @@ chrome.runtime.onInstalled.addListener(function () {
         noseEggUnlock: false,
         lastPactDate: 1647527774447,
       });
+      console.log("RESET DES PARAMETRES");
     }
   });
 });
@@ -49,29 +50,30 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     chrome.tabs.remove(sender.tab.id);
   }
 
-  if (request.greeting === "refreshDayCounter") console.log("5/5 houston");
+  if (request.greeting === "refreshDayCounter") {
 
-  chrome.storage.sync.get(["startDayCounter"], (result) => {
-    let startDayCounter = result.startDayCounter;
-    const oneDay = 1000 * 60 * 60 * 24;
-    const oneMin = 1000 * 60;
-    const oneSec = 1000;
-    const dayElapsed = Math.round((Date.now() - startDayCounter) / oneSec);
-    // console.log("startDayCounter", new Date(startDayCounter).toLocaleString());
-    // console.log("COUNTER DAY DIFF", dayElapsed);
-    chrome.storage.sync.set({ dayElapsed: dayElapsed });
-  });
+    chrome.storage.sync.get(["startDayCounter"], (result) => {
+      let startDayCounter = result.startDayCounter;
+      const oneDay = 1000 * 60 * 60 * 24;
+      const oneMin = 1000 * 60;
+      const oneSec = 1000;
+      const dayElapsed = Math.round((Date.now() - startDayCounter) / oneSec);
+      // console.log("startDayCounter", new Date(startDayCounter).toLocaleString());
+      // console.log("COUNTER DAY DIFF", dayElapsed);
+      chrome.storage.sync.set({ dayElapsed: dayElapsed });
+    });
 
-  chrome.storage.sync.get(["dayCounter"], (result: any) => {
-    if (result.dayCounter) {
-      chrome.storage.sync.get(["dayElapsed"], (res) => {
-        let dayElapsed = res.dayElapsed;
-        chrome.action.setBadgeBackgroundColor({ color: [51, 51, 153, 255] });
-        chrome.action.setBadgeText({ text: String(dayElapsed) });
-      });
-    } else if (result.dayCounter == false) {
-      chrome.action.setBadgeText({ text: "" });
-    }
-  });
-  sendResponse({ farewell: "5/5 flubi" });
+    chrome.storage.sync.get(["dayCounter"], (result: any) => {
+      if (result.dayCounter === true) {
+        chrome.storage.sync.get(["dayElapsed"], (res) => {
+          let dayElapsed = res.dayElapsed;
+          chrome.action.setBadgeBackgroundColor({ color: [51, 51, 153, 255] });
+          chrome.action.setBadgeText({ text: String(dayElapsed) });
+        });
+      } else if (result.dayCounter === false) {
+        chrome.action.setBadgeText({ text: "" });
+      }
+    });
+    sendResponse({ farewell: "5/5 flubi" });
+  }
 });

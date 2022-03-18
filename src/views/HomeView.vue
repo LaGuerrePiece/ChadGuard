@@ -226,7 +226,13 @@ export default defineComponent({
     });
 
     watch(dayCounterState, () => {
-      chrome.storage.sync.set({ dayCounter: dayCounterState.value });
+      if (dayCounterState.value == "true") {
+        chrome.storage.sync.set({ dayCounter: true });
+      }
+      if (dayCounterState.value == "false") {
+        chrome.storage.sync.set({ dayCounter: false });
+      }
+      chrome.runtime.sendMessage({ greeting: "refreshDayCounter" });
     });
 
     const setPageBlocklistOrSettings = (b: boolean) => {
