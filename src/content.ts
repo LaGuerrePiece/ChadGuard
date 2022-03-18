@@ -41,50 +41,46 @@ interface ImagePixel {
 const analysePage = async () => {
   console.log(`Starting to analyse page...`);
   const imagePixelArray: ImagePixel[] = []
-  const imgs = [...document.getElementsByTagName("img")];
-  console.log(`Found ${imgs.length} images on page`);
-
+  let imgs = document.getElementsByTagName("img")
+  //@ts-expect-error I promise I will learn ts later
+  imgs = [...imgs];
+  console.log(`Found ${imgs.length} images on page`)
   for (let i = 0; i < imgs.length; i++) {
-    const img = imgs[i];
-    const imgWidth = img.clientWidth;
-    const imgHeight = img.clientHeight;
-
-    if (imgWidth === 0 || imgHeight === 0) {
-      imgs.splice(i, 1);
-      i--;
+    const img = imgs[i]
+    img.width = img.clientWidth
+    img.height = img.clientHeight
+    if (img.src && img.width > 41 && img.height > 41) {
+      //console.log('i', i, 'width', imgs[i].width, 'clientWidth', img.width)
+      const pixels = img.width * img.height
+      imagePixelArray.push({element: img, pixels})
     }
-    const pixels = imgWidth * imgHeight
-    imagePixelArray.push({element: img, pixels})
-    // set img src as base64
-    //imgs[i].src = getBase64Image(img);
   }
-
   imagePixelArray.sort((a, b) => {
       if (a.pixels === b.pixels) return 0
       return a.pixels > b.pixels ? -1 : 1
   })
+  //imagePixelArray.forEach(e => console.log(e))
+  let imageArray = imagePixelArray.map(e => e.element)
 
-  const biggestImages = imagePixelArray.slice(0, 3).map(imagePixel => imagePixel.element)
-  console.log(biggestImages)
-    const promiseArray = biggestImages.map((img) => {
-    return new Promise((resolve, reject) => {
-      resolve(model.classify(img));
-    });
-  });
-  Promise.allSettled(promiseArray).then((predictions) => {
-    for (let i = 0; i < predictions.length; i++) {
-      console.log(predictions[i], biggestImages[i]);
+  let fetchableImages: HTMLImageElement[] = []
+
+  for (let i = 0; i < imageArray.length; i++) {
+    const img = imageArray[i];
+    try {
+      await fetch(img.src)
+      fetchableImages.push(img)
+      console.log('image poussée')
+      if (fetchableImages.length === 3)
+        break;
+    } catch(e: any) {
+      console.log('erreur')
+      continue;
     }
-    // @ts-expect-error I promise I will learn ts later
-    let score = getScore(predictions as PromiseSettledResult<nsfwjs.predictionType>[]);
-    console.log(`score : ${score}`);
-    if (score > treeshold) {
-      console.log("Seems like porn !");
-      PUNISH();
-    } else {
-      console.log("All seems fine.");
-    }
-  })
+  }
+  
+  console.log("3 biggest fetchables images:", fetchableImages);
+
+
 }
 
 interface values {
@@ -94,6 +90,7 @@ interface values {
     probability: number
   }[]
 }
+
 function getScore(values: values[]) {
   let pScore = 0;
   function incrementPScore(value: values) {
