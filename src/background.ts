@@ -1,8 +1,7 @@
 console.log("service worker running");
 
 //Initialisation de la defaultBlocklist :
-chrome.runtime.onInstalled.addListener(function () {
-  chrome.storage.sync.set({ visitCount: 0 })
+chrome.runtime.onInstalled.addListener(function (details) {
   chrome.storage.local.get(["defaultBlocklist"], function (result) {
     let defaultBlocklist = result.defaultBlocklist ?? [];
     const url = chrome.runtime.getURL("./defaultBlocklist.json");
@@ -26,21 +25,20 @@ chrome.runtime.onInstalled.addListener(function () {
       );
     }
   });
-  chrome.storage.sync.get(["visitCount"], (res) => {
-    if (res.visitCount === 0) {
-      chrome.storage.sync.set({
-        blockingType: 0,
-        aiFiltering: true,
-        dayCounter: false,
-        dayCounterValue: 0,
-        dayElapsed: 0,
-        startDayCounter: Date.now(),
-        noseEggUnlock: false,
-        lastPactDate: 1647527774447,
-      });
-      console.log("RESET DES PARAMETRES");
-    }
-  });
+  if (details.reason == "install") {      //A CHECKER
+    chrome.storage.sync.set({
+      blockingType: 0,
+      visitCount: 0,
+      aiFiltering: true,
+      dayCounter: false,
+      dayCounterValue: 0,
+      dayElapsed: 0,
+      startDayCounter: Date.now(),
+      noseEggUnlock: false,
+      lastPactDate: 1647527774447,
+    });
+    console.log("INSTALLATION, PARAMETRES INITIALISES");
+  }
 });
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {

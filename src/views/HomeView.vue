@@ -296,6 +296,107 @@ export default defineComponent({
       chrome.storage.sync.set({ userBlocklist: links.value });
     });
 
+    //MODULE DE CONNECTION DISCORD
+
+    checkLoginStatus();
+
+    function checkLoginStatus() {
+      chrome.storage.sync.get(["username", "discordToken"], function (data) {
+        let username: string;
+        if ("discordToken" in data) {
+          if (!data.username) {
+            getUsername(data.discordToken.access_token);
+            chrome.storage.sync.get(["username"], function (data) {
+              username = data.username;
+            });
+          }
+          username = data.username;
+          //L'UTILISATEUR EST CONNECTE, AFFICHER SON USERNAME ET "DECONNEXION"
+        } else {
+          //L'UTILISATEUR EST DECONNECTE, AFFICHER "CONNEXION"
+        }
+      });
+    }
+
+    function getUsername(token: string) {
+      var xhr = new XMLHttpRequest();
+
+      xhr.open("GET", "https://discordapp.com/api/users/@me", true);
+      xhr.setRequestHeader("Authorization", "Bearer " + token);
+      xhr.onload = function (e) {
+        if (xhr.readyState === 4) {
+          console.log(xhr.responseText);
+          const username = JSON.parse(xhr.responseText).username;
+          if (username === undefined) {
+            return;
+          }
+          chrome.storage.sync.set({ username: username });
+        }
+      };
+      xhr.send();
+    }
+
+    //ANCIENNE LOGIQUE DE CONNEXION :
+
+    // const button = document.getElementById("BOUTON CONNEXION")
+    //   button.addEventListener("click", function () {
+    //     chrome.storage.sync.get(["discordToken"], function (data) {
+    //       if ("discordToken" in data) {
+    //         logout();
+    //       } else {
+    //         login();
+    //       }
+    //     });
+    //   });
+
+    function login() {
+      var url =
+        "https://discordapp.com/api/oauth2/authorize?client_id=945674310461313087&redirect_uri=" +
+        chrome.identity.getRedirectURL() +
+        "&response_type=code&scope=identify%20guilds";
+      chrome.identity.launchWebAuthFlow(
+        { url: url, interactive: true },
+        function (res: string | undefined) {
+          if (res) {
+            var url = new URL(res);
+            console.log(res);
+            var code = url.searchParams.get("code");
+            getToken(code as string);
+          }
+        }
+      );
+    }
+
+    function getToken(code: string) {
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", "https://discordapp.com/api/oauth2/token", true);
+      xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      xhr.onload = function (e) {
+        if (xhr.readyState === 4) {
+          chrome.storage.sync.set(
+            { discordToken: JSON.parse(xhr.responseText) },
+            function () {
+              checkLoginStatus();
+            }
+          );
+        }
+      };
+      xhr.send(
+        "client_id=945674310461313087&client_secret=tWD4eQ7yT7f6wUk56NN7SDljcPgetWGv&code=" +
+          code +
+          "&redirect_uri=" +
+          chrome.identity.getRedirectURL() +
+          "&scope=identify&grant_type=authorization_code"
+      );
+    }
+
+    function logout() {
+      chrome.storage.sync.remove(["discordToken", "username"], function () {
+        console.log("Déconnexion");
+        checkLoginStatus();
+      });
+    }
+
     // BOUTON RESET
 
     const resetDayCounter = () => {
