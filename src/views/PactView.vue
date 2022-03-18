@@ -1,7 +1,4 @@
 <template>
-  <div v-if="loading" class="flex justify-center items-center flex-grow">
-    <LoadingSpinner />
-  </div>
   <div class="flex flex-col flex-grow gap-3 mt-6">
     <div class="text-6xl logo">CHADGUARD</div>
     <img
@@ -9,7 +6,13 @@
       src="https://i.imgur.com/WjsCGCG.png"
       class="mx-auto pl-3"
     />
-    <div class="flex flex-col gap-2">
+    <div
+      v-if="loading"
+      class="flex justify-center items-center flex-grow w-full"
+    >
+      <LoadingSpinner />
+    </div>
+    <div v-else class="flex flex-col gap-2">
       <p class="text-xl">
         Access the preferences by typing <br />
         “<span class="select-none">{{ pact }}</span
@@ -48,32 +51,28 @@ export default defineComponent({
 
     // VERIFIE SI C'EST LA PREMIERE VISITE OU SI L'UTILISATEUR A ENTRE LE MDP IL Y A - DE 2 MIN POUR SKIP
 
-    chrome.storage.sync.get(["visitCount"], (res) => {
-      if (res.visitCount === 0) {
-        console.log("Première visite");
-        chrome.storage.sync.set({ lastPactDate: Date.now() });
-        router.push("/home");
-      } else {
-        console.log("Visite numero", (res.visitCount + 1 ));
-      }
-      let visitCountInc = res.visitCount + 1;
-      chrome.storage.sync.set({ visitCount: visitCountInc });
-    });
-
-    chrome.storage.sync.get(["lastPactDate"], (result) => {
+    chrome.storage.sync.get(["lastPactDate", "visitCount"], (result) => {
       let lastPactDate = result.lastPactDate;
       let dateNow = Date.now();
       if (dateNow - lastPactDate < 120000) {
         chrome.storage.sync.set({ lastPactDate: dateNow });
         router.push("/home");
       }
+
+      if (result.visitCount === 0) {
+        console.log("Première visite");
+        chrome.storage.sync.set({ lastPactDate: Date.now() });
+        router.push("/home");
+      } else {
+        console.log("Visite numero", result.visitCount + 1);
+      }
+      let visitCountInc = result.visitCount + 1;
+      chrome.storage.sync.set({ visitCount: visitCountInc });
+
+      loading.value = false;
     });
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-    loading.value = false;
 
     watch(phrase, () => {
       if (phrase.value.toLowerCase() === pact.toLowerCase()) {

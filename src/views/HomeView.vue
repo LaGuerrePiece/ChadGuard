@@ -89,12 +89,13 @@
       >
         <PlusIcon class="w-5 h-5" />
       </div>
-      <div v-for="link in links" :key="link" class="flex">
+      <div v-for="(link, index) in links" :key="link" class="flex">
         <div class="input border-2 rounded flex-grow font-sans">
           <input
             type="text"
             :value="link"
             class="w-full h-full bg-transparent blur-sm hover:blur-none transition-all duration-500 px-3 py-1 outline-none text-center"
+            v-on:keyup.enter="editLink(index, $event)"
           />
         </div>
         <TrashIcon
@@ -151,10 +152,12 @@
         </select>
       </div>
       <div class="flex flex-col w-6/12 border-green-600 border-2">
-        <h1 class="text-left text-lg font-bold">Nb de jours :</h1>
+        <h1 class="text-left text-lg font-bold">
+          Nb de jours : {{ dayElapsed }}
+        </h1>
         <button
           v-on:click="resetDayCounter()"
-          class="default-button align-middle default-border px-3 py-1 rounded w-full h-[35px]"
+          class="default-button text-left align-middle default-border px-3 py-1 rounded w-full h-[35px]"
         >
           Reset
         </button>
@@ -206,10 +209,11 @@ export default defineComponent({
     const addingLinkValue = ref("");
     const links = ref<string[]>([]);
     const loading = ref(true);
+    const dayElapsed = ref();
 
     //determine if ai is filtering
 
-    var aiState = ref();
+    const aiState = ref();
     chrome.storage.sync.get(["aiFiltering"], (result) => {
       aiState.value = result.aiFiltering;
     });
@@ -220,7 +224,7 @@ export default defineComponent({
 
     //determine the blockingType
 
-    var blockingTypeSelected = ref();
+    const blockingTypeSelected = ref();
     chrome.storage.sync.get(["blockingType"], (result) => {
       blockingTypeSelected.value = result.blockingType;
     });
@@ -232,7 +236,7 @@ export default defineComponent({
     });
 
     //determine if daycounter is activated
-    var dayCounterState = ref();
+    const dayCounterState = ref();
     chrome.storage.sync.get(["dayCounter"], (result) => {
       dayCounterState.value = result.dayCounter;
     });
@@ -258,17 +262,20 @@ export default defineComponent({
     const addLink = (url: string) => {
       links.value.unshift(url);
       console.log(links.value);
-      chrome.storage.sync.set({ userBlocklist: links.value });
       addingLinkValue.value = "";
       setAddingLink(false);
     };
 
     const removeLink = (url: string) => {
-      var index = links.value.indexOf(url);
+      let index = links.value.indexOf(url);
       if (index !== -1) {
         links.value.splice(index, 1);
-        chrome.storage.sync.set({ userBlocklist: links.value });
       }
+    };
+
+    const editLink = (index: number, event: KeyboardEvent) => {
+      const value = (event.target as HTMLInputElement).value;
+      links.value[index] = value;
     };
 
     const setAddingLink = (bool: boolean) => {
@@ -280,6 +287,10 @@ export default defineComponent({
       if (addInput.value) (addInput.value as HTMLInputElement).select();
     });
 
+    chrome.storage.sync.get(["dayElapsed"], (result) => {
+      dayElapsed.value = result.dayElapsed;
+    });
+
     chrome.storage.sync.get(["userBlocklist"], (result) => {
       for (const key in result.userBlocklist) {
         links.value.push(result.userBlocklist[key]);
@@ -287,11 +298,16 @@ export default defineComponent({
       loading.value = false;
     });
 
+    watch(links.value, () => {
+      if (loading.value) return;
+      chrome.storage.sync.set({ userBlocklist: links.value });
+    });
+
     // BOUTON RESET
 
-    let resetDayCounter = () => {
+    const resetDayCounter = () => {
       chrome.storage.sync.set({ startDayCounter: Date.now() });
-      console.log("erfhu", Date.now());
+      dayElapsed.value = 0;
       chrome.runtime.sendMessage({ greeting: "refreshDayCounter" });
     };
 
@@ -322,6 +338,8 @@ export default defineComponent({
       blockingTypeSelected,
       dayCounterState,
       resetDayCounter,
+      dayElapsed,
+      editLink,
     };
   },
 });
