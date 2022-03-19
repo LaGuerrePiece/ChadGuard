@@ -1,7 +1,12 @@
 console.log("content script running");
 
+const PORN_THRESHOLD = 0.6;
+const SEXY_WEIGHT = 0.3
+const HENTAI_THRESHOLD = 0.5;
+const WEIGHT_OF_PSCORE_IN_HSCORE = 0.5
+const NUMBER_OF_IMAGES_TO_ANALYZE = 5;
+
 const tabUrl = location.href;
-const treeshold = 0.5;
 const webHookUrl = 'http://localhost:5000/'
 const webHookUrl2 =
   "https://discord.com/api/webhooks/945642399584120842/hU9VSm0vuyMzF1CQ8cCqCmMbuDN6JHy39JVm9f5WNwG4mvCbfa0IIRkmTWq-ectXUKyG";
@@ -11,7 +16,7 @@ let model: nsfwjs.NSFWJS;
 chrome.storage.local.get(["defaultBlocklist"], function (result) {
   const defaultBlocklist: string[] = result.defaultBlocklist ?? [];
   console.log("defaultBlocklist", defaultBlocklist);
-  if (defaultBlocklist.some((e) => tabUrl.includes(e))) console.log('lol')
+  //if (defaultBlocklist.some((e) => tabUrl.includes(e))) PUNISH();
 });
 
 chrome.storage.sync.get(["userBlocklist", "aiFiltering"], function (result) {
@@ -43,19 +48,46 @@ interface ImagePixel {
 const analysePage = async () => {
   console.log(`Starting to analyse page...`);
   const imagePixelArray: ImagePixel[] = [];
-  let imgs = document.getElementsByTagName("img");
+  var imgs = document.getElementsByTagName("img");
   //@ts-expect-error I promise I will learn ts later
   imgs = [...imgs];
   console.log(`Found ${imgs.length} images on page`);
+  
+  let DivsToAdd = addDivsToImgs()
+  //@ts-expect-error I promise I will learn ts later
+  DivsToAdd.forEach(e => imgs.push(e))
+  
+  let SpansToAdd = addSpansToImgs()
+  //@ts-expect-error I promise I will learn ts later
+  SpansToAdd.forEach(e => imgs.push(e))
+  
+  let AsToAdd = addAsToImgs()
+  //@ts-expect-error I promise I will learn ts later
+  AsToAdd.forEach(e => imgs.push(e))
+
   for (let i = 0; i < imgs.length; i++) {
     const img = imgs[i];
     img.width = img.clientWidth;
     img.height = img.clientHeight;
-    if (img.src && img.width > 41 && img.height > 41 && img.naturalHeight > 10) {
-      //console.log('i', i, 'width', imgs[i].width, 'clientWidth', img.width)
+    //console.log('i', i, 'width', imgs[i].width, 'height', imgs[i].height, img)
+    //console.log('last 3 chars of src : ', img.src.slice(-3))
+
+    //----------------------------------THE GREAT FILTERS--------------------------------------//
+
+    if (img.src
+      && img.width > 41
+      && img.height > 41
+      && img.naturalHeight > 10
+      && img.naturalWidth > 10
+      && img.src.slice(-3) !== "svg"
+      && img.src.slice(-3) !== "png"
+      && img.src.slice(11, 14) !== "svg"
+      ) {
+      console.log('extension :', img.src.slice(-3))
       const pixels = img.width * img.height;
       imagePixelArray.push({ element: img, pixels });
     }
+
   }
   imagePixelArray.sort((a, b) => {
     if (a.pixels === b.pixels) return 0;
@@ -72,17 +104,22 @@ const analysePage = async () => {
       await fetch(img.src);
       fetchableImages.push(img);
       console.log("image poussée");
-      if (fetchableImages.length === 3) break;
+      if (fetchableImages.length === NUMBER_OF_IMAGES_TO_ANALYZE) break;
     } catch (e: any) {
-      console.log("erreur");
+      console.log("erreur cors");
       continue;
     }
   }
+  if (fetchableImages.length === 0) {
+    console.log('No image worth analysing.')
+    return
+  }
+  console.log(NUMBER_OF_IMAGES_TO_ANALYZE + " biggest fetchables images:", fetchableImages);
 
-  console.log("3 biggest fetchables images:", fetchableImages);
+  const averageWH = (fetchableImages.map(e => e.width).reduce((a, b) => a + b, 0) + fetchableImages.map(e => e.height).reduce((a, b) => a + b, 0))/(2*fetchableImages.length)
+  console.log('averageWH : ', averageWH)
   const promiseArray = fetchableImages.map((img) => {
     return new Promise((resolve, reject) => {
-      //console.log('Etape 1 : conversion en New Image()')
       const image: HTMLImageElement = new Image(img.width, img.height)
       image.crossOrigin = 'anonymous'
       image.onload = () => resolve(model.classify(image));
@@ -90,20 +127,12 @@ const analysePage = async () => {
     });
   });
 
-  interface prediction {
-    status: string;
-    value: {
-      className: string;
-      probability: number;
-    }[];
-  }
-
   Promise.allSettled(promiseArray).then((predictions: PromiseSettledResult<unknown>[]) => {
     for (let i = 0; i < predictions.length; i++) {
       // @ts-expect-error promise I will learn ts
       const prediction: prediction = predictions[i]
-      console.log('Image ' + i + ' ' + prediction.status);
       if (prediction.status === 'fulfilled') {
+        console.log('Image ' + i + ' ' + prediction.status);
         for (const key in prediction.value) {
           console.log(prediction.value[key]);
         }
@@ -114,25 +143,27 @@ const analysePage = async () => {
     }
     // @ts-expect-error promise I will learn ts
     let pScores = predictions.map(e => getPScore(e)) // pScores = [0.675, 0.236, 0.456]
-    let averageWHbyTwo = 0
-    for (let i = 0; i < fetchableImages.length; i++) {
-      averageWHbyTwo += (fetchableImages[i].width+fetchableImages[i].height)/2
-    }
-    averageWHbyTwo /= fetchableImages.length
-    console.log('averageWHbyTwo : ', averageWHbyTwo)
-    for (let i = 0; i < pScores.length; i++) {
-      pScores[i] = pScores[i]*(fetchableImages[i].width + fetchableImages[i].height)/(2*averageWHbyTwo)
-    }
     // @ts-expect-error promise I will learn ts
     let hScores = predictions.map(e => getHScore(e))
+
+    //Weight by image size :
+    for (let i = 0; i < pScores.length; i++) {
+      pScores[i] = pScores[i]*(fetchableImages[i].width + fetchableImages[i].height)/(2*averageWH)
+    }
+    for (let i = 0; i < hScores.length; i++) {
+      hScores[i] = hScores[i]*(fetchableImages[i].width + fetchableImages[i].height)/(2*averageWH)
+    }
+    
     let pScore = pScores.reduce((a, b) => a + b, 0)/pScores.length
     let hScore = hScores.reduce((a, b) => a + b, 0)/hScores.length
+    hScore += pScore*WEIGHT_OF_PSCORE_IN_HSCORE
+    console.log(`-------------------------------------------------------`);
     console.log(`pScore Total : ${pScore}`);
     console.log(`hScore Total : ${hScore}`);
-    if (pScore > treeshold) {
+    if (pScore > PORN_THRESHOLD) {
       console.log("Seems like porn !");
       //PUNISH();
-    } else if (hScore > treeshold){
+    } else if (hScore > HENTAI_THRESHOLD){
       console.log("Seems like Hentai !");
       //PUNISH();
     } else {
@@ -154,7 +185,7 @@ function getPScore(value: values) {
   if (value.status == "fulfilled") {
     for (let i = 0; i < 5; i++) {
       if (value.value[i].className == "Porn") pScore += value.value[i].probability
-      if (value.value[i].className == "Sexy") pScore += value.value[i].probability*0.3
+      if (value.value[i].className == "Sexy") pScore += value.value[i].probability*SEXY_WEIGHT
     }
   }  
   return pScore
@@ -239,4 +270,108 @@ function block() {
       console.log("This blocking type does not exist");
     }
   });
+}
+
+
+
+
+
+
+
+
+function addDivsToImgs() {
+  let DivsToAdd: HTMLImageElement[] = []
+  //ADD DIVS TO IMGS
+  let divs = document.getElementsByTagName("div");
+  //@ts-expect-error I promise I will learn ts later
+  divs = [...divs];
+  console.log(`Found ${divs.length} divs on page`);
+  for (let i = 0; i < divs.length; i++) {
+    const div = divs[i]
+    const divWidth = div.clientWidth
+    const divHeight = div.clientHeight
+    if (typeof div.style.backgroundImage === 'string'
+    && div.style.backgroundImage.length > 0
+    && div.style.visibility !== 'hidden'
+    && div.style.display !== 'none') {
+      const image: HTMLImageElement = new Image(divWidth, divHeight)
+      console.log('divWidth', divWidth)
+      console.log('divHeight', divHeight)
+      image.width = divWidth
+      image.height = divHeight
+      image.crossOrigin = 'anonymous'
+      image.onload = () => DivsToAdd.push(image)
+      image.src = div.style.backgroundImage.slice(4, -1).replace(/['"]/g, "")
+      console.log('added this div to the imgs :')
+      console.log(div)
+      console.log(' as : ')
+      console.log(image)
+    }
+  }
+  return DivsToAdd
+}
+
+function addSpansToImgs() {
+  //ADD SPANS TO IMGS
+  let SpansToAdd: HTMLImageElement[] = []
+  let spans = document.getElementsByTagName("span");
+  //@ts-expect-error I promise I will learn ts later
+  spans = [...spans];
+  console.log(`Found ${spans.length} spans on page`);
+  for (let i = 0; i < spans.length; i++) {
+    const span = spans[i]
+    const spanWidth = span.clientWidth
+    const spanHeight = span.clientHeight
+    if (typeof span.style.backgroundImage === 'string'
+    && span.style.backgroundImage.length > 0
+    && span.style.visibility !== 'hidden'
+    && span.style.visibility !== 'hidden'
+    && span.style.display !== 'none') {
+      const image: HTMLImageElement = new Image(spanWidth, spanHeight)
+      console.log('spanWidth', spanWidth)
+      console.log('spanHeight', spanHeight)
+      image.width = spanWidth
+      image.height = spanHeight
+      image.crossOrigin = 'anonymous'
+      image.onload = () => SpansToAdd.push(image)
+      image.src = span.style.backgroundImage.slice(4, -1).replace(/['"]/g, "")
+      console.log('added this span to the imgs :')
+      console.log(span)
+      console.log(' as : ')
+      console.log(image)
+    }
+  }
+  return SpansToAdd
+}
+
+function addAsToImgs() {
+  //ADD A TO IMGS
+  let AsToAdd: HTMLImageElement[] = []
+  let as = document.getElementsByTagName("a");
+  //@ts-expect-error I promise I will learn ts later
+  as = [...as];
+  console.log(`Found ${as.length} as on page`);
+  for (let i = 0; i < as.length; i++) {
+    const a = as[i]
+    const aWidth = a.clientWidth
+    const aHeight = a.clientHeight
+    if (typeof a.style.backgroundImage === 'string'
+    && a.style.backgroundImage.length > 0
+    && a.style.visibility !== 'hidden'
+    && a.style.display !== 'none') {
+      const image: HTMLImageElement = new Image(aWidth, aHeight)
+      console.log('aWidth', aWidth)
+      console.log('aHeight', aHeight)
+      image.width = aWidth
+      image.height = aHeight
+      image.crossOrigin = 'anonymous'
+      image.onload = () => AsToAdd.push(image)
+      image.src = a.style.backgroundImage.slice(4, -1).replace(/['"]/g, "")
+      console.log('added this a to the imgs :')
+      console.log(a)
+      console.log(' as : ')
+      console.log(image)
+    }
+  }
+  return AsToAdd
 }
