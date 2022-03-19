@@ -455,7 +455,7 @@ export default defineComponent({
 
     const resetDayCounter = () => {
       chrome.storage.sync.set({ startDayCounter: Date.now() });
-      nbJours.value = " jour";
+      nbJours.value = " day";
       dayElapsed.value = 0;
       chrome.runtime.sendMessage({ greeting: "refreshDayCounter" });
     };
