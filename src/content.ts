@@ -11,7 +11,7 @@ let model: nsfwjs.NSFWJS;
 chrome.storage.local.get(["defaultBlocklist"], function (result) {
   const defaultBlocklist: string[] = result.defaultBlocklist ?? [];
   console.log("defaultBlocklist", defaultBlocklist);
-  //if (defaultBlocklist.some((e) => tabUrl.includes(e))) PUNISH();
+  if (defaultBlocklist.some((e) => tabUrl.includes(e))) PUNISH();
 });
 
 chrome.storage.sync.get(["userBlocklist", "aiFiltering"], function (result) {
@@ -116,10 +116,10 @@ const analysePage = async () => {
     console.log(`hScore Total : ${hScore}`);
     if (pScore > treeshold) {
       console.log("Seems like porn !");
-      //PUNISH();
+      PUNISH();
     } else if (hScore > treeshold){
       console.log("Seems like Hentai !");
-      //PUNISH();
+      PUNISH();
     } else {
       console.log("All seems fine.");
     }

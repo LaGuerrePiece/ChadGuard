@@ -150,7 +150,7 @@
       </div>
       <div class="flex flex-col w-6/12">
         <h1 class="text-left text-lg font-semibold ml-2">
-          {{ dayElapsed }} jours
+          {{ dayElapsed }} {{ nbJours }}
         </h1>
         <button
           v-on:click="resetDayCounter()"
@@ -177,7 +177,7 @@
       </div>
       <div class="flex flex-col w-6/12 opacity-0">
         <h1 class="text-left text-lg font-semibold ml-2">
-          {{ dayElapsed }} jours
+          {{ dayElapsed }} {{ nbJours }}
         </h1>
         <button
           v-on:click="resetDayCounter()"
@@ -256,6 +256,7 @@ export default defineComponent({
     const dayElapsed = ref();
     const discordState = ref();
     let username = ref();
+    let nbJours = ref();
 
     //determine if ai is filtering
 
@@ -339,6 +340,12 @@ export default defineComponent({
 
     chrome.storage.sync.get(["dayElapsed"], (result) => {
       dayElapsed.value = result.dayElapsed;
+      if (dayElapsed.value == 0 || dayElapsed.value == 1) {
+        nbJours.value = " jour";
+      }
+      if (dayElapsed.value > 1) {
+        nbJours.value = " jours";
+      }
     });
 
     chrome.storage.sync.get(["userBlocklist"], (result) => {
@@ -416,7 +423,7 @@ export default defineComponent({
             var code = url.searchParams.get("code");
             if (code) getToken(code as string);
             else {
-              console.log('Erreur :', url.searchParams.get("error"));
+              console.log("Erreur :", url.searchParams.get("error"));
               logout();
             }
           }
@@ -496,6 +503,7 @@ export default defineComponent({
       username,
       login,
       logout,
+      nbJours,
     };
   },
 });
