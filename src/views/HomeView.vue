@@ -152,13 +152,13 @@
         </select>
       </div>
       <div class="flex flex-col w-6/12">
-        <div class="grow align-left" v-if="dayCounterState === 'true'">
+        <div class="grow" v-if="dayCounterState === 'true'">
           <h1 class="text-left text-lg font-semibold ml-2">
             {{ dayElapsed }} {{ nbJours }}
           </h1>
           <button
             v-on:click="resetDayCounter()"
-            class="default-button align-left default-border px-3 py-1 rounded w-6/12 h-[35px]"
+            class="float-left text-center default-button ml-2 default-border px-3 py-1 rounded w-6/12 h-[35px]"
           >
             Reset
           </button>
@@ -327,15 +327,16 @@ export default defineComponent({
       chrome.storage.sync.get(["dayElapsed"], (result) => {
         dayElapsed.value = result.dayElapsed;
         if (dayElapsed.value == 0 || dayElapsed.value == 1) {
-          nbJours.value = " jour";
+          nbJours.value = " day";
         }
         if (dayElapsed.value > 1) {
-          nbJours.value = " jours";
+          nbJours.value = " days";
         }
       });
     }
 
-    chrome.storage.sync.get(["userBlocklist"], (result) => {
+    chrome.storage.sync.get(["userBlocklist", "dayElapsed"], (result) => {
+      dayElapsed.value = result.dayElapsed;
       for (const key in result.userBlocklist) {
         links.value.push(result.userBlocklist[key]);
       }
