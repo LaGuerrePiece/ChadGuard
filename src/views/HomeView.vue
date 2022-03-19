@@ -138,7 +138,6 @@
       </div>
     </div>
     <div
-      v-if="dayCounterState === 'true'"
       id="displayDayCounter"
       class="flex flex-row grow w-full gap-1 space-x-4"
     >
@@ -148,49 +147,25 @@
           class="align-middle default-border px-3 py-1 rounded w-full"
           v-model="dayCounterState"
         >
-          <option value="true">Enabled</option>
-          <option value="false">Disabled</option>
+          <option value="true">Enabled 1</option>
+          <option value="false">Disabled 1</option>
         </select>
       </div>
       <div class="flex flex-col w-6/12">
-        <h1 class="text-left text-lg font-semibold ml-2">
-          {{ dayElapsed }} {{ nbJours }}
-        </h1>
-        <button
-          v-on:click="resetDayCounter()"
-          class="default-button align-middle default-border px-3 py-1 rounded w-6/12 h-[35px]"
-        >
-          Reset
-        </button>
+        <div class="grow align-left" v-if="dayCounterState === 'true'">
+          <h1 class="text-left text-lg font-semibold ml-2">
+            {{ dayElapsed }} {{ nbJours }}
+          </h1>
+          <button
+            v-on:click="resetDayCounter()"
+            class="default-button align-left default-border px-3 py-1 rounded w-6/12 h-[35px]"
+          >
+            Reset
+          </button>
+        </div>
       </div>
     </div>
-    <div
-      v-else
-      id="hideDayCounter"
-      class="flex flex-row grow w-full gap-1 space-x-4"
-    >
-      <div class="flex flex-col w-6/12">
-        <h1 class="text-left text-lg font-semibold ml-2">Day Counter :</h1>
-        <select
-          class="align-middle default-border px-3 py-1 rounded w-full"
-          v-model="dayCounterState"
-        >
-          <option value="true">Enabled</option>
-          <option value="false">Disabled</option>
-        </select>
-      </div>
-      <div class="flex flex-col w-6/12 opacity-0">
-        <h1 class="text-left text-lg font-semibold ml-2">
-          {{ dayElapsed }} {{ nbJours }}
-        </h1>
-        <button
-          v-on:click="resetDayCounter()"
-          class="default-button align-middle default-border px-3 py-1 rounded w-6/12 h-[35px]"
-        >
-          Reset
-        </button>
-      </div>
-    </div>
+
     <div v-if="discordState === 'true'" id="connectDiscord" class="mb-3">
       <div class="flex flex-col grow gap-1">
         <h1 class="text-left text-lg font-semibold ml-2">
@@ -290,6 +265,12 @@ export default defineComponent({
     //determine if daycounter is activated
     chrome.storage.sync.get(["dayCounter"], (result) => {
       dayCounterState.value = result.dayCounter;
+      if (dayCounterState.value == true) {
+        dayCounterState.value = "true";
+      }
+      if (dayCounterState.value == false) {
+        dayCounterState.value = "false";
+      }
     });
 
     watch(dayCounterState, () => {
@@ -503,9 +484,9 @@ export default defineComponent({
       randomCatch,
       aiState,
       blockingTypeSelected,
+      dayElapsed,
       dayCounterState,
       resetDayCounter,
-      dayElapsed,
       editLink,
       discordState,
       username,
