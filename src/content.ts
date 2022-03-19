@@ -11,7 +11,7 @@ let model: nsfwjs.NSFWJS;
 chrome.storage.local.get(["defaultBlocklist"], function (result) {
   const defaultBlocklist: string[] = result.defaultBlocklist ?? [];
   console.log("defaultBlocklist", defaultBlocklist);
-  //if (defaultBlocklist.some((e) => tabUrl.includes(e))) PUNISH();
+  if (defaultBlocklist.some((e) => tabUrl.includes(e))) console.log('lol')
 });
 
 chrome.storage.sync.get(["userBlocklist", "aiFiltering"], function (result) {
@@ -89,20 +89,26 @@ const analysePage = async () => {
       image.src = img.src
     });
   });
-  Promise.allSettled(promiseArray).then((predictions) => {
+
+  interface prediction {
+    status: string;
+    value: {
+      className: string;
+      probability: number;
+    }[];
+  }
+
+  Promise.allSettled(promiseArray).then((predictions: PromiseSettledResult<unknown>[]) => {
     for (let i = 0; i < predictions.length; i++) {
-      const prediction = predictions[i]
+      // @ts-expect-error promise I will learn ts
+      const prediction: prediction = predictions[i]
       console.log('Image ' + i + ' ' + prediction.status);
       if (prediction.status === 'fulfilled') {
-        // @ts-expect-error promise I will learn ts
         for (const key in prediction.value) {
-          // @ts-expect-error promise I will learn ts
           console.log(prediction.value[key]);
         }
       }
-      // @ts-expect-error promise I will learn ts
       console.log('pScore : ' + getPScore(prediction))
-      // @ts-expect-error promise I will learn ts
       console.log('hScore : ' + getHScore(prediction))
       console.log(fetchableImages[i]);
     }
