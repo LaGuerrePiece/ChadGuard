@@ -89,25 +89,40 @@ const analysePage = async () => {
       image.src = img.src
     });
   });
-  Promise.allSettled(promiseArray).then((predictions) => {
+
+  interface prediction {
+    status: string;
+    value: {
+      className: string;
+      probability: number;
+    }[];
+  }
+
+  Promise.allSettled(promiseArray).then((predictions: PromiseSettledResult<unknown>[]) => {
     for (let i = 0; i < predictions.length; i++) {
-      const prediction = predictions[i]
+      // @ts-expect-error promise I will learn ts
+      const prediction: prediction = predictions[i]
       console.log('Image ' + i + ' ' + prediction.status);
       if (prediction.status === 'fulfilled') {
-        // @ts-expect-error promise I will learn ts
         for (const key in prediction.value) {
-          // @ts-expect-error promise I will learn ts
           console.log(prediction.value[key]);
         }
       }
-      // @ts-expect-error promise I will learn ts
       console.log('pScore : ' + getPScore(prediction))
-      // @ts-expect-error promise I will learn ts
       console.log('hScore : ' + getHScore(prediction))
       console.log(fetchableImages[i]);
     }
     // @ts-expect-error promise I will learn ts
-    let pScores = predictions.map(e => getPScore(e))
+    let pScores = predictions.map(e => getPScore(e)) // pScores = [0.675, 0.236, 0.456]
+    let averageWHbyTwo = 0
+    for (let i = 0; i < fetchableImages.length; i++) {
+      averageWHbyTwo += (fetchableImages[i].width+fetchableImages[i].height)/2
+    }
+    averageWHbyTwo /= fetchableImages.length
+    console.log('averageWHbyTwo : ', averageWHbyTwo)
+    for (let i = 0; i < pScores.length; i++) {
+      pScores[i] = pScores[i]*(fetchableImages[i].width + fetchableImages[i].height)/(2*averageWHbyTwo)
+    }
     // @ts-expect-error promise I will learn ts
     let hScores = predictions.map(e => getHScore(e))
     let pScore = pScores.reduce((a, b) => a + b, 0)/pScores.length
@@ -139,7 +154,7 @@ function getPScore(value: values) {
   if (value.status == "fulfilled") {
     for (let i = 0; i < 5; i++) {
       if (value.value[i].className == "Porn") pScore += value.value[i].probability
-      if (value.value[i].className == "Sexy") pScore += value.value[i].probability*0.7
+      if (value.value[i].className == "Sexy") pScore += value.value[i].probability*0.3
     }
   }  
   return pScore
