@@ -257,6 +257,7 @@ export default defineComponent({
     const addingLinkValue = ref("");
     const links = ref<string[]>([]);
     const loading = ref(true);
+    const dayCounterState = ref();
     const dayElapsed = ref();
     const discordState = ref();
     let username = ref();
@@ -287,7 +288,6 @@ export default defineComponent({
     });
 
     //determine if daycounter is activated
-    const dayCounterState = ref();
     chrome.storage.sync.get(["dayCounter"], (result) => {
       dayCounterState.value = result.dayCounter;
     });
@@ -342,20 +342,23 @@ export default defineComponent({
       if (addInput.value) (addInput.value as HTMLInputElement).select();
     });
 
-    chrome.storage.sync.get(["dayElapsed"], (result) => {
-      dayElapsed.value = result.dayElapsed;
-      if (dayElapsed.value == 0 || dayElapsed.value == 1) {
-        nbJours.value = " jour";
-      }
-      if (dayElapsed.value > 1) {
-        nbJours.value = " jours";
-      }
-    });
+    function jourSingulierPluriel() {
+      chrome.storage.sync.get(["dayElapsed"], (result) => {
+        dayElapsed.value = result.dayElapsed;
+        if (dayElapsed.value == 0 || dayElapsed.value == 1) {
+          nbJours.value = " jour";
+        }
+        if (dayElapsed.value > 1) {
+          nbJours.value = " jours";
+        }
+      });
+    }
 
     chrome.storage.sync.get(["userBlocklist"], (result) => {
       for (const key in result.userBlocklist) {
         links.value.push(result.userBlocklist[key]);
       }
+      jourSingulierPluriel();
       loading.value = false;
     });
 
@@ -470,6 +473,7 @@ export default defineComponent({
 
     const resetDayCounter = () => {
       chrome.storage.sync.set({ startDayCounter: Date.now() });
+      nbJours.value = " jour";
       dayElapsed.value = 0;
       chrome.runtime.sendMessage({ greeting: "refreshDayCounter" });
     };
