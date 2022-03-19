@@ -3,13 +3,17 @@
     id="grandiv"
     class="h-[210px] relative w-full flex flex-col items-center shadow font-bold"
     style="
-      background: url(https://media.discordapp.net/attachments/952181816364789772/952283565306032168/ChadPecs.png);
       background-size: 330px;
       background-repeat: no-repeat;
       background-position: 160px 0px;
       z-index: 30;
     "
   >
+    <!-- <img
+      style="width: 330px; z-index: 30"
+      src="../assets/noTearsJustDreams.png"
+      class="mx-auto pl-3"
+    /> -->
     <div
       class="flex flex-col flex-grow self-start justify-center"
       style="padding-left: 25px"
@@ -55,7 +59,7 @@
     "
   >
     <img
-      src="https://i.imgur.com/C2GBPBQ.png"
+      src="../assets/soleilStakhanov.png"
       style="height: 100%; opacity: 0.3"
     />
   </div>
@@ -509,6 +513,10 @@ export default defineComponent({
 });
 </script>
 <style>
+#grandiv {
+  background: url("../assets/noTearsJustDreams.png");
+}
+
 .rotate {
   animation: rotation 90s infinite linear;
 }

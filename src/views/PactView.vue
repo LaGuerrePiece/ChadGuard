@@ -3,7 +3,7 @@
     <div class="text-6xl logo">CHADGUARD</div>
     <img
       style="width: 250px"
-      src="https://i.imgur.com/WjsCGCG.png"
+      src="../assets/thereIsNoNeedToBeUpset.png"
       class="mx-auto pl-3"
     />
     <div
