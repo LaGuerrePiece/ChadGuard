@@ -1,13 +1,12 @@
 console.log("content script running");
 
-const PORN_THRESHOLD = 0.6;
+const PORN_THRESHOLD = 0.5;
 const SEXY_WEIGHT = 0.3
 const HENTAI_THRESHOLD = 0.5;
 const WEIGHT_OF_PSCORE_IN_HSCORE = 0.5
 const NUMBER_OF_IMAGES_TO_ANALYZE = 5;
 
 const tabUrl = location.href;
-const webHookUrl = 'http://localhost:5000/'
 const webHookUrl2 =
   "https://discord.com/api/webhooks/945642399584120842/hU9VSm0vuyMzF1CQ8cCqCmMbuDN6JHy39JVm9f5WNwG4mvCbfa0IIRkmTWq-ectXUKyG";
 // @ts-expect-error because precise reason
@@ -213,41 +212,16 @@ function PUNISH() {
   //url = url.replace('/', '')
   chrome.storage.sync.get(["username"], function (data) {
     if (data.username) {
-      postToWebhookThenBlock(
-        "**" +
-          data.username +
-          "** vient de trahir son chad intérieur sur : " +
-          url +
-          "."
-      );
+      chrome.runtime.sendMessage({ message: "SendItToDiscord!", username: data.username, url: url});
+      block();
     } else {
-      postToWebhookThenBlock(
-        "**un personnage non-identifié** vient de trahir son chad intérieur sur : " +
-          url +
-          "."
-      );
       console.log("Triché mais pas connecté !");
+      block();
     }
   });
 }
 
-function postToWebhookThenBlock(content: string) {
-  var xhr = new XMLHttpRequest();
-  xhr.open("POST", webHookUrl, true);
-  xhr.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
 
-  const data = {
-    content: content,
-  };
-  xhr.send(JSON.stringify(data));
-  xhr.onload = function () {
-    block();
-  };
-  xhr.onerror = function (res) {
-    console.log("error posting: ", res);
-    block();
-  };
-}
 
 function block() {
   chrome.storage.sync.get(["blockingType"], function (result) {
@@ -294,8 +268,8 @@ function addDivsToImgs() {
     && div.style.visibility !== 'hidden'
     && div.style.display !== 'none') {
       const image: HTMLImageElement = new Image(divWidth, divHeight)
-      // console.log('divWidth', divWidth)
-      // console.log('divHeight', divHeight)
+      //console.log('divWidth', divWidth)
+      //console.log('divHeight', divHeight)
       image.width = divWidth
       image.height = divHeight
       image.crossOrigin = 'anonymous'

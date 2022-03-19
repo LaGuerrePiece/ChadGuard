@@ -76,3 +76,37 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     sendResponse({ farewell: "5/5 flubi" });
   }
 });
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+  if (request.message == "SendItToDiscord!") {
+    const webHookUrl = 'http://chadguard.pythonanywhere.com/'
+    const username = request.username
+    const url = request.url
+
+    let formData = new FormData();
+    formData.append("name", username);
+    formData.append("url", url);
+
+    fetch(webHookUrl, {
+      method: 'post',
+      body: formData,
+    }).then(e => console.log(e, formData))
+
+
+    // var xhr = new XMLHttpRequest();
+    // xhr.open("POST", webHookUrl, true);
+    // xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+    // xhr.send(formData);
+    // xhr.onload = function () {
+    //   console.log('message envoyé. Username : ' + username + ', url : ' + url)
+    //   //sendResponse({message: "BlockIt!"})
+    // };
+    // xhr.onerror = function (res) {
+    //   console.log("error posting: ", res);
+    //   //sendResponse({message: "BlockIt!"})
+    // };
+  }
+})
+
+  
+
