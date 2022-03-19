@@ -16,7 +16,7 @@ let model: nsfwjs.NSFWJS;
 chrome.storage.local.get(["defaultBlocklist"], function (result) {
   const defaultBlocklist: string[] = result.defaultBlocklist ?? [];
   console.log("defaultBlocklist", defaultBlocklist);
-  //if (defaultBlocklist.some((e) => tabUrl.includes(e))) PUNISH();
+  if (defaultBlocklist.some((e) => tabUrl.includes(e))) PUNISH();
 });
 
 chrome.storage.sync.get(["userBlocklist", "aiFiltering"], function (result) {
@@ -83,7 +83,6 @@ const analysePage = async () => {
       && img.src.slice(-3) !== "png"
       && img.src.slice(11, 14) !== "svg"
       ) {
-      console.log('extension :', img.src.slice(-3))
       const pixels = img.width * img.height;
       imagePixelArray.push({ element: img, pixels });
     }
@@ -162,10 +161,10 @@ const analysePage = async () => {
     console.log(`hScore Total : ${hScore}`);
     if (pScore > PORN_THRESHOLD) {
       console.log("Seems like porn !");
-      //PUNISH();
+      PUNISH();
     } else if (hScore > HENTAI_THRESHOLD){
       console.log("Seems like Hentai !");
-      //PUNISH();
+      PUNISH();
     } else {
       console.log("All seems fine.");
     }
@@ -295,17 +294,17 @@ function addDivsToImgs() {
     && div.style.visibility !== 'hidden'
     && div.style.display !== 'none') {
       const image: HTMLImageElement = new Image(divWidth, divHeight)
-      console.log('divWidth', divWidth)
-      console.log('divHeight', divHeight)
+      // console.log('divWidth', divWidth)
+      // console.log('divHeight', divHeight)
       image.width = divWidth
       image.height = divHeight
       image.crossOrigin = 'anonymous'
       image.onload = () => DivsToAdd.push(image)
       image.src = div.style.backgroundImage.slice(4, -1).replace(/['"]/g, "")
-      console.log('added this div to the imgs :')
-      console.log(div)
-      console.log(' as : ')
-      console.log(image)
+      // console.log('added this div to the imgs :')
+      // console.log(div)
+      // console.log(' as : ')
+      // console.log(image)
     }
   }
   return DivsToAdd
@@ -328,17 +327,17 @@ function addSpansToImgs() {
     && span.style.visibility !== 'hidden'
     && span.style.display !== 'none') {
       const image: HTMLImageElement = new Image(spanWidth, spanHeight)
-      console.log('spanWidth', spanWidth)
-      console.log('spanHeight', spanHeight)
+      // console.log('spanWidth', spanWidth)
+      // console.log('spanHeight', spanHeight)
       image.width = spanWidth
       image.height = spanHeight
       image.crossOrigin = 'anonymous'
       image.onload = () => SpansToAdd.push(image)
       image.src = span.style.backgroundImage.slice(4, -1).replace(/['"]/g, "")
-      console.log('added this span to the imgs :')
-      console.log(span)
-      console.log(' as : ')
-      console.log(image)
+      // console.log('added this span to the imgs :')
+      // console.log(span)
+      // console.log(' as : ')
+      // console.log(image)
     }
   }
   return SpansToAdd
@@ -360,17 +359,17 @@ function addAsToImgs() {
     && a.style.visibility !== 'hidden'
     && a.style.display !== 'none') {
       const image: HTMLImageElement = new Image(aWidth, aHeight)
-      console.log('aWidth', aWidth)
-      console.log('aHeight', aHeight)
+      // console.log('aWidth', aWidth)
+      // console.log('aHeight', aHeight)
       image.width = aWidth
       image.height = aHeight
       image.crossOrigin = 'anonymous'
       image.onload = () => AsToAdd.push(image)
       image.src = a.style.backgroundImage.slice(4, -1).replace(/['"]/g, "")
-      console.log('added this a to the imgs :')
-      console.log(a)
-      console.log(' as : ')
-      console.log(image)
+      // console.log('added this a to the imgs :')
+      // console.log(a)
+      // console.log(' as : ')
+      // console.log(image)
     }
   }
   return AsToAdd

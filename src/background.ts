@@ -35,7 +35,8 @@ chrome.runtime.onInstalled.addListener(function (details) {
       dayElapsed: 0,
       startDayCounter: Date.now(),
       noseEggUnlock: false,
-      lastPactDate: 1647527774447,
+      lastPactDate: Date.now(),
+      userBlocklist: ['www.turboshemale.com']
     });
     console.log("INSTALLATION, PARAMETRES INITIALISES");
   }

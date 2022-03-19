@@ -3,13 +3,17 @@
     id="grandiv"
     class="h-[210px] relative w-full flex flex-col items-center shadow font-bold"
     style="
-      background: url(https://media.discordapp.net/attachments/952181816364789772/952283565306032168/ChadPecs.png);
       background-size: 330px;
       background-repeat: no-repeat;
       background-position: 160px 0px;
       z-index: 30;
     "
   >
+    <!-- <img
+      style="width: 330px; z-index: 30"
+      src="../assets/noTearsJustDreams.png"
+      class="mx-auto pl-3"
+    /> -->
     <div
       class="flex flex-col flex-grow self-start justify-center"
       style="padding-left: 25px"
@@ -55,7 +59,7 @@
     "
   >
     <img
-      src="https://i.imgur.com/C2GBPBQ.png"
+      src="../assets/soleilStakhanov.png"
       style="height: 100%; opacity: 0.3"
     />
   </div>
@@ -106,7 +110,7 @@
     </div>
   </div>
   <div
-    class="p-5 grow gap-3 bg-[#f5c7ee] z-10 flex flex-col tracking-[.075em]"
+    class="p-5 grow gap-3 bg-[#f5c7ee] z-10 flex flex-col tracking-[.05em]"
     v-else
   >
     <div id="notrepromier" class="flex flex-row grow w-full gap-1 space-x-4">
@@ -150,7 +154,7 @@
       </div>
       <div class="flex flex-col w-6/12">
         <h1 class="text-left text-lg font-semibold ml-2">
-          {{ dayElapsed }} jours
+          {{ dayElapsed }} {{ nbJours }}
         </h1>
         <button
           v-on:click="resetDayCounter()"
@@ -177,7 +181,7 @@
       </div>
       <div class="flex flex-col w-6/12 opacity-0">
         <h1 class="text-left text-lg font-semibold ml-2">
-          {{ dayElapsed }} jours
+          {{ dayElapsed }} {{ nbJours }}
         </h1>
         <button
           v-on:click="resetDayCounter()"
@@ -256,6 +260,7 @@ export default defineComponent({
     const dayElapsed = ref();
     const discordState = ref();
     let username = ref();
+    let nbJours = ref();
 
     //determine if ai is filtering
 
@@ -339,6 +344,12 @@ export default defineComponent({
 
     chrome.storage.sync.get(["dayElapsed"], (result) => {
       dayElapsed.value = result.dayElapsed;
+      if (dayElapsed.value == 0 || dayElapsed.value == 1) {
+        nbJours.value = " jour";
+      }
+      if (dayElapsed.value > 1) {
+        nbJours.value = " jours";
+      }
     });
 
     chrome.storage.sync.get(["userBlocklist"], (result) => {
@@ -416,7 +427,7 @@ export default defineComponent({
             var code = url.searchParams.get("code");
             if (code) getToken(code as string);
             else {
-              console.log('Erreur :', url.searchParams.get("error"));
+              console.log("Erreur :", url.searchParams.get("error"));
               logout();
             }
           }
@@ -468,7 +479,7 @@ export default defineComponent({
       "What a bright day brother",
       "I'm proud of us",
       "To the moon, friend",
-      "Time to fuck some bitches",
+      "No tears, just dreams",
       "We're gonna make it",
     ];
     const randomCatch = phrases[Math.floor(Math.random() * phrases.length)];
@@ -496,11 +507,16 @@ export default defineComponent({
       username,
       login,
       logout,
+      nbJours,
     };
   },
 });
 </script>
 <style>
+#grandiv {
+  background: url("../assets/noTearsJustDreams.png");
+}
+
 .rotate {
   animation: rotation 90s infinite linear;
 }
