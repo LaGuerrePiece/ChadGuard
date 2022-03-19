@@ -110,7 +110,7 @@
     </div>
   </div>
   <div
-    class="p-5 grow gap-3 bg-[#f5c7ee] z-10 flex flex-col tracking-[.075em]"
+    class="p-5 grow gap-3 bg-[#f5c7ee] z-10 flex flex-col tracking-[.05em]"
     v-else
   >
     <div id="notrepromier" class="flex flex-row grow w-full gap-1 space-x-4">
@@ -479,7 +479,7 @@ export default defineComponent({
       "What a bright day brother",
       "I'm proud of us",
       "To the moon, friend",
-      "Time to fuck some bitches",
+      "No tears, just dreams",
       "We're gonna make it",
     ];
     const randomCatch = phrases[Math.floor(Math.random() * phrases.length)];
