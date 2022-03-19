@@ -1,18 +1,34 @@
 <template>
   <div class="flex flex-col flex-grow gap-3 mt-6">
-    <div class="text-6xl logo">CHADGUARD</div>
+    <div class="text-6xl logo z-10">CHADGUARD</div>
     <img
       style="width: 250px"
       src="../assets/thereIsNoNeedToBeUpset.png"
-      class="mx-auto pl-3"
+      class="mx-auto pl-3 z-10"
     />
+    <div
+      class="rotate"
+      style="
+        position: fixed;
+        height: 2000px;
+        width: 2000px;
+        top: -750px;
+        left: -750px;
+        z-index: 0;
+      "
+    >
+      <img
+        src="../assets/soleilStakhanov.png"
+        style="height: 100%; opacity: 0.3"
+      />
+    </div>
     <div
       v-if="loading"
       class="flex justify-center items-center flex-grow w-full"
     >
       <LoadingSpinner />
     </div>
-    <div v-else class="flex flex-col gap-2">
+    <div v-else class="flex flex-col gap-2 z-10">
       <p class="text-xl">
         Access the preferences by typing <br />
         “<span class="select-none">{{ pact }}</span
