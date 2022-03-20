@@ -1,11 +1,5 @@
 console.log("content script running");
 
-const PORN_THRESHOLD = 0.5;
-const SEXY_WEIGHT = 0.3
-const HENTAI_THRESHOLD = 0.5;
-const WEIGHT_OF_PSCORE_IN_HSCORE = 0.5
-const NUMBER_OF_IMAGES_TO_ANALYZE = 10;
-
 const tabUrl = location.href;
 console.log(tabUrl)
 // @ts-expect-error because precise reason
@@ -13,23 +7,30 @@ let model: nsfwjs.NSFWJS;
 
 chrome.storage.local.get(["defaultBlocklist"], function (result) {
   const defaultBlocklist: string[] = result.defaultBlocklist ?? [];
-  console.log("defaultBlocklist", defaultBlocklist);
   if (defaultBlocklist.some((e) => tabUrl.includes(e))) {
-    console.log('defaultBlocklist activée sur ' + tabUrl)
     PUNISH();
   }
-});
+})
 
 chrome.storage.sync.get(["userBlocklist", "aiFiltering"], function (result) {
   const aiFiltering: boolean = result.aiFiltering ?? false;
   if (aiFiltering === true) {
     console.log("loading model...");
-    // @ts-expect-error because precise reason
-    nsfwjs.load().then((loaded) => {
-      model = loaded;
-      console.log("Loaded nsfwjs model");
-      console.log("Getting predictions and score...");
-      analysePage();
+    chrome.storage.local.get(["updatedConstants"], function (result) {
+      const PORN_THRESHOLD = result.updatedConstants?.pornthreshold ?? 0.6
+      const SEXY_WEIGHT = result.updatedConstants?.sexyweigth ?? 0.2
+      const HENTAI_THRESHOLD = result.updatedConstants?.hentaithreshold ?? 0.5;
+      const WEIGHT_OF_PSCORE_IN_HSCORE = result.updatedConstants?.pscoreweightinhscore ?? 0.5
+      const NUMBER_OF_IMAGES_TO_ANALYZE = result.updatedConstants?.imagestoanalyse ?? 10;
+
+      // @ts-expect-error because precise reason
+      nsfwjs.load().then((loaded) => {
+        model = loaded;
+        console.log("Loaded nsfwjs model");
+        console.log("Getting predictions and score...");
+        analysePage(PORN_THRESHOLD, SEXY_WEIGHT, HENTAI_THRESHOLD, WEIGHT_OF_PSCORE_IN_HSCORE, NUMBER_OF_IMAGES_TO_ANALYZE);
+
+      })
     });
   } else {
     console.log("Page not analysed because aiFiltering = false");
@@ -46,7 +47,9 @@ interface ImagePixel {
   pixels: number;
 }
 
-const analysePage = async () => {
+
+
+const analysePage = async (PORN_THRESHOLD: number, SEXY_WEIGHT: number, HENTAI_THRESHOLD: number, WEIGHT_OF_PSCORE_IN_HSCORE: number, NUMBER_OF_IMAGES_TO_ANALYZE: number) => {
   console.log(`Starting to analyse page...`);
   const imagePixelArray: ImagePixel[] = [];
   var imgs = document.getElementsByTagName("img");
@@ -56,8 +59,6 @@ const analysePage = async () => {
 
   for (let i = 0; i < imgs.length; i++) {
     const img = imgs[i];
-    console.log('Image ' + i + ' :')
-    console.log(img)
     img.width = img.clientWidth;
     img.height = img.clientHeight;
     //console.log('i', i, 'width', imgs[i].width, 'height', imgs[i].height, img)
@@ -77,7 +78,6 @@ const analysePage = async () => {
       const pixels = img.width * img.height;
       imagePixelArray.push({ element: img, pixels });
     }
-
   }
   imagePixelArray.sort((a, b) => {
     if (a.pixels === b.pixels) return 0;
@@ -127,12 +127,12 @@ const analysePage = async () => {
           console.log(prediction.value[key]);
         }
       }
-      console.log('pScore : ' + getPScore(prediction))
+      console.log('pScore : ' + getPScore(prediction, SEXY_WEIGHT))
       console.log('hScore : ' + getHScore(prediction))
       console.log(fetchableImages[i]);
     }
     // @ts-expect-error promise I will learn ts
-    let pScores = predictions.map(e => getPScore(e)) // pScores = [0.675, 0.236, 0.456]
+    let pScores = predictions.map(e => getPScore(e, SEXY_WEIGHT))
     // @ts-expect-error promise I will learn ts
     let hScores = predictions.map(e => getHScore(e))
 
@@ -170,7 +170,7 @@ interface values {
   }[];
 }
 
-function getPScore(value: values) {
+function getPScore(value: values, SEXY_WEIGHT: number) {
   let pScore = 0;
   if (value.status == "fulfilled") {
     for (let i = 0; i < 5; i++) {
@@ -197,19 +197,17 @@ chrome.storage.sync.get(["dayCounter"], (result: any) => {
   }
 });
 
-
 //MODULE WEBHOOK :
 function PUNISH() {
-  console.log('en punition')
   const url = tabUrl.replace("https://", "");
   //url = url.replace('/', '')
   chrome.storage.sync.get(["username"], function (data) {
     if (data.username) {
       chrome.runtime.sendMessage({ message: "SendItToDiscord!", username: data.username, url: url});
-      block();
+      //block();
     } else {
       console.log("Triché mais pas connecté !");
-      block();
+      //block();
     }
   });
 }
