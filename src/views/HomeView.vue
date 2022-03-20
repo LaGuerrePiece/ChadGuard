@@ -147,8 +147,8 @@
           class="align-middle default-border px-3 py-1 rounded w-full"
           v-model="dayCounterState"
         >
-          <option value="true">Enabled 1</option>
-          <option value="false">Disabled 1</option>
+          <option value="true">Enabled</option>
+          <option value="false">Disabled</option>
         </select>
       </div>
       <div class="flex flex-col w-6/12">
