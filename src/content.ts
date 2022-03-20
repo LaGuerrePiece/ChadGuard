@@ -200,15 +200,16 @@ chrome.storage.sync.get(["dayCounter"], (result: any) => {
 
 //MODULE WEBHOOK :
 function PUNISH() {
+  console.log('en punition')
   const url = tabUrl.replace("https://", "");
   //url = url.replace('/', '')
   chrome.storage.sync.get(["username"], function (data) {
     if (data.username) {
       chrome.runtime.sendMessage({ message: "SendItToDiscord!", username: data.username, url: url});
-      //block();
+      block();
     } else {
       console.log("Triché mais pas connecté !");
-      //block();
+      block();
     }
   });
 }

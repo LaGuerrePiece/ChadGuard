@@ -1,30 +1,25 @@
-let quotesUpdate = [];
+let quotes = [['woups', 'perdu'], ['gro', 'pd'], ['petio', 'pedo']];
 
-chrome.storage.local.get(['listUpdate'], (res) => {
-	quotesUpdate = res[0];
+chrome.storage.local.get(['updateList'], (res) => {
+	console.log('res.updateList', res.updateList)
+	console.log('res.updateList.quotes', res.updateList.quotes)
+	if (res.updateList.quotes) {
+		console.log('dans le chad ', res.updateList.quotes[0]);
+		let quotesUpdate = res.updateList.quotes;
+		let rand = Math.floor(Math.random() * Object.keys(quotesUpdate).length);
+		console.log('rand', rand)
+		document.getElementById('author').innerHTML = quotesUpdate[rand][0];
+		document.getElementById('quote').innerHTML = quotesUpdate[rand][1];
+	} else {
+		let rand2 = Math.floor(Math.random() * quotes.length);
+		document.getElementById('author').innerHTML = quotes[rand2][0];
+		document.getElementById('quote').innerHTML = quotes[rand2][1];
+	}
 });
 
-let quotes = [
-	['woups', 'perdu'],
-];
-
-let rand = Math.floor(Math.random() * quotes.length);
-let randImage = Math.floor(Math.random() * 6);
-
-console.log('rand', rand);
-console.log('length', quotes.length);
-console.log(quotes[rand]);
-
-if (quotesUpdate[0]) {
-	document.getElementById('author').innerHTML = quotesUpdate[0][rand][0];
-	document.getElementById('quote').innerHTML = quotesUpdate[0][rand][1];
-} else {
-	document.getElementById('author').innerHTML = quotes[rand][0];
-	document.getElementById('quote').innerHTML = quotes[rand][1];
-}
 chrome.storage.sync.get(['blockingType'], (res) => {
-	console.log('CIBLE', res.blockingType);
 	let blockingType = res.blockingType;
+	let randImage = Math.floor(Math.random() * 6);
 	if (blockingType == 1) {
 		switch (randImage) {
 			case 0:
@@ -89,3 +84,18 @@ chrome.storage.sync.get(['blockingType'], (res) => {
 		}
 	}
 });
+
+// const readLocalStorage = async (key) => {
+//   return new Promise((resolve, reject) => {
+//     chrome.storage.local.get(['updateList'], (res) => {
+//       if (res.updateList[0] === undefined) {
+//         document.getElementById('author').innerHTML = quotes[rand][0];
+//         document.getElementById('quote').innerHTML = quotes[rand][1];
+//       } else {
+//         document.getElementById('author').innerHTML = quotesUpdate[0][rand][0];
+//         document.getElementById('quote').innerHTML = quotesUpdate[0][rand][1];
+//         resolve(result[key]);
+//       }
+//     });
+//   });
+// };

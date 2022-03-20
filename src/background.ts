@@ -1,5 +1,16 @@
 console.log('service worker running');
 
+const urlUpdate = 'http://chadguard.pythonanywhere.com/data';
+console.log('log difficile');
+fetch(urlUpdate, {
+	method: 'get',
+}).then((res) => {
+	res.json().then(res2 => {
+	let raiponsse = res2
+	console.log('raiponsse', raiponsse);
+	chrome.storage.local.set({ updateList: raiponsse })});
+});
+
 //Initialisation de la defaultBlocklist :
 chrome.runtime.onInstalled.addListener(function (details) {
 	chrome.storage.local.get(['defaultBlocklist'], function (result) {
@@ -37,25 +48,6 @@ chrome.runtime.onInstalled.addListener(function (details) {
 		console.log('INSTALLATION, PARAMETRES INITIALISES');
 	}
 });
-
-
-
-
-
-
-	const urlUpdate = 'http://chadguard.pythonanywhere.com/data';
-	console.log('log difficile');
-	fetch(urlUpdate, {
-		method: 'get',
-	}).then((res) => {
-    let raiponsse = res.json()
-		console.log("raiponsse", raiponsse);
-		chrome.storage.local.set({ updateList: raiponsse });
-	});
-
-
-
-
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 	if (request.message == 'closeIt') {
