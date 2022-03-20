@@ -39,7 +39,7 @@ html,
 body,
 #app {
   // font-family: sans-serif;
-  font-family: "Bebas Neue", cursive;
+  font-family: "Bebas Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
