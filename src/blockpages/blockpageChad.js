@@ -7,7 +7,6 @@ chrome.storage.local.get(['updateList'], (res) => {
 		console.log('dans le chad ', res.updateList.quotes[0]);
 		let quotesUpdate = res.updateList.quotes;
 		let rand = Math.floor(Math.random() * Object.keys(quotesUpdate).length);
-		console.log('rand', rand)
 		document.getElementById('author').innerHTML = quotesUpdate[rand][0];
 		document.getElementById('quote').innerHTML = quotesUpdate[rand][1];
 	} else {

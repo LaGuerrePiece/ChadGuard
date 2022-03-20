@@ -8,7 +8,11 @@ fetch(urlUpdate, {
 	res.json().then(res2 => {
 	let raiponsse = res2
 	console.log('raiponsse', raiponsse);
-	chrome.storage.local.set({ updateList: raiponsse })});
+	chrome.storage.local.set({ updatedQuotes: raiponsse.quotes });
+	chrome.storage.local.set({ updatedVideos: raiponsse.videos });
+	chrome.storage.local.set({ updatedHomePhrases: raiponsse.homePhrases });
+	chrome.storage.local.set({ updatedDefaultBlocklist: raiponsse.defaultBlocklist  });
+	chrome.storage.local.set({ updatedConstants: raiponsse.constants });
 });
 
 //Initialisation de la defaultBlocklist :
