@@ -17,12 +17,12 @@ chrome.storage.sync.get(["userBlocklist", "aiFiltering"], function (result) {
   if (aiFiltering === true) {
     console.log("loading model...");
     chrome.storage.local.get(["updatedConstants"], function (result) {
-      const PORN_THRESHOLD = result.updatedConstants?.pornthreshold ?? 0.6
-      const SEXY_WEIGHT = result.updatedConstants?.sexyweigth ?? 0.2
-      const HENTAI_THRESHOLD = result.updatedConstants?.hentaithreshold ?? 0.5;
-      const WEIGHT_OF_PSCORE_IN_HSCORE = result.updatedConstants?.pscoreweightinhscore ?? 0.5
-      const NUMBER_OF_IMAGES_TO_ANALYZE = result.updatedConstants?.imagestoanalyse ?? 10;
-
+      const PORN_THRESHOLD = result.updatedConstants?.pornthreshold ?? 0.1
+      const SEXY_WEIGHT = result.updatedConstants?.sexyweigth ?? 0.1
+      const HENTAI_THRESHOLD = result.updatedConstants?.hentaithreshold ?? 0.1;
+      const WEIGHT_OF_PSCORE_IN_HSCORE = result.updatedConstants?.pscoreweightinhscore ?? 0.1
+      const NUMBER_OF_IMAGES_TO_ANALYZE = result.updatedConstants?.imagestoanalyse ?? 2;
+      console.log(PORN_THRESHOLD, SEXY_WEIGHT, HENTAI_THRESHOLD, WEIGHT_OF_PSCORE_IN_HSCORE, NUMBER_OF_IMAGES_TO_ANALYZE)
       // @ts-expect-error because precise reason
       nsfwjs.load().then((loaded) => {
         model = loaded;

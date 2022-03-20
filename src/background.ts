@@ -100,20 +100,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 		fetch(webHookUrl, {
 			method: 'post',
 			body: formData,
-		}).then((e) => console.log(e, formData));
-
-		// var xhr = new XMLHttpRequest();
-		// xhr.open("POST", webHookUrl, true);
-		// xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-
-		// xhr.send(formData);
-		// xhr.onload = function () {
-		//   console.log('message envoyé. Username : ' + username + ', url : ' + url)
-		//   //sendResponse({message: "BlockIt!"})
-		// };
-		// xhr.onerror = function (res) {
-		//   console.log("error posting: ", res);
-		//   //sendResponse({message: "BlockIt!"})
-		// };
-	}
+		}).then((e) => console.log(e, formData))
+  }
 })
