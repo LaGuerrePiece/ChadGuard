@@ -25,7 +25,7 @@ chrome.runtime.onInstalled.addListener(function (details) {
       );
     }
   });
-  if (details.reason == "install") {      //A CHECKER
+  if (details.reason == "install") {
     chrome.storage.sync.set({
       blockingType: 0,
       visitCount: 0,
@@ -90,23 +90,5 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       method: 'post',
       body: formData,
     }).then(e => console.log(e, formData))
-
-
-    // var xhr = new XMLHttpRequest();
-    // xhr.open("POST", webHookUrl, true);
-    // xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-
-    // xhr.send(formData);
-    // xhr.onload = function () {
-    //   console.log('message envoyé. Username : ' + username + ', url : ' + url)
-    //   //sendResponse({message: "BlockIt!"})
-    // };
-    // xhr.onerror = function (res) {
-    //   console.log("error posting: ", res);
-    //   //sendResponse({message: "BlockIt!"})
-    // };
   }
 })
-
-  
-
