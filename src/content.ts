@@ -4,18 +4,20 @@ const PORN_THRESHOLD = 0.5;
 const SEXY_WEIGHT = 0.3
 const HENTAI_THRESHOLD = 0.5;
 const WEIGHT_OF_PSCORE_IN_HSCORE = 0.5
-const NUMBER_OF_IMAGES_TO_ANALYZE = 5;
+const NUMBER_OF_IMAGES_TO_ANALYZE = 10;
 
 const tabUrl = location.href;
-const webHookUrl2 =
-  "https://discord.com/api/webhooks/945642399584120842/hU9VSm0vuyMzF1CQ8cCqCmMbuDN6JHy39JVm9f5WNwG4mvCbfa0IIRkmTWq-ectXUKyG";
+console.log(tabUrl)
 // @ts-expect-error because precise reason
 let model: nsfwjs.NSFWJS;
 
 chrome.storage.local.get(["defaultBlocklist"], function (result) {
   const defaultBlocklist: string[] = result.defaultBlocklist ?? [];
   console.log("defaultBlocklist", defaultBlocklist);
-  if (defaultBlocklist.some((e) => tabUrl.includes(e))) PUNISH();
+  if (defaultBlocklist.some((e) => tabUrl.includes(e))) {
+    console.log('defaultBlocklist activée sur ' + tabUrl)
+    PUNISH();
+  }
 });
 
 chrome.storage.sync.get(["userBlocklist", "aiFiltering"], function (result) {
@@ -51,21 +53,11 @@ const analysePage = async () => {
   //@ts-expect-error I promise I will learn ts later
   imgs = [...imgs];
   console.log(`Found ${imgs.length} images on page`);
-  
-  let DivsToAdd = addDivsToImgs()
-  //@ts-expect-error I promise I will learn ts later
-  DivsToAdd.forEach(e => imgs.push(e))
-  
-  let SpansToAdd = addSpansToImgs()
-  //@ts-expect-error I promise I will learn ts later
-  SpansToAdd.forEach(e => imgs.push(e))
-  
-  let AsToAdd = addAsToImgs()
-  //@ts-expect-error I promise I will learn ts later
-  AsToAdd.forEach(e => imgs.push(e))
 
   for (let i = 0; i < imgs.length; i++) {
     const img = imgs[i];
+    console.log('Image ' + i + ' :')
+    console.log(img)
     img.width = img.clientWidth;
     img.height = img.clientHeight;
     //console.log('i', i, 'width', imgs[i].width, 'height', imgs[i].height, img)
@@ -205,23 +197,21 @@ chrome.storage.sync.get(["dayCounter"], (result: any) => {
   }
 });
 
-//MODULE WEBHOOK :
 
+//MODULE WEBHOOK :
 function PUNISH() {
   const url = tabUrl.replace("https://", "");
   //url = url.replace('/', '')
   chrome.storage.sync.get(["username"], function (data) {
     if (data.username) {
       chrome.runtime.sendMessage({ message: "SendItToDiscord!", username: data.username, url: url});
-      block();
+      //block();
     } else {
       console.log("Triché mais pas connecté !");
-      block();
+      //block();
     }
   });
 }
-
-
 
 function block() {
   chrome.storage.sync.get(["blockingType"], function (result) {
@@ -243,108 +233,4 @@ function block() {
       console.log("This blocking type does not exist");
     }
   });
-}
-
-
-
-
-
-
-
-
-function addDivsToImgs() {
-  let DivsToAdd: HTMLImageElement[] = []
-  //ADD DIVS TO IMGS
-  let divs = document.getElementsByTagName("div");
-  //@ts-expect-error I promise I will learn ts later
-  divs = [...divs];
-  console.log(`Found ${divs.length} divs on page`);
-  for (let i = 0; i < divs.length; i++) {
-    const div = divs[i]
-    const divWidth = div.clientWidth
-    const divHeight = div.clientHeight
-    if (typeof div.style.backgroundImage === 'string'
-    && div.style.backgroundImage.length > 0
-    && div.style.visibility !== 'hidden'
-    && div.style.display !== 'none') {
-      const image: HTMLImageElement = new Image(divWidth, divHeight)
-      //console.log('divWidth', divWidth)
-      //console.log('divHeight', divHeight)
-      image.width = divWidth
-      image.height = divHeight
-      image.crossOrigin = 'anonymous'
-      image.onload = () => DivsToAdd.push(image)
-      image.src = div.style.backgroundImage.slice(4, -1).replace(/['"]/g, "")
-      // console.log('added this div to the imgs :')
-      // console.log(div)
-      // console.log(' as : ')
-      // console.log(image)
-    }
-  }
-  return DivsToAdd
-}
-
-function addSpansToImgs() {
-  //ADD SPANS TO IMGS
-  let SpansToAdd: HTMLImageElement[] = []
-  let spans = document.getElementsByTagName("span");
-  //@ts-expect-error I promise I will learn ts later
-  spans = [...spans];
-  console.log(`Found ${spans.length} spans on page`);
-  for (let i = 0; i < spans.length; i++) {
-    const span = spans[i]
-    const spanWidth = span.clientWidth
-    const spanHeight = span.clientHeight
-    if (typeof span.style.backgroundImage === 'string'
-    && span.style.backgroundImage.length > 0
-    && span.style.visibility !== 'hidden'
-    && span.style.visibility !== 'hidden'
-    && span.style.display !== 'none') {
-      const image: HTMLImageElement = new Image(spanWidth, spanHeight)
-      // console.log('spanWidth', spanWidth)
-      // console.log('spanHeight', spanHeight)
-      image.width = spanWidth
-      image.height = spanHeight
-      image.crossOrigin = 'anonymous'
-      image.onload = () => SpansToAdd.push(image)
-      image.src = span.style.backgroundImage.slice(4, -1).replace(/['"]/g, "")
-      // console.log('added this span to the imgs :')
-      // console.log(span)
-      // console.log(' as : ')
-      // console.log(image)
-    }
-  }
-  return SpansToAdd
-}
-
-function addAsToImgs() {
-  //ADD A TO IMGS
-  let AsToAdd: HTMLImageElement[] = []
-  let as = document.getElementsByTagName("a");
-  //@ts-expect-error I promise I will learn ts later
-  as = [...as];
-  console.log(`Found ${as.length} as on page`);
-  for (let i = 0; i < as.length; i++) {
-    const a = as[i]
-    const aWidth = a.clientWidth
-    const aHeight = a.clientHeight
-    if (typeof a.style.backgroundImage === 'string'
-    && a.style.backgroundImage.length > 0
-    && a.style.visibility !== 'hidden'
-    && a.style.display !== 'none') {
-      const image: HTMLImageElement = new Image(aWidth, aHeight)
-      // console.log('aWidth', aWidth)
-      // console.log('aHeight', aHeight)
-      image.width = aWidth
-      image.height = aHeight
-      image.crossOrigin = 'anonymous'
-      image.onload = () => AsToAdd.push(image)
-      image.src = a.style.backgroundImage.slice(4, -1).replace(/['"]/g, "")
-      // console.log('added this a to the imgs :')
-      // console.log(a)
-      // console.log(' as : ')
-      // console.log(image)
-    }
-  }
-  return AsToAdd
 }
