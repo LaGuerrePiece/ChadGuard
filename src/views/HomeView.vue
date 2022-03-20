@@ -115,7 +115,15 @@
   >
     <div id="notrepromier" class="flex flex-row grow w-full gap-1 space-x-4">
       <div class="flex flex-col grow basis-0 border-solid">
-        <h1 class="text-left text-lg font-semibold ml-2 ubuntu">BLOCKING TYPE :</h1>
+
+
+
+
+
+
+
+        
+        <h1 class="text-left text-lg font-semibold tracking-wider ml-2">BLOCKING TYPE :</h1>
         <select
           class="align-middle default-border px-3 py-1 rounded w-full"
           v-model="blockingTypeSelected"
@@ -127,7 +135,7 @@
         </select>
       </div>
       <div class="flex flex-col grow basis-0 border-solid">
-        <h1 class="text-left text-lg font-semibold ml-2">AI FILTERING :</h1>
+        <h1 class="text-left text-lg font-semibold tracking-wider ml-2">AI FILTER :</h1>
         <select
           class="align-middle default-border px-3 py-1 rounded w-full"
           v-model="aiState"
@@ -142,7 +150,7 @@
       class="flex flex-row grow w-full gap-1 space-x-4"
     >
       <div class="flex flex-col w-6/12">
-        <h1 class="text-left text-lg font-semibold ml-2">DAY COUNTER :</h1>
+        <h1 class="text-left text-lg font-semibold tracking-wider ml-2">DAY COUNTER :</h1>
         <select
           class="align-middle default-border px-3 py-1 rounded w-full"
           v-model="dayCounterState"
@@ -153,14 +161,14 @@
       </div>
       <div class="flex flex-col w-6/12">
         <div class="grow" v-if="dayCounterState === 'true'">
-          <h1 class="text-left text-lg font-semibold ml-2">
+          <h1 class="text-left text-lg font-semibold tracking-wider ml-2">
             {{ dayElapsed }} {{ nbJours }}
           </h1>
           <button
             v-on:click="resetDayCounter()"
-            class="float-left text-center default-button ml-2 default-border px-3 py-1 rounded w-6/12 h-[35px]"
+            class="float-left text-center default-button default-border px-3 py-1 rounded w-6/12 h-[35px]"
           >
-            Reset
+            RESET
           </button>
         </div>
       </div>
@@ -168,7 +176,7 @@
 
     <div v-if="discordState === 'true'" id="connectDiscord" class="mb-3">
       <div class="flex flex-col grow gap-1">
-        <h1 class="text-left text-lg font-semibold ml-2">
+        <h1 class="text-left text-lg font-semibold tracking-wider ml-2">
           DISCORD : CONNECTED AS {{ username }}
         </h1>
         <div class="flex flex-row grow gap-1 space-x-4">
@@ -176,7 +184,7 @@
             class="default-button grow basis-0 h-[35px]"
             v-on:click="logout()"
           >
-            Disconnect
+            DISCONNECT
           </button>
           <button class="default-button grow basis-0 opacity-0"></button>
           <!-- <div class="grow basis-0"></div> -->
@@ -500,15 +508,18 @@ export default defineComponent({
 });
 </script>
 <style>
-@import url("https://fonts.googleapis.com/css2?family=Ubuntu:wght@500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Teko&display=swap");
 
 #grandiv {
   background: url("../assets/noTearsJustDreams.png");
 }
 
 .ubuntu {
-  font-family: Ubuntu, cursive;
-  letter-spacing: 0em;
+  font-family: "Teko";
+  font-weight: 700;
+  letter-spacing: 0.00em;
+  font-size: 1.375rem; /* 24px */
+  line-height: 1.75rem; /* 32px */
 }
 
 .rotate {

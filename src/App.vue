@@ -35,6 +35,7 @@ export default defineComponent({
 <style lang="scss">
 @import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Yanone+Kaffeesatz:wght@300&display=swap");
+
 html,
 body,
 #app {

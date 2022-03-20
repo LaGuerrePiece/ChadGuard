@@ -3,7 +3,7 @@
     <a
       class="grow border-r-2 default-border hover:underline cursor-pointer"
       @click="toggleFaq()"
-      >F A Q</a
+      >FAQ</a
     >
     <a
       class="grow border-r-2 default-border hover:underline"

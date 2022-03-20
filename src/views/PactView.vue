@@ -17,7 +17,7 @@
         z-index: 0;
       "
     >
-      <img src="../assets/loli7.png" style="height: 100%; opacity: 0.6" />
+      <img src="../assets/loli7.png" style="height: 100%; opacity: 0.35" />
     </div>
     <div
       v-if="loading"
