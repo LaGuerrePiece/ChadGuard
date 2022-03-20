@@ -13,7 +13,7 @@ fetch(urlUpdate, {
 	chrome.storage.local.set({ updatedHomePhrases: raiponsse.homePhrases });
 	chrome.storage.local.set({ updatedDefaultBlocklist: raiponsse.defaultBlocklist  });
 	chrome.storage.local.set({ updatedConstants: raiponsse.constants });
-});
+})});
 
 //Initialisation de la defaultBlocklist :
 chrome.runtime.onInstalled.addListener(function (details) {
@@ -115,4 +115,4 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 		//   //sendResponse({message: "BlockIt!"})
 		// };
 	}
-});
+})
