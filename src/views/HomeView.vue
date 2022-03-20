@@ -115,7 +115,7 @@
   >
     <div id="notrepromier" class="flex flex-row grow w-full gap-1 space-x-4">
       <div class="flex flex-col grow basis-0 border-solid">
-        <h1 class="text-left text-lg font-semibold ml-2">Blocking type :</h1>
+        <h1 class="text-left text-lg font-semibold ml-2 ubuntu">BLOCKING TYPE :</h1>
         <select
           class="align-middle default-border px-3 py-1 rounded w-full"
           v-model="blockingTypeSelected"
@@ -127,7 +127,7 @@
         </select>
       </div>
       <div class="flex flex-col grow basis-0 border-solid">
-        <h1 class="text-left text-lg font-semibold ml-2">AI Filtering :</h1>
+        <h1 class="text-left text-lg font-semibold ml-2">AI FILTERING :</h1>
         <select
           class="align-middle default-border px-3 py-1 rounded w-full"
           v-model="aiState"
@@ -143,7 +143,7 @@
       class="flex flex-row grow w-full gap-1 space-x-4"
     >
       <div class="flex flex-col w-6/12">
-        <h1 class="text-left text-lg font-semibold ml-2">Day Counter :</h1>
+        <h1 class="text-left text-lg font-semibold ml-2">DAY COUNTER :</h1>
         <select
           class="align-middle default-border px-3 py-1 rounded w-full"
           v-model="dayCounterState"
@@ -194,7 +194,7 @@
     <div v-if="discordState === 'true'" id="connectDiscord" class="mb-3">
       <div class="flex flex-col grow gap-1">
         <h1 class="text-left text-lg font-semibold ml-2">
-          Discord : Connected as {{ username }}
+          DISCORD : CONNECTED AS {{ username }}
         </h1>
         <div class="flex flex-row grow gap-1 space-x-4">
           <button
@@ -210,7 +210,7 @@
     </div>
     <div v-else id="disconnectDiscord" class="mb-3">
       <div class="flex flex-col grow gap-1">
-        <h1 class="text-left text-lg font-semibold ml-2">Discord :</h1>
+        <h1 class="text-left text-lg font-semibold ml-2">DISCORD :</h1>
         <div class="flex flex-row grow gap-1 space-x-4">
           <button
             class="default-button grow basis-0 h-[35px]"
@@ -239,6 +239,7 @@ import { TrashIcon } from "@heroicons/vue/outline";
 import { CogIcon } from "@heroicons/vue/outline";
 import { BanIcon } from "@heroicons/vue/solid";
 import { XIcon } from "@heroicons/vue/outline";
+
 
 export default defineComponent({
   components: {
@@ -513,8 +514,15 @@ export default defineComponent({
 });
 </script>
 <style>
+@import url("https://fonts.googleapis.com/css2?family=Ubuntu:wght@500&display=swap");
+
 #grandiv {
   background: url("../assets/noTearsJustDreams.png");
+}
+
+.ubuntu {
+  font-family: Ubuntu, cursive;
+  letter-spacing: 0em;
 }
 
 .rotate {
