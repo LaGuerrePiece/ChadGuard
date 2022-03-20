@@ -13,14 +13,11 @@
         height: 2000px;
         width: 2000px;
         top: -750px;
-        left: -750px;
+        left: -790px;
         z-index: 0;
       "
     >
-      <img
-        src="../assets/soleilStakhanov.png"
-        style="height: 100%; opacity: 0.3"
-      />
+      <img src="../assets/loli9.png" style="height: 100%; opacity: 0.6" />
     </div>
     <div
       v-if="loading"
