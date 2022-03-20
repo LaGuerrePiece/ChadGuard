@@ -1,14 +1,14 @@
 let quotes = [['woups', 'perdu'], ['gro', 'pd'], ['petio', 'pedo']];
 
-chrome.storage.local.get(['updateList'], (res) => {
-	console.log('res.updateList', res.updateList)
-	console.log('res.updateList.quotes', res.updateList.quotes)
-	if (res.updateList.quotes) {
-		console.log('dans le chad ', res.updateList.quotes[0]);
-		let quotesUpdate = res.updateList.quotes;
-		let rand = Math.floor(Math.random() * Object.keys(quotesUpdate).length);
-		document.getElementById('author').innerHTML = quotesUpdate[rand][0];
-		document.getElementById('quote').innerHTML = quotesUpdate[rand][1];
+chrome.storage.local.get(['updatedQuotes'], (res) => {
+	updatedQuotes = res.updatedQuotes
+	console.log('updatedQuotes', updatedQuotes)
+	console.log('updatedQuotes[0]', updatedQuotes[0])
+	if (updatedQuotes) {
+		console.log('dans le chad ');
+		let rand = Math.floor(Math.random() * updatedQuotes.length);
+		document.getElementById('author').innerHTML = updatedQuotes[rand][0];
+		document.getElementById('quote').innerHTML = updatedQuotes[rand][1];
 	} else {
 		let rand2 = Math.floor(Math.random() * quotes.length);
 		document.getElementById('author').innerHTML = quotes[rand2][0];
@@ -83,18 +83,3 @@ chrome.storage.sync.get(['blockingType'], (res) => {
 		}
 	}
 });
-
-// const readLocalStorage = async (key) => {
-//   return new Promise((resolve, reject) => {
-//     chrome.storage.local.get(['updateList'], (res) => {
-//       if (res.updateList[0] === undefined) {
-//         document.getElementById('author').innerHTML = quotes[rand][0];
-//         document.getElementById('quote').innerHTML = quotes[rand][1];
-//       } else {
-//         document.getElementById('author').innerHTML = quotesUpdate[0][rand][0];
-//         document.getElementById('quote').innerHTML = quotesUpdate[0][rand][1];
-//         resolve(result[key]);
-//       }
-//     });
-//   });
-// };
