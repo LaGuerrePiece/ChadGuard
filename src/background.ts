@@ -11,6 +11,7 @@ fetch(urlUpdate, {
 	chrome.storage.local.set({ updatedQuotes: raiponsse.quotes });
 	chrome.storage.local.set({ updatedVideos: raiponsse.videos });
 	chrome.storage.local.set({ updatedHomePhrases: raiponsse.homePhrases });
+	console.log("raiponsse.homePhrases", raiponsse.homePhrases)
 	chrome.storage.local.set({ updatedDefaultBlocklist: raiponsse.defaultBlocklist  });
 	chrome.storage.local.set({ updatedConstants: raiponsse.constants });
 })});

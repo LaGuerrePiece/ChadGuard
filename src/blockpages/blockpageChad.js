@@ -1,9 +1,13 @@
-let quotes = [['woups', 'perdu'], ['gro', 'pd'], ['petio', 'pedo']];
+let quotes = [
+	['woups', 'perdu'],
+	['gro', 'pd'],
+	['petio', 'pedo'],
+];
 
 chrome.storage.local.get(['updatedQuotes'], (res) => {
-	updatedQuotes = res.updatedQuotes
-	console.log('updatedQuotes', updatedQuotes)
-	console.log('updatedQuotes[0]', updatedQuotes[0])
+	let updatedQuotes = res.updatedQuotes;
+	console.log('updatedQuotes', updatedQuotes);
+	console.log('updatedQuotes[0]', updatedQuotes[0]);
 	if (updatedQuotes) {
 		console.log('dans le chad ');
 		let rand = Math.floor(Math.random() * updatedQuotes.length);
