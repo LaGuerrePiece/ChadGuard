@@ -1,5 +1,5 @@
 <template>
-  <div class="flex border-t-2 default-border py-1 text-base z-50 bg-[#f5c7ee]">
+  <div class="flex border-t-2 default-border py-1 text-base select-none z-50 bg-[#f5c7ee]">
     <a
       class="grow border-r-2 default-border hover:underline cursor-pointer"
       @click="toggleFaq()"

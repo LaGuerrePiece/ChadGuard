@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col flex-grow gap-3 mt-6">
+  <div class="flex flex-col flex-grow gap-3 mt-6 select-none">
     <div class="text-6xl logo z-10">CHADGUARD</div>
     <img
       style="width: 250px"
@@ -56,8 +56,8 @@ export default defineComponent({
   },
   setup(props, { emit }) {
     const router = useRouter();
-    const pact = "I am not betraying our sacred pact, Chad bro";
-    const pactRaccourci = "1";
+    const pact = "1";
+    const pactRacc = "I am not betraying our sacred pact, Chad bro";
     const phrase = ref("");
     const dateNow = new Date();
     const loading = ref(true);

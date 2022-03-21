@@ -1,7 +1,7 @@
 <template>
 	<div
 		id="grandiv"
-		class="h-[210px] relative w-full flex flex-col items-center shadow font-bold"
+		class="h-[210px] relative w-full flex flex-col items-center shadow font-bold select-none"
 		style="
 			background-size: 330px;
 			background-repeat: no-repeat;
@@ -9,6 +9,9 @@
 			z-index: 30;
 		"
 	>
+		<button class="absolute top-[75px] right-[96px] text-transparent cursor-help h-4 w-4" @click="kikoue">
+			o
+		</button>
 		<!-- <img
       style="width: 330px; z-index: 30"
       src="../assets/noTearsJustDreams.png"
@@ -60,7 +63,7 @@
 	<div v-if="loading" class="flex justify-center items-center flex-grow">
 		<LoadingSpinner />
 	</div>
-	<div class="overflow-y-auto p-3 flex-grow bg-[#f5c7ee] z-10 tracking-widest" v-else-if="!page">
+	<div class="overflow-y-auto p-3 flex-grow bg-[#f5c7ee] z-10 tracking-widest select-none" v-else-if="!page">
 		<div class="flex flex-col gap-2">
 			<div v-if="addingLink" class="flex">
 				<div class="input border-2 rounded flex-grow font-sans">
@@ -100,7 +103,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="p-5 grow gap-3 bg-[#f5c7ee] z-10 flex flex-col tracking-[.05em]" v-else>
+	<div class="p-5 grow gap-3 bg-[#f5c7ee] z-10 flex flex-col tracking-[.05em] select-none" v-else>
 		<div id="notrepromier" class="flex flex-row grow w-full gap-1 space-x-4">
 			<div class="flex flex-col grow basis-0 border-solid">
 				<h1 class="text-left text-lg font-semibold tracking-wider ml-2">BLOCKING TYPE :</h1>
@@ -218,7 +221,6 @@ export default defineComponent({
 		let nbJours = ref();
 		let randomCatch = ref();
 
-  
 		//determine if ai is filtering
 
 		const aiState = ref();
@@ -333,6 +335,10 @@ export default defineComponent({
 		//MODULE DE CONNECTION DISCORD
 
 		checkLoginStatus();
+
+		function kikoue() {
+			console.log('KIKOUE, TU VEUX VOIR MA');
+		}
 
 		function checkLoginStatus() {
 			chrome.storage.sync.get(['username', 'discordToken'], (data) => {
@@ -485,6 +491,7 @@ export default defineComponent({
 			login,
 			logout,
 			nbJours,
+			kikoue,
 		};
 	},
 });
