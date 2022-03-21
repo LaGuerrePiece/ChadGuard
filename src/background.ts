@@ -5,14 +5,18 @@ fetch(urlUpdate, {
 	method: 'get',
 })
 	.then((res) => {
-		res.json().then((res2) => {
-			let raiponsse = res2;
-			chrome.storage.local.set({ updatedQuotes: raiponsse.quotes });
-			chrome.storage.local.set({ updatedVideos: raiponsse.videos });
-			chrome.storage.local.set({ updatedHomePhrases: raiponsse.homePhrases });
-			chrome.storage.local.set({ updatedDefaultBlocklist: raiponsse.defaultBlocklist });
-			chrome.storage.local.set({ updatedConstants: raiponsse.constants });
-		});
+    if (res.status == 200) {
+      res.json().then((res2) => {
+        let raiponsse = res2;
+        chrome.storage.local.set({ updatedQuotes: raiponsse.quotes });
+        chrome.storage.local.set({ updatedVideos: raiponsse.videos });
+        chrome.storage.local.set({ updatedHomePhrases: raiponsse.homePhrases });
+        chrome.storage.local.set({ defaultBlocklist: raiponsse.blocklist });
+        console.log('raiponsse.defaultBlocklist :', raiponsse.blocklist)
+        chrome.storage.local.set({ updatedConstants: raiponsse.constants });
+        
+      });
+    }
 	})
 	.catch((err) => {
 		console.log('le serveur na pas été atteint. Erreur :', err.message);
@@ -28,7 +32,6 @@ chrome.runtime.onInstalled.addListener(function (details) {
 			.then((json) => MiseAJour(json, defaultBlocklist));
 
 		function MiseAJour(urls: string[], defaultBlocklist: string[]) {
-			console.log(urls);
 			urls.forEach((e) => {
 				defaultBlocklist.push(e);
 			});
