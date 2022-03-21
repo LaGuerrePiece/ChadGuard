@@ -1,19 +1,13 @@
 {
   "name": "CHADGUARD",
   "version": "1.0",
-  "description": "Reveal your inner chad. CHADGUARD keeps you away from porn.",
+  "description": "Reveal your inner chad.",
   "manifest_version": 3,
   "homepage_url": "https://github.com/LaGuerrePiece/ChadGuard",
   "permissions": [
-    "activeTab",
     "storage",
     "identity",
-    "scripting",
-    "tabs",
-    "webRequest",
-    "declarativeNetRequest",
-    "declarativeNetRequestWithHostAccess",
-    "declarativeNetRequestFeedback"
+    "tabs"
   ],
   "icons": {
     "48": "icon48.png"
