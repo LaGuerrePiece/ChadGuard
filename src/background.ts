@@ -1,6 +1,6 @@
 console.log('service worker running');
 
-const urlUpdate = 'http://chadguardpythonanywhere.com/data';
+const urlUpdate = 'http://chadguard.pythonanywhere.com/data';
 fetch(urlUpdate, {
 	method: 'get',
 })

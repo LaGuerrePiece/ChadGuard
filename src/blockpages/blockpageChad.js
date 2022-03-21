@@ -1,23 +1,14 @@
-
 chrome.storage.local.get(['updatedQuotes'], (res) => {
 	let defaultQuotes = [
 		['woups', 'perdu'],
 		['gro', 'pd'],
 		['petio', 'pedo'],
 	];
-	let updatedQuotes = res.updatedQuotes;
-	console.log('updatedQuotes', updatedQuotes);
-	console.log('updatedQuotes[0]', updatedQuotes[0]);
-	if (updatedQuotes) {
-		console.log('dans le chad ');
-		let rand = Math.floor(Math.random() * updatedQuotes.length);
-		document.getElementById('author').innerHTML = updatedQuotes[rand][0];
-		document.getElementById('quote').innerHTML = updatedQuotes[rand][1];
-	} else {
-		let rand2 = Math.floor(Math.random() * quotes.length);
-		document.getElementById('author').innerHTML = quotes[rand2][0];
-		document.getElementById('quote').innerHTML = quotes[rand2][1];
-	}
+	console.log('dans la mierda');
+	let quotes = res.updatedQuotes ?? defaultQuotes;
+	let rand = Math.floor(Math.random() * quotes.length);
+	document.getElementById('author').innerHTML = quotes[rand][0];
+	document.getElementById('quote').innerHTML = quotes[rand][1];
 });
 
 chrome.storage.sync.get(['blockingType'], (res) => {
