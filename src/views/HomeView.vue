@@ -9,7 +9,14 @@
 			z-index: 30;
 		"
 	>
-		<button class="absolute top-[75px] right-[96px] text-transparent cursor-help h-4 w-4" @click="kikoue">
+		<button
+			class="absolute top-[75px] right-[96px] text-transparent h-4 w-4"
+			:class="{
+				'cursor-help': !unlockPink,
+				'cursor-default': unlockPink,
+			}"
+			@click="kikoue"
+		>
 			o
 		</button>
 		<!-- <img
@@ -63,7 +70,10 @@
 	<div v-if="loading" class="flex justify-center items-center flex-grow">
 		<LoadingSpinner />
 	</div>
-	<div class="overflow-y-auto p-3 flex-grow bg-[#f5c7ee] z-10 tracking-widest select-none" v-else-if="!page">
+	<div
+		class="overflow-y-auto p-3 flex-grow bg-[#f5c7ee] z-10 tracking-widest select-none"
+		v-else-if="!page"
+	>
 		<div class="flex flex-col gap-2">
 			<div v-if="addingLink" class="flex">
 				<div class="input border-2 rounded flex-grow font-sans">
@@ -106,13 +116,21 @@
 	<div class="p-5 grow gap-3 bg-[#f5c7ee] z-10 flex flex-col tracking-[.05em] select-none" v-else>
 		<div id="notrepromier" class="flex flex-row grow w-full gap-1 space-x-4">
 			<div class="flex flex-col grow basis-0 border-solid">
-				<h1 class="text-left text-lg font-semibold tracking-wider ml-2">BLOCKING TYPE :</h1>
+				<h1
+					class="text-left text-lg font-semibold tracking-wider ml-2"
+					:class="{
+						'cursor-help': !unlockPink,
+						booncy: unlockPink == 1,
+					}"
+				>
+					BLOCKING TYPE :
+				</h1>
 				<select
 					class="align-middle default-border px-3 py-1 rounded w-full"
 					v-model="blockingTypeSelected"
 				>
 					<option value="0">Chad</option>
-					<option value="1">Chad (pink mode)</option>
+					<option value="1" v-if="unlockPink">Chad (pink mode)</option>
 					<option value="2">Video</option>
 					<option value="3">Auto-Close</option>
 				</select>
@@ -220,6 +238,7 @@ export default defineComponent({
 		let username = ref();
 		let nbJours = ref();
 		let randomCatch = ref();
+		let unlockPink = ref();
 
 		//determine if ai is filtering
 
@@ -318,10 +337,11 @@ export default defineComponent({
 			});
 		}
 
-		chrome.storage.sync.get(['userBlocklist', 'dayElapsed'], (result) => {
-			dayElapsed.value = result.dayElapsed;
-			for (const key in result.userBlocklist) {
-				links.value.push(result.userBlocklist[key]);
+		chrome.storage.sync.get(['userBlocklist', 'dayElapsed', 'unlockPink'], (res) => {
+			dayElapsed.value = res.dayElapsed;
+			unlockPink.value = res.unlockPink ?? false;
+			for (const key in res.userBlocklist) {
+				links.value.push(res.userBlocklist[key]);
 			}
 			jourSingulierPluriel();
 			loading.value = false;
@@ -335,9 +355,13 @@ export default defineComponent({
 		//MODULE DE CONNECTION DISCORD
 
 		checkLoginStatus();
-
+		chrome.storage.sync.get(['unlockPink'], (res) => {
+			unlockPink.value = res.unlockPink ?? false;
+		});
 		function kikoue() {
 			console.log('KIKOUE, TU VEUX VOIR MA');
+			unlockPink.value = 1;
+			chrome.storage.sync.set({ unlockPink: 2 });
 		}
 
 		function checkLoginStatus() {
@@ -492,6 +516,7 @@ export default defineComponent({
 			logout,
 			nbJours,
 			kikoue,
+			unlockPink,
 		};
 	},
 });
@@ -511,6 +536,22 @@ export default defineComponent({
 	}
 	100% {
 		transform: rotate(360deg);
+	}
+}
+
+.booncy {
+	animation: bounce 1s;
+}
+
+@keyframes bounce {
+	0%,
+	100% {
+		transform: translateY(0);
+		animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+	}
+	50% {
+		transform: translateY(-25%);
+		animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
 	}
 }
 </style>
