@@ -216,8 +216,9 @@ export default defineComponent({
 		const discordState = ref();
 		let username = ref();
 		let nbJours = ref();
+		let randomCatch = ref();
 
-    let randomCatch = ref();
+  
 		//determine if ai is filtering
 
 		const aiState = ref();
@@ -444,8 +445,6 @@ export default defineComponent({
 
 		chrome.storage.local.get(['updatedHomePhrases'], (res) => {
 			let updatedHomePhrases = res.updatedHomePhrases;
-			console.log('updatedHomePhrases', updatedHomePhrases);
-			console.log('updatedHomePhrases[0]', updatedHomePhrases[0]);
 			if (updatedHomePhrases) {
 				randomCatch.value =
 					updatedHomePhrases[Math.floor(Math.random() * updatedHomePhrases.length)];
@@ -458,7 +457,6 @@ export default defineComponent({
 					'No tears, just dreams',
 					"We're gonna make it",
 				];
-
 				randomCatch.value = phrases[Math.floor(Math.random() * phrases.length)];
 			}
 		});

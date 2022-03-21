@@ -204,10 +204,10 @@ function PUNISH() {
   chrome.storage.sync.get(["username"], function (data) {
     if (data.username) {
       chrome.runtime.sendMessage({ message: "SendItToDiscord!", username: data.username, url: url});
-      //block();
+      block();
     } else {
       console.log("Triché mais pas connecté !");
-      //block();
+      block();
     }
   });
 }
