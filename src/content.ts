@@ -1,7 +1,6 @@
 console.log("content script running");
 
 const tabUrl = location.href;
-console.log(tabUrl)
 // @ts-expect-error because precise reason
 let model: nsfwjs.NSFWJS;
 
@@ -17,12 +16,11 @@ chrome.storage.sync.get(["userBlocklist", "aiFiltering"], function (result) {
   if (aiFiltering === true) {
     console.log("loading model...");
     chrome.storage.local.get(["updatedConstants"], function (result) {
-      const PORN_THRESHOLD = result.updatedConstants?.pornthreshold ?? 0.1
-      const SEXY_WEIGHT = result.updatedConstants?.sexyweigth ?? 0.1
-      const HENTAI_THRESHOLD = result.updatedConstants?.hentaithreshold ?? 0.1;
-      const WEIGHT_OF_PSCORE_IN_HSCORE = result.updatedConstants?.pscoreweightinhscore ?? 0.1
-      const NUMBER_OF_IMAGES_TO_ANALYZE = result.updatedConstants?.imagestoanalyse ?? 2;
-      console.log(PORN_THRESHOLD, SEXY_WEIGHT, HENTAI_THRESHOLD, WEIGHT_OF_PSCORE_IN_HSCORE, NUMBER_OF_IMAGES_TO_ANALYZE)
+      const PORN_THRESHOLD = result.updatedConstants?.pornthreshold ?? 0.6
+      const SEXY_WEIGHT = result.updatedConstants?.sexyweigth ?? 0.2
+      const HENTAI_THRESHOLD = result.updatedConstants?.hentaithreshold ?? 0.5;
+      const WEIGHT_OF_PSCORE_IN_HSCORE = result.updatedConstants?.pscoreweightinhscore ?? 0.5
+      const NUMBER_OF_IMAGES_TO_ANALYZE = result.updatedConstants?.imagestoanalyse ?? 10;
       // @ts-expect-error because precise reason
       nsfwjs.load().then((loaded) => {
         model = loaded;
@@ -36,7 +34,6 @@ chrome.storage.sync.get(["userBlocklist", "aiFiltering"], function (result) {
     console.log("Page not analysed because aiFiltering = false");
   }
   const userBlocklist: string[] = result.userBlocklist ?? [];
-  console.log("userBlocklist", userBlocklist);
   for (const key in result.userBlocklist) {
     if (tabUrl.includes(result.userBlocklist[key])) PUNISH();
   }
@@ -93,10 +90,8 @@ const analysePage = async (PORN_THRESHOLD: number, SEXY_WEIGHT: number, HENTAI_T
     try {
       await fetch(img.src);
       fetchableImages.push(img);
-      console.log("image poussée");
       if (fetchableImages.length === NUMBER_OF_IMAGES_TO_ANALYZE) break;
     } catch (e: any) {
-      console.log("erreur cors");
       continue;
     }
   }
@@ -107,7 +102,6 @@ const analysePage = async (PORN_THRESHOLD: number, SEXY_WEIGHT: number, HENTAI_T
   console.log(NUMBER_OF_IMAGES_TO_ANALYZE + " biggest fetchables images:", fetchableImages);
 
   const averageWH = (fetchableImages.map(e => e.width).reduce((a, b) => a + b, 0) + fetchableImages.map(e => e.height).reduce((a, b) => a + b, 0))/(2*fetchableImages.length)
-  console.log('averageWH : ', averageWH)
   const promiseArray = fetchableImages.map((img) => {
     return new Promise((resolve, reject) => {
       const image: HTMLImageElement = new Image(img.width, img.height)
@@ -118,19 +112,19 @@ const analysePage = async (PORN_THRESHOLD: number, SEXY_WEIGHT: number, HENTAI_T
   });
 
   Promise.allSettled(promiseArray).then((predictions: PromiseSettledResult<unknown>[]) => {
-    for (let i = 0; i < predictions.length; i++) {
-      // @ts-expect-error promise I will learn ts
-      const prediction: prediction = predictions[i]
-      if (prediction.status === 'fulfilled') {
-        console.log('Image ' + i + ' ' + prediction.status);
-        for (const key in prediction.value) {
-          console.log(prediction.value[key]);
-        }
-      }
-      console.log('pScore : ' + getPScore(prediction, SEXY_WEIGHT))
-      console.log('hScore : ' + getHScore(prediction))
-      console.log(fetchableImages[i]);
-    }
+    // for (let i = 0; i < predictions.length; i++) {
+    //   // @ts-expect-error promise I will learn ts
+    //   const prediction: prediction = predictions[i]
+    //   if (prediction.status === 'fulfilled') {
+    //     console.log('Image ' + i + ' ' + prediction.status);
+    //     for (const key in prediction.value) {
+    //       console.log(prediction.value[key]);
+    //     }
+    //   }
+    //   console.log('pScore : ' + getPScore(prediction, SEXY_WEIGHT))
+    //   console.log('hScore : ' + getHScore(prediction))
+    //   console.log(fetchableImages[i]);
+    // }
     // @ts-expect-error promise I will learn ts
     let pScores = predictions.map(e => getPScore(e, SEXY_WEIGHT))
     // @ts-expect-error promise I will learn ts
