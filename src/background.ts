@@ -67,7 +67,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 			const oneDay = 1000 * 60 * 60 * 24;
 			const oneMin = 1000 * 60;
 			const oneSec = 1000;
-			const dayElapsed = Math.round((Date.now() - startDayCounter) / oneSec);
+			const dayElapsed = Math.round((Date.now() - startDayCounter) / oneDay);
 			// console.log("startDayCounter", new Date(startDayCounter).toLocaleString());
 			// console.log("COUNTER DAY DIFF", dayElapsed);
 			chrome.storage.sync.set({ dayElapsed: dayElapsed });
