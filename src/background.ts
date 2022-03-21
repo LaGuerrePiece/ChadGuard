@@ -1,20 +1,22 @@
 console.log('service worker running');
 
-const urlUpdate = 'http://chadguard.pythonanywhere.com/data';
-console.log('log difficile');
+const urlUpdate = 'http://chadguardpythonanywhere.com/data';
 fetch(urlUpdate, {
 	method: 'get',
-}).then((res) => {
-	res.json().then(res2 => {
-	let raiponsse = res2
-	console.log('raiponsse', raiponsse);
-	chrome.storage.local.set({ updatedQuotes: raiponsse.quotes });
-	chrome.storage.local.set({ updatedVideos: raiponsse.videos });
-	chrome.storage.local.set({ updatedHomePhrases: raiponsse.homePhrases });
-	console.log("raiponsse.homePhrases", raiponsse.homePhrases)
-	chrome.storage.local.set({ updatedDefaultBlocklist: raiponsse.defaultBlocklist  });
-	chrome.storage.local.set({ updatedConstants: raiponsse.constants });
-})});
+})
+	.then((res) => {
+		res.json().then((res2) => {
+			let raiponsse = res2;
+			chrome.storage.local.set({ updatedQuotes: raiponsse.quotes });
+			chrome.storage.local.set({ updatedVideos: raiponsse.videos });
+			chrome.storage.local.set({ updatedHomePhrases: raiponsse.homePhrases });
+			chrome.storage.local.set({ updatedDefaultBlocklist: raiponsse.defaultBlocklist });
+			chrome.storage.local.set({ updatedConstants: raiponsse.constants });
+		});
+	})
+	.catch((err) => {
+		console.log('le serveur na pas été atteint. Erreur :', err.message);
+	});
 
 //Initialisation de la defaultBlocklist :
 chrome.runtime.onInstalled.addListener(function (details) {
@@ -31,9 +33,7 @@ chrome.runtime.onInstalled.addListener(function (details) {
 				defaultBlocklist.push(e);
 			});
 			defaultBlocklist = [...new Set(defaultBlocklist)];
-			chrome.storage.local.set({ defaultBlocklist: defaultBlocklist }, function () {
-				console.log('Value 85 for instance is set to ' + defaultBlocklist[85]);
-			});
+			chrome.storage.local.set({ defaultBlocklist: defaultBlocklist }, function () {});
 		}
 	});
 	if (details.reason == 'install') {
@@ -100,6 +100,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 		fetch(webHookUrl, {
 			method: 'post',
 			body: formData,
-		}).then((e) => console.log(e, formData))
-  }
-})
+		}).then((e) => console.log(e, formData));
+	}
+});

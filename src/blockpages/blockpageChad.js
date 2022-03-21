@@ -1,10 +1,10 @@
-let quotes = [
-	['woups', 'perdu'],
-	['gro', 'pd'],
-	['petio', 'pedo'],
-];
 
 chrome.storage.local.get(['updatedQuotes'], (res) => {
+	let defaultQuotes = [
+		['woups', 'perdu'],
+		['gro', 'pd'],
+		['petio', 'pedo'],
+	];
 	let updatedQuotes = res.updatedQuotes;
 	console.log('updatedQuotes', updatedQuotes);
 	console.log('updatedQuotes[0]', updatedQuotes[0]);
