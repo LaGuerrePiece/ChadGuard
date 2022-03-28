@@ -19,11 +19,6 @@
 		>
 			o
 		</button>
-		<!-- <img
-      style="width: 330px; z-index: 30"
-      src="../assets/noTearsJustDreams.png"
-      class="mx-auto pl-3"
-    /> -->
 		<div class="flex flex-col flex-grow self-start justify-center" style="padding-left: 25px">
 			<div class="text-6xl logo">ChadGuard</div>
 			<div class="text-2xl">{{ randomCatch }}</div>
@@ -82,6 +77,7 @@
 						class="w-full h-full bg-transparent px-3 py-1 outline-none text-center"
 						v-model="addingLinkValue"
 						v-on:keyup.enter="addLink(addingLinkValue)"
+						v-click-outside="addLink(addingLinkValue)"
 						ref="addInput"
 					/>
 				</div>
@@ -117,7 +113,7 @@
 		<div id="notrepromier" class="flex flex-row grow w-full gap-1 space-x-4">
 			<div class="flex flex-col grow basis-0 border-solid">
 				<h1
-					class="text-left text-lg font-semibold tracking-wider ml-2"
+					class="text-left text-lg font-semibold tracking-wider ml-2 cursor-default"
 					:class="{
 						'cursor-help': !unlockPink,
 						booncy: unlockPink == 1,
@@ -181,8 +177,7 @@
 					<button class="default-button grow basis-0 h-[35px]" v-on:click="logout()">
 						DISCONNECT
 					</button>
-					<button class="default-button grow basis-0 opacity-0"></button>
-					<!-- <div class="grow basis-0"></div> -->
+					<button class="default-button grow basis-0 opacity-0 cursor-default"></button>
 				</div>
 			</div>
 		</div>
@@ -193,8 +188,7 @@
 					<button class="default-button grow basis-0 h-[35px]" v-on:click="login()">
 						Connect
 					</button>
-					<button class="default-button grow basis-0 opacity-0"></button>
-					<!-- <div class="grow basis-0"></div> -->
+					<button class="default-button grow basis-0 opacity-0 cursor-default"></button>
 				</div>
 			</div>
 		</div>
@@ -241,23 +235,19 @@ export default defineComponent({
 		let unlockPink = ref();
 
 		//determine if ai is filtering
-
 		const aiState = ref();
 		chrome.storage.sync.get(['aiFiltering'], (result) => {
 			aiState.value = result.aiFiltering;
 		});
-
 		watch(aiState, () => {
 			chrome.storage.sync.set({ aiFiltering: aiState.value });
 		});
 
 		//determine the blockingType
-
 		const blockingTypeSelected = ref();
 		chrome.storage.sync.get(['blockingType'], (result) => {
 			blockingTypeSelected.value = result.blockingType;
 		});
-
 		watch(blockingTypeSelected, () => {
 			chrome.storage.sync.set({
 				blockingType: parseInt(blockingTypeSelected.value, 10),
@@ -274,7 +264,6 @@ export default defineComponent({
 				dayCounterState.value = 'false';
 			}
 		});
-
 		watch(dayCounterState, () => {
 			if (dayCounterState.value == 'true') {
 				chrome.storage.sync.set({ dayCounter: true });
@@ -285,9 +274,9 @@ export default defineComponent({
 			chrome.runtime.sendMessage({ greeting: 'refreshDayCounter' });
 		});
 
-		watch(username, () => {
-			if (username.value) chrome.storage.sync.set({ username: username.value });
-		});
+		// watch(username, () => {
+		// 	if (username.value) chrome.storage.sync.set({ username: username.value });
+		// });
 
 		const setPageBlocklistOrSettings = (b: boolean) => {
 			page.value = b;
@@ -390,7 +379,7 @@ export default defineComponent({
 				if (xhr.readyState === 4) {
 					let usernameResponse = JSON.parse(xhr.responseText).username;
 					if (usernameResponse === undefined) return;
-					// chrome.storage.sync.set({ username: usernameResponse });
+					chrome.storage.sync.set({ username: usernameResponse });
 					username.value = usernameResponse;
 				}
 			};
@@ -540,7 +529,8 @@ export default defineComponent({
 }
 
 .booncy {
-	animation: bounce 1s;
+	animation: bounce 0.7s 3;
+	transition-timing-function: ease-out;
 }
 
 @keyframes bounce {

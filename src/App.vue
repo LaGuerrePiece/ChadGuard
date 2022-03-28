@@ -11,6 +11,9 @@
 import { defineComponent, ref } from "vue";
 import TheFAQ from "@/components/TheFAQ.vue";
 import "@/assets/tailwind.css";
+import Lottie from '@/components/lottie.vue';
+import * as animationData from './assets/final.json';
+
 
 export default defineComponent({
   components: {
