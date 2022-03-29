@@ -77,7 +77,6 @@
 						class="w-full h-full bg-transparent px-3 py-1 outline-none text-center"
 						v-model="addingLinkValue"
 						v-on:keyup.enter="addLink(addingLinkValue)"
-						v-click-outside="addLink(addingLinkValue)"
 						ref="addInput"
 					/>
 				</div>
@@ -119,7 +118,7 @@
 						booncy: unlockPink == 1,
 					}"
 				>
-					BLOCKING TYPE :
+					BLOCKING PAGE :
 				</h1>
 				<select
 					class="align-middle default-border px-3 py-1 rounded w-full"
@@ -284,6 +283,7 @@ export default defineComponent({
 
 		const toggleFaq = () => {
 			emit('toggleFaq');
+			chrome.storage.sync.set({ lastPactDate: Date.now() });
 		};
 
 		const addLink = (url: string) => {
@@ -291,6 +291,7 @@ export default defineComponent({
 			console.log(links.value);
 			addingLinkValue.value = '';
 			setAddingLink(false);
+			chrome.storage.sync.set({ lastPactDate: Date.now() });
 		};
 
 		const removeLink = (url: string) => {
@@ -298,6 +299,7 @@ export default defineComponent({
 			if (index !== -1) {
 				links.value.splice(index, 1);
 			}
+			chrome.storage.sync.set({ lastPactDate: Date.now() });
 		};
 
 		const editLink = (index: number, event: KeyboardEvent) => {
@@ -350,10 +352,11 @@ export default defineComponent({
 		function kikoue() {
 			console.log('KIKOUE, TU VEUX VOIR MA');
 			unlockPink.value = 1;
-			chrome.storage.sync.set({ unlockPink: 2 });
+			chrome.storage.sync.set({ unlockPink: 2, lastPactDate: Date.now() });
 		}
 
 		function checkLoginStatus() {
+			chrome.storage.sync.set({ lastPactDate: Date.now() });
 			chrome.storage.sync.get(['username', 'discordToken'], (data) => {
 				if (data.discordToken) {
 					if (!data.username) {
@@ -529,7 +532,7 @@ export default defineComponent({
 }
 
 .booncy {
-	animation: bounce 0.7s 3;
+	animation: bounce 0.7s 5;
 	transition-timing-function: ease-out;
 }
 
