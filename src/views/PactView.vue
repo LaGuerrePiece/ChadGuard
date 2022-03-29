@@ -31,7 +31,7 @@
 				z-index: 1;
 			"
 		>
-			<img src="../assets/loli7.png" style="height: 100%; opacity: 0.35" />
+			<img src="../assets/petikokin.png" style="height: 100%; opacity: 0.35" />
 		</div>
 		<div v-if="loading" class="flex justify-center items-center flex-grow w-full">
 			<LoadingSpinner />

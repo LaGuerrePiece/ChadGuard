@@ -66,7 +66,7 @@
 		<LoadingSpinner />
 	</div>
 	<div
-		class="overflow-y-auto p-3 flex-grow bg-[#f5c7ee] z-10 tracking-widest select-none"
+		class="overflow-y-auto p-3 h-[19.8rem] bg-[#f5c7ee] z-10 tracking-widest select-none"
 		v-else-if="!page"
 	>
 		<div class="flex flex-col gap-2">
@@ -76,6 +76,7 @@
 						type="text"
 						class="w-full h-full bg-transparent px-3 py-1 outline-none text-center"
 						v-model="addingLinkValue"
+						v-on:blur="addLink(addingLinkValue)"
 						v-on:keyup.enter="addLink(addingLinkValue)"
 						ref="addInput"
 					/>
@@ -98,6 +99,7 @@
 						type="text"
 						:value="link"
 						class="w-full h-full bg-transparent blur-sm hover:blur-none transition-all duration-500 px-3 py-1 outline-none text-center"
+						v-on:blur="editLink(index, $event)"
 						v-on:keyup.enter="editLink(index, $event)"
 					/>
 				</div>
@@ -287,6 +289,7 @@ export default defineComponent({
 		};
 
 		const addLink = (url: string) => {
+			if (url.length < 1) return;
 			links.value.unshift(url);
 			console.log(links.value);
 			addingLinkValue.value = '';
@@ -302,7 +305,7 @@ export default defineComponent({
 			chrome.storage.sync.set({ lastPactDate: Date.now() });
 		};
 
-		const editLink = (index: number, event: KeyboardEvent) => {
+		const editLink = (index: number, event: KeyboardEvent | FocusEvent) => {
 			const value = (event.target as HTMLInputElement).value;
 			links.value[index] = value;
 		};
