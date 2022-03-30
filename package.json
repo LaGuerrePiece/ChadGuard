@@ -12,6 +12,7 @@
     "browserify-zlib": "^0.2.0",
     "core-js": "^3.8.3",
     "lottie-web": "^5.9.1",
+    "lottie-web-vue": "^2.0.6",
     "nsfwjs": "2.4.1",
     "path-browserify": "^1.0.1",
     "register-service-worker": "^1.7.2",
@@ -45,7 +46,8 @@
     "sass": "^1.32.7",
     "sass-loader": "^12.0.0",
     "tailwindcss": "^3.0.23",
-    "typescript": "~4.5.5"
+    "typescript": "~4.5.5",
+    "vue3-popper": "^1.4.2"
   },
   "eslintConfig": {
     "root": true,

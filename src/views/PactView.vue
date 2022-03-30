@@ -2,15 +2,15 @@
 	<div class="flex flex-col flex-grow gap-3 mt-6 select-none">
 		<div class="text-6xl logo z-10" id="svg">CHADGUARD</div>
 		<div class="mx-auto z-10 h-72">
-			<div class="fixed top-14 left-4">
-				<Vue3Lottie
-					ref="anima"
+			<div class="relative -top-12">
+				<lottie-animation
+					ref="anim"
 					:animationData="wink"
-					:height="'150%'"
-					:width="'150%'"
-					:autoPlay="false"
 					:loop="false"
-					:pauseOnHover="true"
+					:autoPlay="false"
+					@loopComplete="loopComplete"
+					@complete="complete"
+					@enterFrame="enterFrame"
 				/>
 			</div>
 		</div>
@@ -65,13 +65,12 @@ import TheFooter from '@/components/TheFooter.vue';
 import { useRouter } from 'vue-router';
 import LoadingSpinner from '@/components/LoadingSpinner.vue';
 import wink from '../assets/wink.json';
-import { Vue3Lottie } from 'vue3-lottie';
+
 
 export default defineComponent({
 	components: {
 		LoadingSpinner,
 		TheFooter,
-		Vue3Lottie,
 	},
 	setup(props, { emit }) {
 		const router = useRouter();
@@ -80,14 +79,13 @@ export default defineComponent({
 		const phrase = ref('');
 		const dateNow = new Date();
 		const loading = ref(true);
-		const anima = ref();
 
 		// VERIFIE SI C'EST LA PREMIERE VISITE OU SI L'UTILISATEUR A ENTRE LE MDP IL Y A - DE 2 MIN POUR SKIP
 
 		chrome.storage.sync.get(['lastPactDate', 'visitCount'], (result) => {
 			let lastPactDate = result.lastPactDate;
 			let dateNow = Date.now();
-			if (dateNow - lastPactDate < 1200) {
+			if (dateNow - lastPactDate < 120) {
 				chrome.storage.sync.set({ lastPactDate: dateNow });
 				router.push('/home');
 			}
@@ -111,27 +109,38 @@ export default defineComponent({
 			emit('toggleFaq');
 		};
 
+		const anim = ref();
+		
+		const loopComplete = () => {
+		};
+
+		const complete = () => {
+			router.push('/home');
+		};
+
+		const enterFrame = () => {
+		};
+
 		onMounted(() => {
-			console.log(`the component is now mounted.`);
-
-			console.log('anima', anima);
-			console.log('anima.value', anima.value);
-			console.log('anima.value.TEST', anima.value._.propsOptions);
-			// anima.value.propsOptions.stop();
-			// anima.value.propsOptions.pause();
-
 			watch(phrase, () => {
 				if (phrase.value.toLowerCase() === pact.toLowerCase()) {
 					chrome.storage.sync.set({ lastPactDate: Date.now() });
-					// anima.value.propsOptions.play();
-					setTimeout(() => {
-						router.push('/home');
-					}, 1200);
+					anim.value.play();
 				}
 			});
 		});
 
-		return { phrase, pact, toggleFaq, loading, wink, anima };
+		return {
+			phrase,
+			pact,
+			toggleFaq,
+			loading,
+			wink,
+			anim,
+			complete,
+			enterFrame,
+			loopComplete,
+		};
 	},
 });
 </script>

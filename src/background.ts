@@ -12,7 +12,7 @@ fetch(urlUpdate, {
         chrome.storage.local.set({ updatedVideos: raiponsse.videos });
         chrome.storage.local.set({ updatedHomePhrases: raiponsse.homePhrases });
         chrome.storage.local.set({ defaultBlocklist: raiponsse.blocklist });
-        console.log('raiponsse.defaultBlocklist :', raiponsse.blocklist)
+        // console.log('raiponsse.defaultBlocklist :', raiponsse.blocklist)
         chrome.storage.local.set({ updatedConstants: raiponsse.constants });
         
       });
