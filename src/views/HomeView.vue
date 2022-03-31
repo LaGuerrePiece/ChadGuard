@@ -10,7 +10,7 @@
 		"
 	>
 		<button
-			class="absolute top-[75px] right-[96px] text-transparent h-4 w-4"
+			class="absolute top-[63px] right-[68px] text-transparent h-14 w-14"
 			:class="{
 				'cursor-help': !unlockPink,
 				'cursor-default': unlockPink,
@@ -144,7 +144,11 @@
 			</div>
 		</div>
 		<div id="displayDayCounter" class="flex flex-row grow w-full gap-1 space-x-4">
-			<div class="flex flex-col w-6/12">
+			<div class="flex flex-col w-6/12 tooltip">
+				<span v-if="visitCount < 3" class="tooltiptext"
+					>This counter counts the days since you installed ChadGuard. <br />It is reset
+					when you press the reset button or disable the extension.</span
+				>
 				<h1 class="text-left text-lg font-semibold tracking-wider ml-2">DAY COUNTER :</h1>
 				<select
 					class="align-middle default-border px-3 py-1 rounded w-full"
@@ -234,6 +238,7 @@ export default defineComponent({
 		let nbJours = ref();
 		let randomCatch = ref();
 		let unlockPink = ref();
+		let visitCount = ref();
 
 		//determine if ai is filtering
 		const aiState = ref();
@@ -473,6 +478,10 @@ export default defineComponent({
 			}
 		});
 
+		chrome.storage.sync.get(['visitCount'], (result) => {
+			visitCount.value = result.visitCount;
+		});
+
 		return {
 			loading,
 			page,
@@ -499,6 +508,7 @@ export default defineComponent({
 			nbJours,
 			kikoue,
 			unlockPink,
+			visitCount,
 		};
 	},
 });
@@ -508,16 +518,51 @@ export default defineComponent({
 	background: url('../assets/noTearsJustDreams.png');
 }
 
-.rotate {
-	animation: rotation 90s infinite linear;
+/* Tooltip container */
+.tooltip {
+	position: relative;
+	display: inline-block;
 }
 
-@keyframes rotation {
-	0% {
-		transform: rotate(0deg);
-	}
-	100% {
-		transform: rotate(360deg);
-	}
+/* Tooltip text */
+.tooltip .tooltiptext {
+	visibility: hidden;
+	width: 260px;
+	bottom: 105%;
+	left: 50%;
+	margin-left: -90px; /* Use half of the width (120/2 = 60), to center the tooltip */
+	background-color: #f0a6e4;
+	color: black;
+	text-align: center;
+	padding: 5px;
+	border-radius: 1rem;
+	border-width: 2px;
+	border-color: black;
+
+	font-size: 0.8rem;
+	letter-spacing: 0em;
+	font-weight: 600;
+	font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+		'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+		'Segoe UI Symbol', 'Noto Color Emoji';
+	/* Position the tooltip text - see examples below! */
+	position: absolute;
+	z-index: 1;
+}
+
+.tooltip .tooltiptext::after {
+	content: '';
+	position: absolute;
+	top: 103%;
+	left: 20%;
+	margin-left: -5px;
+	border-width: 5px;
+	border-style: solid;
+	border-color: #000000 transparent transparent transparent;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+	visibility: visible;
 }
 </style>
