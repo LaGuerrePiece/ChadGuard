@@ -7,35 +7,56 @@ let model: nsfwjs.NSFWJS;
 chrome.storage.local.get(["defaultBlocklist"], function (result) {
   const defaultBlocklist: string[] = result.defaultBlocklist ?? [];
   if (defaultBlocklist.some((e) => tabUrl.includes(e))) {
-    PUNISH();
+    //PUNISH();
   }
 })
+
+
+//Time measurement :
+var startTime: number, loadTime: number, endTime: number;
+
+// nsfwjs.load().then((model) => {
+//   chrome.storage.local.set({ model });
+// });
 
 chrome.storage.sync.get(["userBlocklist", "aiFiltering"], function (result) {
   const aiFiltering: boolean = result.aiFiltering ?? false;
   if (aiFiltering === true) {
-    console.log("loading model...");
-    chrome.storage.local.get(["updatedConstants"], function (result) {
+    chrome.storage.local.get(["updatedConstants"], async function (result) {
       const PORN_THRESHOLD = result.updatedConstants?.pornthreshold ?? 0.6
       const SEXY_WEIGHT = result.updatedConstants?.sexyweigth ?? 0.2
       const HENTAI_THRESHOLD = result.updatedConstants?.hentaithreshold ?? 0.5;
       const WEIGHT_OF_PSCORE_IN_HSCORE = result.updatedConstants?.pscoreweightinhscore ?? 0.5
       const NUMBER_OF_IMAGES_TO_ANALYZE = result.updatedConstants?.imagestoanalyse ?? 10;
+
+      const modelUrl = chrome.runtime.getURL('./quant_nsfw_mobilenet/');
+      console.log("loading model...");
+      
       // @ts-expect-error because precise reason
-      nsfwjs.load().then((loaded) => {
+      startTime = new Date();
+
+      //@ts-expect-error because precise reason
+      nsfwjs.load(modelUrl).then((loaded) => {
+        //console.log("loaded from indexeddb");
         model = loaded;
+        // @ts-expect-error because precise reason
+        loadTime = new Date();
+        var timeDiff = loadTime - startTime; //in ms
+        timeDiff /= 1000;
+        console.log(timeDiff + " seconds to load model");
+  
         console.log("Loaded nsfwjs model");
         console.log("Getting predictions and score...");
         analysePage(PORN_THRESHOLD, SEXY_WEIGHT, HENTAI_THRESHOLD, WEIGHT_OF_PSCORE_IN_HSCORE, NUMBER_OF_IMAGES_TO_ANALYZE);
-
-      })
+      });
     });
   } else {
     console.log("Page not analysed because aiFiltering = false");
   }
+
   const userBlocklist: string[] = result.userBlocklist ?? [];
   for (const key in result.userBlocklist) {
-    if (tabUrl.includes(result.userBlocklist[key])) PUNISH();
+    //if (tabUrl.includes(result.userBlocklist[key])) PUNISH();
   }
 });
 
@@ -43,8 +64,6 @@ interface ImagePixel {
   element: HTMLImageElement;
   pixels: number;
 }
-
-
 
 const analysePage = async (PORN_THRESHOLD: number, SEXY_WEIGHT: number, HENTAI_THRESHOLD: number, WEIGHT_OF_PSCORE_IN_HSCORE: number, NUMBER_OF_IMAGES_TO_ANALYZE: number) => {
   console.log(`Starting to analyse page...`);
@@ -59,7 +78,6 @@ const analysePage = async (PORN_THRESHOLD: number, SEXY_WEIGHT: number, HENTAI_T
     img.width = img.clientWidth;
     img.height = img.clientHeight;
     //console.log('i', i, 'width', imgs[i].width, 'height', imgs[i].height, img)
-    //console.log('last 3 chars of src : ', img.src.slice(-3))
 
     //----------------------------------THE GREAT FILTERS--------------------------------------//
 
@@ -80,9 +98,8 @@ const analysePage = async (PORN_THRESHOLD: number, SEXY_WEIGHT: number, HENTAI_T
     if (a.pixels === b.pixels) return 0;
     return a.pixels > b.pixels ? -1 : 1;
   });
-  //imagePixelArray.forEach(e => console.log(e))
-  let imageArray = imagePixelArray.map((e) => e.element);
 
+  let imageArray = imagePixelArray.map((e) => e.element);
   let fetchableImages: HTMLImageElement[] = [];
 
   for (let i = 0; i < imageArray.length; i++) {
@@ -99,7 +116,7 @@ const analysePage = async (PORN_THRESHOLD: number, SEXY_WEIGHT: number, HENTAI_T
     console.log('No image worth analysing.')
     return
   }
-  console.log(NUMBER_OF_IMAGES_TO_ANALYZE + " biggest fetchables images:", fetchableImages);
+  console.log(NUMBER_OF_IMAGES_TO_ANALYZE, " biggest fetchables images:", fetchableImages);
 
   const averageWH = (fetchableImages.map(e => e.width).reduce((a, b) => a + b, 0) + fetchableImages.map(e => e.height).reduce((a, b) => a + b, 0))/(2*fetchableImages.length)
   const promiseArray = fetchableImages.map((img) => {
@@ -111,7 +128,8 @@ const analysePage = async (PORN_THRESHOLD: number, SEXY_WEIGHT: number, HENTAI_T
     });
   });
 
-  Promise.allSettled(promiseArray).then((predictions: PromiseSettledResult<unknown>[]) => {
+  // @ts-expect-error --- I promise I will learn more ts later
+  Promise.allSettled(promiseArray).then((predictions: values[]) => {
     // for (let i = 0; i < predictions.length; i++) {
     //   // @ts-expect-error promise I will learn ts
     //   const prediction: prediction = predictions[i]
@@ -125,9 +143,8 @@ const analysePage = async (PORN_THRESHOLD: number, SEXY_WEIGHT: number, HENTAI_T
     //   console.log('hScore : ' + getHScore(prediction))
     //   console.log(fetchableImages[i]);
     // }
-    // @ts-expect-error promise I will learn ts
+
     let pScores = predictions.map(e => getPScore(e, SEXY_WEIGHT))
-    // @ts-expect-error promise I will learn ts
     let hScores = predictions.map(e => getHScore(e))
 
     //Weight by image size :
@@ -153,6 +170,12 @@ const analysePage = async (PORN_THRESHOLD: number, SEXY_WEIGHT: number, HENTAI_T
     } else {
       console.log("All seems fine.");
     }
+
+    // @ts-expect-error because precise reason
+    endTime = new Date();
+    var timeDiff2 = endTime - loadTime; //in ms
+    timeDiff2 /= 1000;
+    console.log(timeDiff2 + " seconds to analyse images");
   })
 };
 
@@ -198,10 +221,10 @@ function PUNISH() {
   chrome.storage.sync.get(["username"], function (data) {
     if (data.username) {
       chrome.runtime.sendMessage({ message: "SendItToDiscord!", username: data.username, url: url});
-      block();
+      //block();
     } else {
       console.log("Triché mais pas connecté !");
-      block();
+      //block();
     }
   });
 }
