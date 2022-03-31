@@ -11,9 +11,6 @@
 import { defineComponent, ref } from "vue";
 import TheFAQ from "@/components/TheFAQ.vue";
 import "@/assets/tailwind.css";
-import Lottie from '@/components/lottie.vue';
-import * as animationData from './assets/final.json';
-
 
 export default defineComponent({
   components: {
@@ -132,4 +129,22 @@ input::placeholder {
 select {
   @apply text-lg;
 }
+
+.booncy {
+	animation: bounce 0.7s 5;
+	transition-timing-function: ease-out;
+}
+
+@keyframes bounce {
+	0%,
+	100% {
+		transform: translateY(0);
+		animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+	}
+	50% {
+		transform: translateY(-25%);
+		animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+	}
+}
+
 </style>

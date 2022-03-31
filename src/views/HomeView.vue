@@ -392,19 +392,6 @@ export default defineComponent({
 			xhr.send();
 		}
 
-		//ANCIENNE LOGIQUE DE CONNEXION :
-
-		// const button = document.getElementById("BOUTON CONNEXION")
-		//   button.addEventListener("click", function () {
-		//     chrome.storage.sync.get(["discordToken"], function (data) {
-		//       if ("discordToken" in data) {
-		//         logout();
-		//       } else {
-		//         login();
-		//       }
-		//     });
-		//   });
-
 		function login() {
 			var url =
 				'https://discordapp.com/api/oauth2/authorize?client_id=945674310461313087&redirect_uri=' +
@@ -531,23 +518,6 @@ export default defineComponent({
 	}
 	100% {
 		transform: rotate(360deg);
-	}
-}
-
-.booncy {
-	animation: bounce 0.7s 5;
-	transition-timing-function: ease-out;
-}
-
-@keyframes bounce {
-	0%,
-	100% {
-		transform: translateY(0);
-		animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
-	}
-	50% {
-		transform: translateY(-25%);
-		animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
 	}
 }
 </style>

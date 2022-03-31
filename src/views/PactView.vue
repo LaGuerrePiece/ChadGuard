@@ -85,7 +85,7 @@ export default defineComponent({
 		chrome.storage.sync.get(['lastPactDate', 'visitCount'], (result) => {
 			let lastPactDate = result.lastPactDate;
 			let dateNow = Date.now();
-			if (dateNow - lastPactDate < 120) {
+			if (dateNow - lastPactDate < 180000) {
 				chrome.storage.sync.set({ lastPactDate: dateNow });
 				router.push('/home');
 			}
@@ -112,6 +112,7 @@ export default defineComponent({
 		const anim = ref();
 		
 		const loopComplete = () => {
+			// console.log('loopComplete')
 		};
 
 		const complete = () => {
@@ -119,6 +120,7 @@ export default defineComponent({
 		};
 
 		const enterFrame = () => {
+			// console.log(enterFrame)
 		};
 
 		onMounted(() => {
