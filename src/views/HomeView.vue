@@ -344,7 +344,6 @@ export default defineComponent({
 		const addLink = (url: string) => {
 			if (url.length < 1) return;
 			links.value.unshift(url);
-			console.log(links.value);
 			addingLinkValue.value = '';
 			setAddingLink(false);
 			chrome.storage.sync.set({ lastPactDate: Date.now() });
@@ -456,7 +455,6 @@ export default defineComponent({
 
 		function logout() {
 			chrome.storage.sync.remove(['discordToken', 'username'], function () {
-				console.log('Déconnexion');
 				discordState.value = 'false';
 				checkLoginStatus();
 			});

@@ -27,7 +27,7 @@
     "js": ["nsfwjsmin2.js", "content.js"]
   }],
   "web_accessible_resources": [{
-    "resources": ["blockpages/blockpageChad.html", "blockpages/blockpageVideo.html", "nsfw-filter-models/*"],
+    "resources": ["blockpages/Stop_And_Reflect.html", "blockpages/Stop_And_Refocus.html", "nsfw-filter-models/*"],
     "matches": ["<all_urls>"]
   }]
 }

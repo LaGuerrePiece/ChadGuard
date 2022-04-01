@@ -121,7 +121,6 @@ const analysePage = async (PORN_THRESHOLD: number, SEXY_WEIGHT: number, HENTAI_T
     let hScore = hScores.reduce((a, b) => a + b, 0)/hScores.length
     hScore += pScore*WEIGHT_OF_PSCORE_IN_HSCORE
     if (pScore > PORN_THRESHOLD) {
-      console.log("azeaze")
       PUNISH();
     } else if (hScore > HENTAI_THRESHOLD){
       PUNISH();
@@ -178,13 +177,13 @@ function block() {
       location.replace(
         "chrome-extension://" +
           chrome.runtime.id +
-          "/blockpages/blockpageChad.html"
+          "/blockpages/Stop_And_Reflect.html"
       );
     } else if (result.blockingType === 2) {
       location.replace(
         "chrome-extension://" +
           chrome.runtime.id +
-          "/blockpages/blockpageVideo.html"
+          "/blockpages/Stop_And_Refocus.html"
       );
     } else if (result.blockingType === 3) {
       chrome.runtime.sendMessage({ message: "closeIt" });
