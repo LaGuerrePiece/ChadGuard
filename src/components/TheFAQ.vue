@@ -16,9 +16,8 @@
 			<h3 class="reponse">
 				ChadGuard's role is to put more steps between you and websites you want to avoid.
 				Ultimately, it's just a helper tool and rely on an underlying decision.<br /><br />
-				On first use, we recommend you go to your history and add any website you want to
-				avoid in the block site. Then, delete them from your history. You can also try and
-				think of any other website to ban. <br/><br/>We strongly advocate you allow ChadGuard to run
+				ChadGuard comes with a list of 1000+ blocked adult sites. Nonetheless, we recommend that on first use, you go to your history and add any website you want to
+				avoid in the block site.<br/><br/>We strongly advocate you allow ChadGuard to run
 				in Incognito mode.
 			</h3>
 
