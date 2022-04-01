@@ -14,12 +14,6 @@
 				/>
 			</div>
 		</div>
-
-		<!-- <img
-			style="width: 250px"
-			src="../assets/thereIsNoNeedToBeUpset.png"
-			class="mx-auto pl-3 z-10"
-		/> -->
 		<div
 			class="rotate"
 			style="
@@ -42,11 +36,6 @@
 				“<span class="select-none">{{ pact }}</span
 				>”
 			</p>
-			<!-- <div class="z-1000 min-w-full min-h-full" >
-        <button id="svg" @click="foutre()">
-          get started
-        </button>
-      </div> -->
 			<input
 				type="text"
 				class="h-full mx-8 px-3 py-1 mb-2 border-2 bg-[#A1B5F6] text-lg rounded-md outline-none default-border"
@@ -91,11 +80,11 @@ export default defineComponent({
 			}
 
 			if (result.visitCount === 0) {
-				console.log('Première visite');
+				// console.log('Première visite');
 				chrome.storage.sync.set({ lastPactDate: Date.now() });
 				router.push('/home');
 			} else {
-				console.log('Visite numero', result.visitCount + 1);
+				// console.log('Visite numero', result.visitCount + 1);
 			}
 			let visitCountInc = result.visitCount + 1;
 			chrome.storage.sync.set({ visitCount: visitCountInc });
