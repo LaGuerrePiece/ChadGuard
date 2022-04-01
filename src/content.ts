@@ -10,7 +10,7 @@ chrome.storage.local.get(["defaultBlocklist"], function (result) {
 })
 
 chrome.storage.sync.get(["userBlocklist", "aiFiltering", "dayCounter"], function (result) {
-  if (result.aiFiltering == 'true') {
+  if (result.aiFiltering == true) {
     chrome.storage.local.get(["updatedConstants"], function (result) {
       const PORN_THRESHOLD = result.updatedConstants?.pornthreshold ?? 0.6
       const SEXY_WEIGHT = result.updatedConstants?.sexyweigth ?? 0.2

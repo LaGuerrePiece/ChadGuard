@@ -1,7 +1,7 @@
 {
-  "name": "CHADGUARD",
-  "version": "1.0",
-  "description": "Reveal your inner chad.",
+  "name": "ChadGuard",
+  "version": "1.0.0",
+  "description": "Reveal your inner chad with ChadGuard, an AI powered website blocker.",
   "manifest_version": 3,
   "homepage_url": "https://github.com/LaGuerrePiece/ChadGuard",
   "permissions": [

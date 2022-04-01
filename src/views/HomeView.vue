@@ -268,6 +268,13 @@ export default defineComponent({
 						dayCounterState.value = 'false';
 					}
 
+					if (aiState.value == true) {
+						aiState.value = 'true';
+					}
+					if (aiState.value == false) {
+						aiState.value = 'false';
+					}
+
 					for (const key in result.userBlocklist) {
 						links.value.push(result.userBlocklist[key]);
 					}
