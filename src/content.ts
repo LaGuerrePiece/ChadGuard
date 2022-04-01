@@ -10,12 +10,8 @@ chrome.storage.local.get(["defaultBlocklist"], function (result) {
 })
 
 chrome.storage.sync.get(["userBlocklist", "aiFiltering", "dayCounter"], function (result) {
-  if (result.dayCounter) {
-    chrome.runtime.sendMessage({ greeting: "refreshDayCounter" });
-  }
-  const aiFiltering: boolean = result.aiFiltering ?? false;
-  if (aiFiltering === true) {
-    chrome.storage.local.get(["updatedConstants"], async function (result) {
+  if (result.aiFiltering == 'true') {
+    chrome.storage.local.get(["updatedConstants"], function (result) {
       const PORN_THRESHOLD = result.updatedConstants?.pornthreshold ?? 0.6
       const SEXY_WEIGHT = result.updatedConstants?.sexyweigth ?? 0.2
       const HENTAI_THRESHOLD = result.updatedConstants?.hentaithreshold ?? 0.5;
@@ -32,12 +28,15 @@ chrome.storage.sync.get(["userBlocklist", "aiFiltering", "dayCounter"], function
     });
   } else {
     //Page not analysed because aiFiltering = false
-    console.log('Page not analysed because aiFiltering = false')
   }
 
   const userBlocklist: string[] = result.userBlocklist ?? [];
   for (const key in result.userBlocklist) {
     if (tabUrl.includes(result.userBlocklist[key])) PUNISH();
+  }
+
+  if (result.dayCounter) {
+    chrome.runtime.sendMessage({ greeting: "refreshDayCounter" });
   }
 });
 
