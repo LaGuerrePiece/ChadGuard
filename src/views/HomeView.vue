@@ -319,7 +319,12 @@ export default defineComponent({
 			});
 
 			watch(aiState, () => {
-				chrome.storage.sync.set({ aiFiltering: aiState.value });
+				if (aiState.value == 'true') {
+					chrome.storage.sync.set({ aiFiltering: true });
+				}
+				if (aiState.value == 'false') {
+					chrome.storage.sync.set({ aiFiltering: false });
+				}
 			});
 
 			watch(blockingTypeSelected, () => {
