@@ -31,7 +31,8 @@ chrome.storage.sync.get(["userBlocklist", "aiFiltering", "dayCounter"], function
       });
     });
   } else {
-    console.log("Page not analysed because aiFiltering = false");
+    //Page not analysed because aiFiltering = false
+    console.log('Page not analysed because aiFiltering = false')
   }
 
   const userBlocklist: string[] = result.userBlocklist ?? [];
@@ -90,11 +91,10 @@ const analysePage = async (PORN_THRESHOLD: number, SEXY_WEIGHT: number, HENTAI_T
     }
   }
   if (fetchableImages.length === 0) {
-    console.log('No image worth analysing.')
+    //No image worth analysing.
     return
   }
-  console.log(NUMBER_OF_IMAGES_TO_ANALYZE, " biggest fetchables images:", fetchableImages);
-
+  
   const averageWH = (fetchableImages.map(e => e.width).reduce((a, b) => a + b, 0) + fetchableImages.map(e => e.height).reduce((a, b) => a + b, 0))/(2*fetchableImages.length)
   const promiseArray = fetchableImages.map((img) => {
     return new Promise((resolve, reject) => {
@@ -121,14 +121,10 @@ const analysePage = async (PORN_THRESHOLD: number, SEXY_WEIGHT: number, HENTAI_T
     let pScore = pScores.reduce((a, b) => a + b, 0)/pScores.length
     let hScore = hScores.reduce((a, b) => a + b, 0)/hScores.length
     hScore += pScore*WEIGHT_OF_PSCORE_IN_HSCORE
-    console.log(`-------------------------------------------------------`);
-    console.log(`pScore Total : ${pScore}`);
-    console.log(`hScore Total : ${hScore}`);
     if (pScore > PORN_THRESHOLD) {
-      console.log("Seems like porn !");
+      console.log("azeaze")
       PUNISH();
     } else if (hScore > HENTAI_THRESHOLD){
-      console.log("Seems like Hentai !");
       PUNISH();
     }
   })
@@ -169,10 +165,10 @@ function PUNISH() {
   chrome.storage.sync.get(["username"], function (data) {
     if (data.username) {
       chrome.runtime.sendMessage({ message: "SendItToDiscord!", username: data.username, url: url});
-      //block();
+      block();
     } else {
-      console.log("Triché mais pas connecté !");
-      //block();
+      //Triché mais pas connecté !
+      block();
     }
   });
 }
@@ -194,7 +190,7 @@ function block() {
     } else if (result.blockingType === 3) {
       chrome.runtime.sendMessage({ message: "closeIt" });
     } else {
-      console.log("This blocking type does not exist");
+      //This blocking type does not exist
     }
   });
 }

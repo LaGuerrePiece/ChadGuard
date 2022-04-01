@@ -1,5 +1,3 @@
-console.log('service worker running');
-
 const urlUpdate = 'http://chadguard.pythonanywhere.com/data';
 fetch(urlUpdate, {
 	method: 'get',
@@ -12,9 +10,7 @@ fetch(urlUpdate, {
         chrome.storage.local.set({ updatedVideos: raiponsse.videos });
         chrome.storage.local.set({ updatedHomePhrases: raiponsse.homePhrases });
         chrome.storage.local.set({ defaultBlocklist: raiponsse.blocklist });
-        // console.log('raiponsse.defaultBlocklist :', raiponsse.blocklist)
         chrome.storage.local.set({ updatedConstants: raiponsse.constants });
-        
       });
     }
 	})
@@ -40,7 +36,6 @@ chrome.runtime.onInstalled.addListener(function (details) {
 		}
 	});
 	if (details.reason == 'install') {
-		//A CHECKER
 		chrome.storage.sync.set({
 			blockingType: 0,
 			visitCount: 0,
@@ -53,13 +48,11 @@ chrome.runtime.onInstalled.addListener(function (details) {
 			lastPactDate: Date.now(),
 			userBlocklist: ['www.turboshemale.com'],
 		});
-		console.log('INSTALLATION, PARAMETRES INITIALISES');
 	}
 });
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 	if (request.message == 'closeIt') {
-		console.log('Received order to close you !');
 		// @ts-expect-error I promise I will learn ts later
 		chrome.tabs.remove(sender.tab.id);
 	}
@@ -71,8 +64,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 			const oneMin = 1000 * 60;
 			const oneSec = 1000;
 			const dayElapsed = Math.round((Date.now() - startDayCounter) / oneDay);
-			// console.log("startDayCounter", new Date(startDayCounter).toLocaleString());
-			// console.log("COUNTER DAY DIFF", dayElapsed);
 			chrome.storage.sync.set({ dayElapsed: dayElapsed });
 		});
 
