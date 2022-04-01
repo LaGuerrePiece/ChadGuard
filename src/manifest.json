@@ -10,7 +10,8 @@
     "tabs"
   ],
   "icons": {
-    "48": "icon48.png"
+    "48": "icon48.png",
+    "128": "icon128.png"
   },
   "host_permissions": ["https://discordapp.com/api/"],
   "background": {
