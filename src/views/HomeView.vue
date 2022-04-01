@@ -1,7 +1,7 @@
 <template>
 	<div
-		id="grandiv"
 		class="h-[210px] relative w-full flex flex-col items-center shadow font-bold select-none"
+		:style="{ 'background-image': `url(${require('../assets/noTearsJustDreams.png')})` }"
 		style="
 			background-size: 330px;
 			background-repeat: no-repeat;
@@ -202,10 +202,7 @@
 </template>
 
 <script lang="ts">
-// Avoid this, temporary fix for Vue not finding chrome types when compiling
-/* eslint-disable */
-
-import { defineComponent, ref, watch } from 'vue';
+import { defineComponent, ref, watch, onMounted } from 'vue';
 import TheFooter from '@/components/TheFooter.vue';
 import LoadingSpinner from '@/components/LoadingSpinner.vue';
 import { PlusIcon } from '@heroicons/vue/outline';
@@ -234,55 +231,106 @@ export default defineComponent({
 		const dayCounterState = ref();
 		const dayElapsed = ref();
 		const discordState = ref();
+		const blockingTypeSelected = ref();
 		let username = ref();
 		let nbJours = ref();
 		let randomCatch = ref();
 		let unlockPink = ref();
 		let visitCount = ref();
-
-		//determine if ai is filtering
 		const aiState = ref();
-		chrome.storage.sync.get(['aiFiltering'], (result) => {
-			aiState.value = result.aiFiltering;
-		});
-		watch(aiState, () => {
-			chrome.storage.sync.set({ aiFiltering: aiState.value });
-		});
 
-		//determine the blockingType
-		const blockingTypeSelected = ref();
-		chrome.storage.sync.get(['blockingType'], (result) => {
-			blockingTypeSelected.value = result.blockingType;
-		});
-		watch(blockingTypeSelected, () => {
-			chrome.storage.sync.set({
-				blockingType: parseInt(blockingTypeSelected.value, 10),
+		onMounted(() => {
+			///// LA GROSSE FONCTION GET /////
+			chrome.storage.sync.get(
+				[
+					'aiFiltering',
+					'blockingType',
+					'dayCounter',
+					'unlockPink',
+					'userBlocklist',
+					'dayElapsed',
+					'visitCount',
+					'updatedHomePhrases',
+				],
+				(result) => {
+					aiState.value = result.aiFiltering;
+					blockingTypeSelected.value = result.blockingType;
+					unlockPink.value = result.unlockPink ?? false;
+					visitCount.value = result.visitCount;
+					dayElapsed.value = result.dayElapsed;
+					unlockPink.value = result.unlockPink ?? false;
+					dayCounterState.value = result.dayCounter;
+
+					if (dayCounterState.value == true) {
+						dayCounterState.value = 'true';
+					}
+					if (dayCounterState.value == false) {
+						dayCounterState.value = 'false';
+					}
+
+					for (const key in result.userBlocklist) {
+						links.value.push(result.userBlocklist[key]);
+					}
+
+					if (dayElapsed.value == 0 || dayElapsed.value == 1) {
+						nbJours.value = ' day';
+					}
+					if (dayElapsed.value > 1) {
+						nbJours.value = ' days';
+					}
+
+					let updatedHomePhrases = result.updatedHomePhrases;
+					if (updatedHomePhrases) {
+						randomCatch.value =
+							updatedHomePhrases[
+								Math.floor(Math.random() * updatedHomePhrases.length)
+							];
+					} else {
+						const phrases = [
+							'I love you, brother',
+							'What a bright day brother',
+							"I'm proud of us",
+							'To the moon, friend',
+							'No tears, just dreams',
+							"We're gonna make it",
+						];
+						randomCatch.value = phrases[Math.floor(Math.random() * phrases.length)];
+					}
+				}
+			);
+
+			checkLoginStatus();
+			loading.value = false;
+
+			watch(addInput, () => {
+				if (addInput.value) (addInput.value as HTMLInputElement).select();
+			});
+
+			watch(links.value, () => {
+				if (loading.value) return;
+				chrome.storage.sync.set({ userBlocklist: links.value });
+			});
+
+			watch(aiState, () => {
+				chrome.storage.sync.set({ aiFiltering: aiState.value });
+			});
+
+			watch(blockingTypeSelected, () => {
+				chrome.storage.sync.set({
+					blockingType: parseInt(blockingTypeSelected.value, 10),
+				});
+			});
+
+			watch(dayCounterState, () => {
+				if (dayCounterState.value == 'true') {
+					chrome.storage.sync.set({ dayCounter: true });
+				}
+				if (dayCounterState.value == 'false') {
+					chrome.storage.sync.set({ dayCounter: false });
+				}
+				chrome.runtime.sendMessage({ greeting: 'refreshDayCounter' });
 			});
 		});
-
-		//determine if daycounter is activated
-		chrome.storage.sync.get(['dayCounter'], (result) => {
-			dayCounterState.value = result.dayCounter;
-			if (dayCounterState.value == true) {
-				dayCounterState.value = 'true';
-			}
-			if (dayCounterState.value == false) {
-				dayCounterState.value = 'false';
-			}
-		});
-		watch(dayCounterState, () => {
-			if (dayCounterState.value == 'true') {
-				chrome.storage.sync.set({ dayCounter: true });
-			}
-			if (dayCounterState.value == 'false') {
-				chrome.storage.sync.set({ dayCounter: false });
-			}
-			chrome.runtime.sendMessage({ greeting: 'refreshDayCounter' });
-		});
-
-		// watch(username, () => {
-		// 	if (username.value) chrome.storage.sync.set({ username: username.value });
-		// });
 
 		const setPageBlocklistOrSettings = (b: boolean) => {
 			page.value = b;
@@ -320,43 +368,8 @@ export default defineComponent({
 			if (!bool) addingLinkValue.value = '';
 		};
 
-		watch(addInput, () => {
-			if (addInput.value) (addInput.value as HTMLInputElement).select();
-		});
-
-		function jourSingulierPluriel() {
-			chrome.storage.sync.get(['dayElapsed'], (result) => {
-				dayElapsed.value = result.dayElapsed;
-				if (dayElapsed.value == 0 || dayElapsed.value == 1) {
-					nbJours.value = ' day';
-				}
-				if (dayElapsed.value > 1) {
-					nbJours.value = ' days';
-				}
-			});
-		}
-
-		chrome.storage.sync.get(['userBlocklist', 'dayElapsed', 'unlockPink'], (res) => {
-			dayElapsed.value = res.dayElapsed;
-			unlockPink.value = res.unlockPink ?? false;
-			for (const key in res.userBlocklist) {
-				links.value.push(res.userBlocklist[key]);
-			}
-			jourSingulierPluriel();
-			loading.value = false;
-		});
-
-		watch(links.value, () => {
-			if (loading.value) return;
-			chrome.storage.sync.set({ userBlocklist: links.value });
-		});
-
 		//MODULE DE CONNECTION DISCORD
 
-		checkLoginStatus();
-		chrome.storage.sync.get(['unlockPink'], (res) => {
-			unlockPink.value = res.unlockPink ?? false;
-		});
 		function kikoue() {
 			console.log('KIKOUE, TU VEUX VOIR MA');
 			unlockPink.value = 1;
@@ -449,38 +462,12 @@ export default defineComponent({
 			});
 		}
 
-		// BOUTON RESET
-
 		const resetDayCounter = () => {
 			chrome.storage.sync.set({ startDayCounter: Date.now() });
 			nbJours.value = ' day';
 			dayElapsed.value = 0;
 			chrome.runtime.sendMessage({ greeting: 'refreshDayCounter' });
 		};
-
-		// PHRASES CHAD
-
-		chrome.storage.local.get(['updatedHomePhrases'], (res) => {
-			let updatedHomePhrases = res.updatedHomePhrases;
-			if (updatedHomePhrases) {
-				randomCatch.value =
-					updatedHomePhrases[Math.floor(Math.random() * updatedHomePhrases.length)];
-			} else {
-				const phrases = [
-					'I love you, brother',
-					'What a bright day brother',
-					"I'm proud of us",
-					'To the moon, friend',
-					'No tears, just dreams',
-					"We're gonna make it",
-				];
-				randomCatch.value = phrases[Math.floor(Math.random() * phrases.length)];
-			}
-		});
-
-		chrome.storage.sync.get(['visitCount'], (result) => {
-			visitCount.value = result.visitCount;
-		});
 
 		return {
 			loading,
@@ -514,10 +501,6 @@ export default defineComponent({
 });
 </script>
 <style>
-#grandiv {
-	background: url('../assets/noTearsJustDreams.png');
-}
-
 /* Tooltip container */
 .tooltip {
 	position: relative;
