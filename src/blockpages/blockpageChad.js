@@ -23,7 +23,7 @@ chrome.storage.local.get(['updatedQuotes'], (res) => {
 		],
 		[
 		  'Batman',
-		  "But if I do that, if I allow myself to go down into that place… I'll never come back."
+		  "But if I do that, if I allow myself to go down into that place... I'll never come back."
 		],
 		[
 		  'Bruce Lee',
