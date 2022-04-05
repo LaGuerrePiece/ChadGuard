@@ -14,7 +14,7 @@
 <a href="https://chrome.google.com/webstore/detail/chadguard/oogpehhghgfaeojjbflgeemilhkhgbhe" target="_blank"><strong>Download for Chrome</strong></a>
 </p>
 
-Model used - [**nsfwjs**](https://github.com/infinitered/nsfwjs) developed by [**Infinite Red, Inc.**](https://github.com/infinitered)
+Model used [**nsfwjs**](https://github.com/infinitered/nsfwjs) developed by [**Infinite Red, Inc.**](https://github.com/infinitered)
 
 Inspired by [**nsfw-filter**](https://github.com/nsfw-filter/nsfw-filter)
 
@@ -51,4 +51,4 @@ Then, go to chrome://extensions/ then "load unpacked" and select the dist/ folde
 
 Temporary fix to a bug :
 If you are on windows, erase " && cp src/manifest.json dist && cp src/defaultBlocklist.json dist " from the command in package.json.
-Then after you build, copy the manifest from the src to the dist, and it shoudl work
+Then after you build, copy the manifest from the src to the dist, and it should work
