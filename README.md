@@ -48,7 +48,3 @@ npm run build
 ```
 
 Then, go to chrome://extensions/ then "load unpacked" and select the dist/ folder
-
-Temporary fix to a bug :
-If you are on windows, erase " && cp src/manifest.json dist && cp src/defaultBlocklist.json dist " from the command in package.json.
-Then after you build, copy the manifest from the src to the dist, and it should work
