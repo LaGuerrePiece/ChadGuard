@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build && tsc -p tsconfig.extras.json && cp src/manifest.json dist && cp src/defaultBlocklist.json dist ",
+    "build": "vue-cli-service build && tsc -p tsconfig.extras.json",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
@@ -30,7 +30,6 @@
     "@typescript-eslint/parser": "^5.14.0",
     "@vue/cli-plugin-babel": "~5.0.0",
     "@vue/cli-plugin-eslint": "~5.0.0",
-    "@vue/cli-plugin-pwa": "~5.0.0",
     "@vue/cli-plugin-router": "~5.0.0",
     "@vue/cli-plugin-typescript": "~5.0.0",
     "@vue/cli-plugin-vuex": "~5.0.0",

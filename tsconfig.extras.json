@@ -33,7 +33,6 @@
     "include": [
       "src/background.ts",
       "src/content.ts",
-      "src/blockpage.ts",
     ],
     "exclude": [
       "node_modules"
