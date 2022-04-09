@@ -22,16 +22,17 @@ Inspired by [**nsfw-filter**](https://github.com/nsfw-filter/nsfw-filter)
 
 After adding the extension to your browser, it will block pages that contain porn.
 
+**Do not forget to allow the extension in incognito mode. To do this, go to chrome://extensions/ then details then "Allow in incognito".**
+
+<p align="center">
+    <img align="center" src="https://github.com/LaGuerrePiece/ChadGuard/blob/main/public/img/menu.png" alt="Menu">
+</p>
+
 After the extension is installed, the first page loaded will load the AI model in the cache, so it might be slow for a few seconds.
 
 But after it's in the cache, it should be quite fast.
 
 If your computer still cannot handle it, you can disable the AI filter in the menu.
-
-
-<p align="center">
-    <img align="center" src="https://github.com/LaGuerrePiece/ChadGuard/blob/main/public/img/menu.png" alt="Menu">
-</p>
 
 # Development
 
