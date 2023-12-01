@@ -39,7 +39,7 @@ chrome.runtime.onInstalled.addListener(function (details) {
 		chrome.storage.sync.set({
 			blockingType: 0,
 			visitCount: 0,
-			aiFiltering: true,
+			aiFiltering: false,
 			dayCounter: false,
 			dayCounterValue: 0,
 			dayElapsed: 0,
